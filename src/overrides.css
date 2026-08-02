@@ -1,0 +1,146 @@
+/* --- OVERRIDES: Complete removal of rounded corners --- */
+/* Forzamos esquinas completamente cuadradas (90 grados) en todos los elementos, incluyendo ventanas, diálogos, decoraciones y widgets */
+* {
+    border-radius: 0px;
+    -gtk-outline-radius: 0px;
+}
+
+window,
+dialog,
+messagedialog,
+decoration,
+.decoration,
+.window-frame,
+windowdecoration,
+headerbar,
+.titlebar,
+button,
+entry,
+notebook,
+tab,
+menu,
+popover,
+.card,
+.sheet,
+slider,
+trough,
+switch,
+.sidebar,
+list-row,
+list,
+treeview {
+    border-radius: 0px;
+}
+
+/* --- OVERRIDES: High-contrast selection styling (exhaustivo) --- */
+@define-color theme_selected_fg_color #272E33;          /* fg en selección */
+@define-color theme_selected_bg_color #A7C080;          /* bg en selección */
+
+/* Selección normal (sin foco) */
+:selected,
+*:selected,
+.selected,
+list-row:selected,
+treeview.view:selected,
+entry selection,
+label selection {
+    color: @theme_selected_fg_color !important;
+    background-color: @theme_selected_bg_color !important;
+}
+
+/* Selección con foco (cuando el widget está activo) */
+:selected:focus,
+*:selected:focus,
+.selected:focus,
+list-row:selected:focus,
+treeview.view:selected:focus,
+entry selection:focus,
+label selection:focus {
+    color: @theme_selected_fg_color !important;
+    background-color: @theme_selected_bg_color !important;
+}
+
+/* Selección en ventana inactiva (backdrop) */
+:selected:backdrop,
+*:selected:backdrop,
+.selected:backdrop,
+list-row:selected:backdrop,
+treeview.view:selected:backdrop,
+entry selection:backdrop,
+label selection:backdrop {
+    color: @theme_selected_fg_color !important;
+    background-color: shade(@theme_selected_bg_color, 0.8) !important;   /* ligeramente más oscuro */
+}
+
+/* Selección activa (p.ej. al arrastrar) */
+:selected:active,
+*:selected:active,
+.selected:active,
+list-row:selected:active,
+treeview.view:selected:active,
+entry selection:active,
+label selection:active {
+    color: @theme_selected_fg_color !important;
+    background-color: @theme_selected_bg_color !important;
+}
+
+/* Aseguramos que cualquier descendiente del elemento seleccionado herede el mismo color */
+:selected *,
+*:selected *,
+.selected *,
+list-row:selected *,
+treeview.view:selected * {
+    color: @theme_selected_fg_color !important;
+}
+
+/* --- OVERRIDES: Minimalist Scrollbars --- */
+scrollbar trough {
+    background-color: #1E2326;
+    border: none;
+}
+scrollbar slider {
+    background-color: #414B50; /* Everforest bg3 */
+    border: 2px solid #1E2326;
+    border-radius: 0px;
+}
+scrollbar slider:hover {
+    background-color: #859289; /* Everforest grey1 */
+}
+scrollbar slider:active {
+    background-color: #A7C080; /* Everforest green */
+}
+
+/* --- OVERRIDES: Semantic Action Buttons --- */
+button.suggested-action {
+    background-color: #A7C080; /* Everforest green */
+    color: #1E2326;
+    border: 1px solid #3C4841;
+}
+button.suggested-action:hover {
+    background-color: #b5cfa3;
+    color: #1E2326;
+}
+button.suggested-action:active {
+    background-color: #98b073;
+    color: #1E2326;
+}
+
+button.destructive-action {
+    background-color: #E67E80; /* Everforest red */
+    color: #1E2326;
+    border: 1px solid #4C3739;
+}
+button.destructive-action:hover {
+    background-color: #eb9496;
+    color: #1E2326;
+}
+button.destructive-action:active {
+    background-color: #d16e70;
+    color: #1E2326;
+}
+
+/* --- OVERRIDES: Text Entries Focus --- */
+entry:focus {
+    border: 1px solid #A7C080;
+    box-shadow: none;
+}
