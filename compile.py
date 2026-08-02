@@ -79,23 +79,30 @@ COLOR_MAP = {
 
 # Reglas adicionales de estilo CSS
 SUFFIX = """
-/* --- OVERRIDES: Square corners (No rounded corners) --- */
-/* Excluimos las decoraciones de ventana para mantener sombras correctas */
-*:not(decoration):not(.decoration):not(.window-frame):not(window) {
-    border-radius: 0px !important;
-    -gtk-outline-radius: 0px !important;
+/* --- OVERRIDES: Complete removal of rounded corners --- */
+/* Forzamos esquinas completamente cuadradas (90 grados) en todos los elementos, incluyendo ventanas, diálogos, decoraciones y widgets */
+* {
+    border-radius: 0px;
+    -gtk-outline-radius: 0px;
 }
 
 window,
 dialog,
 messagedialog,
+decoration,
+.decoration,
+.window-frame,
+windowdecoration,
 headerbar,
+.titlebar,
 button,
 entry,
 notebook,
 tab,
 menu,
 popover,
+.card,
+.sheet,
 slider,
 trough,
 switch,
@@ -103,7 +110,7 @@ switch,
 list-row,
 list,
 treeview {
-    border-radius: 0px !important;
+    border-radius: 0px;
 }
 
 /* --- OVERRIDES: High-contrast selection styling --- */
@@ -117,8 +124,8 @@ list-row:selected,
 treeview.view:selected,
 entry selection,
 label selection {
-    color: #1E2326 !important;
-    background-color: #A7C080 !important;
+    color: #1E2326;
+    background-color: #A7C080;
 }
 
 :selected label,
@@ -131,7 +138,7 @@ treeview.view:selected label,
 .selected *,
 list-row:selected *,
 treeview.view:selected * {
-    color: #1E2326 !important;
+    color: #1E2326;
 }
 
 /* --- OVERRIDES: Backdrop state (Infocused windows selection contrast) --- */
@@ -139,8 +146,8 @@ treeview.view:selected * {
 *:selected:backdrop,
 .selected:backdrop,
 list-row:selected:backdrop {
-    color: #D3C6AA !important;
-    background-color: #3C4841 !important;
+    color: #D3C6AA;
+    background-color: #3C4841;
 }
 
 :selected:backdrop label,
@@ -150,59 +157,59 @@ list-row:selected:backdrop label,
 :selected:backdrop *,
 *:selected:backdrop *,
 .selected:backdrop * {
-    color: #D3C6AA !important;
+    color: #D3C6AA;
 }
 
 /* --- OVERRIDES: Minimalist Scrollbars --- */
 scrollbar trough {
-    background-color: #1E2326 !important;
-    border: none !important;
+    background-color: #1E2326;
+    border: none;
 }
 scrollbar slider {
-    background-color: #414C50 !important; /* Everforest bg3 */
-    border: 2px solid #1E2326 !important;
-    border-radius: 0px !important;
+    background-color: #414C50; /* Everforest bg3 */
+    border: 2px solid #1E2326;
+    border-radius: 0px;
 }
 scrollbar slider:hover {
-    background-color: #859289 !important; /* Everforest grey1 */
+    background-color: #859289; /* Everforest grey1 */
 }
 scrollbar slider:active {
-    background-color: #A7C080 !important; /* Everforest green */
+    background-color: #A7C080; /* Everforest green */
 }
 
 /* --- OVERRIDES: Semantic Action Buttons --- */
 button.suggested-action {
-    background-color: #A7C080 !important; /* Everforest green */
-    color: #1E2326 !important;
-    border: 1px solid #3C4841 !important;
+    background-color: #A7C080; /* Everforest green */
+    color: #1E2326;
+    border: 1px solid #3C4841;
 }
 button.suggested-action:hover {
-    background-color: #b5cfa3 !important;
-    color: #1E2326 !important;
+    background-color: #b5cfa3;
+    color: #1E2326;
 }
 button.suggested-action:active {
-    background-color: #98b073 !important;
-    color: #1E2326 !important;
+    background-color: #98b073;
+    color: #1E2326;
 }
 
 button.destructive-action {
-    background-color: #E67E80 !important; /* Everforest red */
-    color: #1E2326 !important;
-    border: 1px solid #4C3739 !important;
+    background-color: #E67E80; /* Everforest red */
+    color: #1E2326;
+    border: 1px solid #4C3739;
 }
 button.destructive-action:hover {
-    background-color: #eb9496 !important;
-    color: #1E2326 !important;
+    background-color: #eb9496;
+    color: #1E2326;
 }
 button.destructive-action:active {
-    background-color: #d16e70 !important;
-    color: #1E2326 !important;
+    background-color: #d16e70;
+    color: #1E2326;
 }
 
 /* --- OVERRIDES: Text Entries Focus --- */
 entry:focus {
-    border: 1px solid #A7C080 !important;
-    box-shadow: none !important;
+    border: 1px solid #A7C080;
+    box-shadow: none;
 }
 """
 
