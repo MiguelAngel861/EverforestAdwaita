@@ -24,7 +24,8 @@ if not os.path.exists(overrides_path):
     sys.exit(1)
 
 with open(colors_path, "r", encoding="utf-8") as f:
-    COLOR_MAP = json.load(f)
+    colors_data = json.load(f)
+    COLOR_MAP = colors_data.get("map", colors_data)
 
 with open(overrides_path, "r", encoding="utf-8") as f:
     SUFFIX = f.read()
