@@ -32,10 +32,11 @@ treeview {
     border-radius: 0px;
 }
 
-/* --- OVERRIDES: High-contrast selection styling --- */
-@define-color theme_selected_fg_color #1E2326;
-@define-color theme_unfocused_selected_fg_color #1E2326;
+/* --- OVERRIDES: High-contrast selection styling (exhaustivo) --- */
+@define-color theme_selected_fg_color #272E33;          /* fg en selección */
+@define-color theme_selected_bg_color #A7C080;          /* bg en selección */
 
+/* Selección normal (sin foco) */
 :selected,
 *:selected,
 .selected,
@@ -43,40 +44,53 @@ list-row:selected,
 treeview.view:selected,
 entry selection,
 label selection {
-    color: #1E2326;
-    background-color: #A7C080;
+    color: @theme_selected_fg_color !important;
+    background-color: @theme_selected_bg_color !important;
 }
 
-:selected label,
-*:selected label,
-.selected label,
-list-row:selected label,
-treeview.view:selected label,
+/* Selección con foco (cuando el widget está activo) */
+:selected:focus,
+*:selected:focus,
+.selected:focus,
+list-row:selected:focus,
+treeview.view:selected:focus,
+entry selection:focus,
+label selection:focus {
+    color: @theme_selected_fg_color !important;
+    background-color: @theme_selected_bg_color !important;
+}
+
+/* Selección en ventana inactiva (backdrop) */
+:selected:backdrop,
+*:selected:backdrop,
+.selected:backdrop,
+list-row:selected:backdrop,
+treeview.view:selected:backdrop,
+entry selection:backdrop,
+label selection:backdrop {
+    color: @theme_selected_fg_color !important;
+    background-color: shade(@theme_selected_bg_color, 0.8) !important;   /* ligeramente más oscuro */
+}
+
+/* Selección activa (p.ej. al arrastrar) */
+:selected:active,
+*:selected:active,
+.selected:active,
+list-row:selected:active,
+treeview.view:selected:active,
+entry selection:active,
+label selection:active {
+    color: @theme_selected_fg_color !important;
+    background-color: @theme_selected_bg_color !important;
+}
+
+/* Aseguramos que cualquier descendiente del elemento seleccionado herede el mismo color */
 :selected *,
 *:selected *,
 .selected *,
 list-row:selected *,
 treeview.view:selected * {
-    color: #1E2326;
-}
-
-/* --- OVERRIDES: Backdrop state (Infocused windows selection contrast) --- */
-:selected:backdrop,
-*:selected:backdrop,
-.selected:backdrop,
-list-row:selected:backdrop {
-    color: #D3C6AA;
-    background-color: #3C4841;
-}
-
-:selected:backdrop label,
-*:selected:backdrop label,
-.selected:backdrop label,
-list-row:selected:backdrop label,
-:selected:backdrop *,
-*:selected:backdrop *,
-.selected:backdrop * {
-    color: #D3C6AA;
+    color: @theme_selected_fg_color !important;
 }
 
 /* --- OVERRIDES: Minimalist Scrollbars --- */
