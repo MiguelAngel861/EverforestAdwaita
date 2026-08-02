@@ -24,7 +24,7 @@ COLOR_MAP = {
     
     # Deshabilitados / Insensibles
     r'#323232': '#2E383C',  # Fondo deshabilitado -> Everforest bg1
-    r'#919190': '#859289',  # Texto deshabilitado -> Everforest grey1
+    r'#919190': '#9DA9A0',  # Texto deshabilitado -> Everforest grey2 (Mejora de contraste A11y: 4.84:1)
     r'#5b5b5b': '#7A8478',  # Bordes deshabilitados -> Everforest grey0
     
     # Bordes
@@ -132,6 +132,77 @@ treeview.view:selected label,
 list-row:selected *,
 treeview.view:selected * {
     color: #1E2326 !important;
+}
+
+/* --- OVERRIDES: Backdrop state (Infocused windows selection contrast) --- */
+:selected:backdrop,
+*:selected:backdrop,
+.selected:backdrop,
+list-row:selected:backdrop {
+    color: #D3C6AA !important;
+    background-color: #3C4841 !important;
+}
+
+:selected:backdrop label,
+*:selected:backdrop label,
+.selected:backdrop label,
+list-row:selected:backdrop label,
+:selected:backdrop *,
+*:selected:backdrop *,
+.selected:backdrop * {
+    color: #D3C6AA !important;
+}
+
+/* --- OVERRIDES: Minimalist Scrollbars --- */
+scrollbar trough {
+    background-color: #1E2326 !important;
+    border: none !important;
+}
+scrollbar slider {
+    background-color: #414C50 !important; /* Everforest bg3 */
+    border: 2px solid #1E2326 !important;
+    border-radius: 0px !important;
+}
+scrollbar slider:hover {
+    background-color: #859289 !important; /* Everforest grey1 */
+}
+scrollbar slider:active {
+    background-color: #A7C080 !important; /* Everforest green */
+}
+
+/* --- OVERRIDES: Semantic Action Buttons --- */
+button.suggested-action {
+    background-color: #A7C080 !important; /* Everforest green */
+    color: #1E2326 !important;
+    border: 1px solid #3C4841 !important;
+}
+button.suggested-action:hover {
+    background-color: #b5cfa3 !important;
+    color: #1E2326 !important;
+}
+button.suggested-action:active {
+    background-color: #98b073 !important;
+    color: #1E2326 !important;
+}
+
+button.destructive-action {
+    background-color: #E67E80 !important; /* Everforest red */
+    color: #1E2326 !important;
+    border: 1px solid #4C3739 !important;
+}
+button.destructive-action:hover {
+    background-color: #eb9496 !important;
+    color: #1E2326 !important;
+}
+button.destructive-action:active {
+    background-color: #d16e70 !important;
+    color: #1E2326 !important;
+}
+
+/* --- OVERRIDES: Text Entries Focus --- */
+entry:focus {
+    border: 1px solid #A7C080 !important;
+    box-shadow: none !important;
 }
 """
 
