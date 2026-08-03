@@ -1,0 +1,67 @@
+[
+  {
+    "session_id": 1,
+    "timestamp": "2026-08-02T20:10:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Establecimiento del entorno de desarrollo local y documentación inicial para EverforestAdwaita.",
+    "objectives": [
+      "Asegurar que los últimos cambios visuales de overrides.css no se pierdan.",
+      "Crear un flujo de recarga instantánea para probar cambios visuales rápidamente.",
+      "Documentar el proyecto (README.md) y definir el sistema de memoria inter-sesión para agentes."
+    ],
+    "changes_made": [
+      "Recuperación y copiado del archivo overrides.css (con estilos de backdrop inactivos y contraste de selección) desde la ruta instalada hacia /src/overrides.css.",
+      "Sustitución de la carpeta física ~/.local/share/themes/EverforestAdwaita por un enlace simbólico que apunta directamente a /home/damian/Projects/EverforestAdwaita.",
+      "Ejecución de `make compile` para reconstruir las carpetas gtk-3.0 y gtk-4.0 en el proyecto.",
+      "Creación de README.md con especificaciones del tema, dependencias, comandos y flujo de trabajo.",
+      "Creación de la carpeta docs/ y los archivos AGENTS.md y memory.json."
+    ],
+    "key_decisions": [
+      "Usar un enlace simbólico para evitar copias manuales y permitir recarga instantánea al compilar.",
+      "Mantener el Makefile y compile_theme.py de Python en lugar de migrar a Meson para simplificar el flujo mientras el tema sea de uso personal."
+    ],
+    "next_steps": [
+      "Implementar un script 'watcher' para automatizar `make compile` al guardar cambios.",
+      "Iniciar pruebas visuales en aplicaciones GTK 3 y GTK 4 y pulir detalles estéticos específicos.",
+      "Mantener actualizado el archivo de memoria al finalizar cada sesión de desarrollo."
+    ]
+  },
+  {
+    "session_id": 2,
+    "timestamp": "2026-08-02T20:25:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Resolución de errores de compilación, corrección de checkboxes/botones y diseño de interruptores (switches) cuadrados.",
+    "objectives": [
+      "Crear una carpeta de plantillas y agregar la plantilla del formato de memoria de agentes.",
+      "Identificar y solucionar el color azul de los checkboxes/checkbuttons en la interfaz de Nicotine+.",
+      "Eliminar las advertencias 'Junk at end of value' generadas durante la compilación de GTK.",
+      "Corregir el degradado oscuro no deseado en el botón sugerido 'OK' en los diálogos de Nicotine+.",
+      "Forzar esquinas cuadradas (0px) en la perilla de los switches/interruptores para mantener consistencia de diseño."
+    ],
+    "changes_made": [
+      "Creación de docs/templates/memory_template.json con la plantilla de memoria.",
+      "Actualización de AGENTS.md para apuntar al archivo de la plantilla en docs/templates/.",
+      "Adición de seis colores azules específicos de GTK 4 (#185fb4, #1b68c6, #124787, #0c2f5a, #13498c, #134c90) al mapeo de colors.json.",
+      "Limpieza de todas las instancias de '!important' en overrides.css, eliminando los fallos del parser de GTK.",
+      "Reorganización de comentarios de definición de color en overrides.css a líneas individuales.",
+      "Modificación de overrides.css para añadir 'background-image: none' en button.suggested-action y button.destructive-action (normal, hover, active, backdrop).",
+      "Creación del directorio tests/ y del script tests/test_switch.py en Python usando PyGObject para realizar pruebas visuales rápidas e interactivas de widgets en GTK 3 y GTK 4.",
+      "Actualización del Makefile agregando las reglas 'test-gtk3' y 'test-gtk4' para compilar y ejecutar automáticamente las pruebas visuales.",
+      "Resolución de un bug de inicialización en tests/test_switch.py donde GApplication interpretaba los argumentos de línea de comandos de Python (--gtk4) como argumentos nativos desconocidos, cancelando silenciosamente la creación de la ventana.",
+      "Añadido control de excepciones try-except en tests/test_switch.py al invocar load_from_path() para evitar que el script de pruebas aborte debido a advertencias menores de sintaxis CSS de GTK 3 o GTK 4 (ej. -gtk-icon-filter).",
+      "Configuración de estilos en overrides.css para forzar esquinas cuadradas (border-radius: 0px) en switches y sliders de todos los estados conservando las líneas de contorno y bordes nativos de Adwaita, y aplicando una transición de márgenes estables."
+    ],
+    "key_decisions": [
+      "El parser de GTK CSS no soporta el modificador '!important' ni comentarios inline en '@define-color'; eliminarlos resolvió todas las advertencias.",
+      "Se mapearon los colores azules de checked y hover de GTK 4 a verde (#A7C080) y verde oscuro (#3C4841) en colors.json para dar coherencia con el estilo Everforest.",
+      "Se forzó 'background-image: none' en los botones de acción semánticos en overrides.css para evitar que el degradado oscuro original de Adwaita se dibuje sobre el background-color verde Everforest.",
+      "Se modificó el inicio de GApplication en el script de prueba para consumir únicamente 'sys.argv[0]', evitando que el parser nativo de GTK aborte la ejecución al recibir parámetros de control personalizados.",
+      "Capturar GLib.GError en los cargadores de CSS de PyGObject permite que GTK ignore de forma nativa propiedades no soportadas en una versión dada (como -gtk-icon-filter en GTK 3) y continúe la renderización en lugar de terminar el proceso con un error crítico de Python.",
+      "Se combinó la geometría de esquinas a 90 grados con la retención de las líneas de contorno y bordes de Adwaita para asegurar la legibilidad del interruptor. Para evitar que la perilla rebote en GTK 4, la transición se declaró explícitamente sobre los márgenes físicos y lógicos, garantizando que el widget reciba el evento de fin de animación y funcione de forma totalmente fluida y fija."
+    ],
+    "next_steps": [
+      "Confirmar que el usuario puede ejecutar exitosamente las pruebas visuales locales y verificar la correcta animación de los switches.",
+      "Crear el script 'watcher' para auto-compilar cambios."
+    ]
+  }
+]

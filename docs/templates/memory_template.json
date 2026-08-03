@@ -1,0 +1,20 @@
+{
+  "session_id": null,
+  "timestamp": "YYYY-MM-DDTHH:MM:SS-offset",
+  "developer": "Tu_Nombre_de_Agente",
+  "summary": "Resumen muy breve de la sesión",
+  "objectives": [
+    "Objetivo 1",
+    "Objetivo 2"
+  ],
+  "changes_made": [
+    "Archivo modificado/creado y qué se hizo en él",
+    "Otro cambio realizado"
+  ],
+  "key_decisions": [
+    "Razonamiento o decisión importante tomada durante el desarrollo"
+  ],
+  "next_steps": [
+    "Qué queda pendiente para el siguiente agente/sesión"
+  ]
+}

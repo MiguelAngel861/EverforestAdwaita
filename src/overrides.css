@@ -24,7 +24,6 @@ popover,
 .sheet,
 slider,
 trough,
-switch,
 .sidebar,
 list-row,
 list,
@@ -33,8 +32,14 @@ treeview {
 }
 
 /* --- OVERRIDES: High-contrast selection styling (exhaustivo) --- */
-@define-color theme_selected_fg_color #272E33;          /* fg en selección */
-@define-color theme_selected_bg_color #A7C080;          /* bg en selección */
+/* fg en selección */
+@define-color theme_selected_fg_color #272E33;
+/* bg en selección */
+@define-color theme_selected_bg_color #A7C080;
+/* bg en selección (inactivo) */
+@define-color theme_selected_bg_color_backdrop #3C4841;
+/* fg en selección (inactivo) */
+@define-color theme_selected_fg_color_backdrop #D3C6AA;
 
 /* Selección normal (sin foco) */
 :selected,
@@ -44,8 +49,8 @@ list-row:selected,
 treeview.view:selected,
 entry selection,
 label selection {
-    color: @theme_selected_fg_color !important;
-    background-color: @theme_selected_bg_color !important;
+    color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color;
 }
 
 /* Selección con foco (cuando el widget está activo) */
@@ -56,8 +61,8 @@ list-row:selected:focus,
 treeview.view:selected:focus,
 entry selection:focus,
 label selection:focus {
-    color: @theme_selected_fg_color !important;
-    background-color: @theme_selected_bg_color !important;
+    color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color;
 }
 
 /* Selección en ventana inactiva (backdrop) */
@@ -68,8 +73,8 @@ list-row:selected:backdrop,
 treeview.view:selected:backdrop,
 entry selection:backdrop,
 label selection:backdrop {
-    color: @theme_selected_fg_color !important;
-    background-color: shade(@theme_selected_bg_color, 0.8) !important;   /* ligeramente más oscuro */
+    color: @theme_selected_fg_color_backdrop;
+    background-color: @theme_selected_bg_color_backdrop;
 }
 
 /* Selección activa (p.ej. al arrastrar) */
@@ -80,8 +85,8 @@ list-row:selected:active,
 treeview.view:selected:active,
 entry selection:active,
 label selection:active {
-    color: @theme_selected_fg_color !important;
-    background-color: @theme_selected_bg_color !important;
+    color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color;
 }
 
 /* Aseguramos que cualquier descendiente del elemento seleccionado herede el mismo color */
@@ -90,7 +95,7 @@ label selection:active {
 .selected *,
 list-row:selected *,
 treeview.view:selected * {
-    color: @theme_selected_fg_color !important;
+    color: @theme_selected_fg_color;
 }
 
 /* --- OVERRIDES: Minimalist Scrollbars --- */
@@ -113,29 +118,35 @@ scrollbar slider:active {
 /* --- OVERRIDES: Semantic Action Buttons --- */
 button.suggested-action {
     background-color: #A7C080; /* Everforest green */
+    background-image: none;
     color: #1E2326;
     border: 1px solid #3C4841;
 }
 button.suggested-action:hover {
     background-color: #b5cfa3;
+    background-image: none;
     color: #1E2326;
 }
 button.suggested-action:active {
     background-color: #98b073;
+    background-image: none;
     color: #1E2326;
 }
 
 button.destructive-action {
     background-color: #E67E80; /* Everforest red */
+    background-image: none;
     color: #1E2326;
     border: 1px solid #4C3739;
 }
 button.destructive-action:hover {
     background-color: #eb9496;
+    background-image: none;
     color: #1E2326;
 }
 button.destructive-action:active {
     background-color: #d16e70;
+    background-image: none;
     color: #1E2326;
 }
 
@@ -143,4 +154,191 @@ button.destructive-action:active {
 entry:focus {
     border: 1px solid #A7C080;
     box-shadow: none;
+}
+
+/* --- OVERRIDES: Backdrop/Unfocused Window States --- */
+/* Improve contrast and visibility for inactive windows - using solid hex colors for GTK compatibility */
+
+/* Titlebar/headerbar in backdrop */
+.titlebar:backdrop:not(headerbar),
+headerbar:backdrop {
+    border-color: #374145;
+    background-color: #1E2326;
+    background-image: none;
+    box-shadow: inset 0 -1px #374145;
+}
+
+.titlebar:backdrop:not(headerbar) .title,
+headerbar:backdrop .title {
+    color: #B8B095;
+}
+
+/* Base text colors for backdrop windows */
+.background:backdrop {
+    color: #B8B095;
+    background-color: #1E2326;
+}
+
+.view:backdrop,
+iconview:backdrop,
+.view text:backdrop,
+iconview text:backdrop,
+textview text:backdrop {
+    color: #D3C6AA;
+    background-color: #2E383C;
+}
+
+label:backdrop {
+    color: #B8B095;
+}
+
+/* Button backdrop states */
+button:backdrop,
+notebook > header > tabs > arrow:backdrop {
+    color: #B8B095;
+    border-color: #374145;
+    background-image: image(#2E383C);
+    background-color: #2E383C;
+}
+
+button:backdrop:not(:disabled),
+notebook > header > tabs > arrow:backdrop:not(:disabled) {
+    -gtk-icon-filter: none;
+}
+
+button:backdrop:active,
+button:backdrop:checked,
+notebook > header > tabs > arrow:backdrop:active,
+notebook > header > tabs > arrow:backdrop:checked {
+    color: #C7BCA2;
+    border-color: #374145;
+    background-image: image(#374145);
+}
+
+/* Flat/sidebar buttons in backdrop */
+button.sidebar-button:backdrop,
+button.flat:backdrop,
+windowcontrols button:backdrop,
+.toolbar > button:backdrop,
+.toolbar :not(.linked) > button:backdrop {
+    border-color: #374145;
+    background-color: #2E383C;
+    background-image: none;
+    box-shadow: none;
+    color: #B8B095;
+}
+
+/* Selected row buttons in backdrop */
+row:selected button.sidebar-button:backdrop,
+row:selected button.flat:backdrop {
+    color: #C7BCA2;
+}
+
+/* Entry/spinbutton backdrop */
+spinbutton > text:backdrop,
+spinbutton:backdrop,
+entry:backdrop {
+    color: #D3C6AA;
+    border-color: #374145;
+    background-color: #2E383C;
+    box-shadow: none;
+}
+
+/* Window frame/shadow for backdrop */
+window.csd:backdrop {
+    box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.75), inset 0 0 0 1px #374145;
+}
+
+window.solid-csd:backdrop {
+    box-shadow: inset 0 0 0 4px #374145, inset 0 0 0 3px #1E2326, inset 0 1px rgba(238, 238, 236, 0.07);
+    border-color: #374145;
+}
+
+window.tiled:backdrop,
+window.tiled-top:backdrop,
+window.tiled-left:backdrop,
+window.tiled-right:backdrop,
+window.tiled-bottom:backdrop {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.75), 0 0 0 20px transparent, inset 0 0 0 1px #374145;
+}
+
+/* Treeview/columnview/listview backdrop */
+columnview.view:backdrop,
+treeview.view:backdrop,
+listview:backdrop,
+list:backdrop {
+    border-left-color: #374145;
+    border-top-color: #374145;
+    color: #D3C6AA;
+    background-color: #2E383C;
+    border-color: #374145;
+}
+
+/* Boxed list backdrop */
+.boxed-list > row:backdrop {
+    border-bottom-color: #374145;
+    color: #D3C6AA;
+    background-color: #2E383C;
+}
+
+/* Calendar header backdrop */
+calendar > header > button:backdrop {
+    color: #9DA9A0;
+}
+
+/* Suggested/destructive action buttons backdrop */
+button.suggested-action:backdrop {
+    color: #83C092;
+    border-color: #3C4841;
+    background-color: #3C4841;
+    background-image: none;
+    box-shadow: none;
+}
+
+button.destructive-action:backdrop {
+    color: #f0d0d2;
+    border-color: #851015;
+    background-color: #8a1116;
+    background-image: none;
+    box-shadow: none;
+}
+
+/* Progressbar selected backdrop */
+columnview.view.progressbar:selected:backdrop,
+treeview.view.progressbar:selected:backdrop {
+    background-color: #3C4841;
+    color: #D3C6AA;
+}
+
+/* Inline toolbar backdrop */
+.inline-toolbar toolbutton > button:backdrop {
+    color: #B8B095;
+    border-color: #374145;
+    background-image: image(#2E383C);
+}
+
+/* --- OVERRIDES: Square Switches --- */
+switch,
+switch:checked,
+switch:disabled,
+switch:hover {
+    border-radius: 0px;
+}
+
+switch > slider,
+switch slider,
+switch:checked > slider,
+switch:checked slider,
+switch:hover > slider,
+switch:hover slider,
+switch:disabled > slider,
+switch:disabled slider {
+    border-radius: 0px;
+    transition: margin-start 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                margin-end 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                margin-left 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                margin-right 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                background-color 200ms,
+                border-color 200ms,
+                box-shadow 200ms;
 }
