@@ -1,8 +1,8 @@
 /* --- OVERRIDES: Complete removal of rounded corners --- */
 /* Forzamos esquinas completamente cuadradas (90 grados) en todos los elementos, incluyendo ventanas, diálogos, decoraciones y widgets */
+/* Nota: -gtk-outline-radius vive en overrides-gtk3.css (propiedad solo-GTK 3) */
 * {
     border-radius: 0px;
-    -gtk-outline-radius: 0px;
 }
 
 window,

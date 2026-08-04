@@ -1,0 +1,6 @@
+/* --- OVERRIDES GTK3-ONLY: Esquinas de foco (outline) --- */
+/* -gtk-outline-radius es una propiedad solo-GTK 3: GTK 4 la rechaza con
+   "No property named" en el parser. Se inyecta únicamente en gtk-3.0/gtk.css. */
+* {
+    -gtk-outline-radius: 0px;
+}
