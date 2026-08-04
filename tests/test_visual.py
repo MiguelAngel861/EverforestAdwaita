@@ -395,8 +395,6 @@ else:
 
         hb = Gtk.HeaderBar()
         hb.set_show_title_buttons(True)
-        hb.set_title("EverforestAdwaita")
-        hb.set_subtitle("Prueba visual unificada GTK 4")
         win.set_titlebar(hb)
 
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)

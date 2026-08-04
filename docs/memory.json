@@ -409,5 +409,23 @@
       "Ejecutar make test-gtk3 / make test-gtk4 con display para validar visualmente el tester unificado",
       "Ajustar common.py si se detectan advertencias de CSS al cargar el tema"
     ]
+  },
+  {
+    "session_id": 17,
+    "timestamp": "2026-08-03T22:20:00-06:00",
+    "developer": "opencode",
+    "summary": "Fix crash del tester unificado en GTK 4: HeaderBar.set_title/set_subtitle no existen en GTK 4 (eliminados en 4.x), solo GTK 3 los tiene.",
+    "objectives": [
+      "Corregir AttributeError: 'HeaderBar' object has no attribute 'set_title' al lanzar make test-gtk4"
+    ],
+    "changes_made": [
+      "tests/test_visual.py: eliminadas las llamadas hb.set_title()/hb.set_subtitle() de la rama GTK 4 (el titulo se muestra por el titulo de la ventana y las CSD)"
+    ],
+    "key_decisions": [
+      "GTK 4 HeaderBar no expone set_title/set_subtitle (eliminados de la API); el titulo de la ventana se muestra en la decoracion"
+    ],
+    "next_steps": [
+      "Validar visualmente las 6 pestanas del tester en GTK 3 y GTK 4"
+    ]
   }
 ]
