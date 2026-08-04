@@ -1,4 +1,4 @@
-.PHONY: all compile clean test-gtk3 test-gtk4
+.PHONY: all compile clean test-gtk3 test-gtk4 test-components-gtk3 test-components-gtk4 test-changes-gtk3 test-changes-gtk4 test-disabled-gtk3 test-disabled-gtk4 watch
 
 all: compile
 
@@ -15,3 +15,30 @@ test-gtk3: compile
 test-gtk4: compile
 	chmod +x tests/test_switch.py
 	python3 tests/test_switch.py --gtk4
+
+test-components-gtk3: compile
+	chmod +x tests/test_components.py
+	python3 tests/test_components.py --gtk3
+
+test-components-gtk4: compile
+	chmod +x tests/test_components.py
+	python3 tests/test_components.py --gtk4
+
+test-changes-gtk3: compile
+	chmod +x tests/test_changes.py
+	python3 tests/test_changes.py --gtk3
+
+test-changes-gtk4: compile
+	chmod +x tests/test_changes.py
+	python3 tests/test_changes.py --gtk4
+
+test-disabled-gtk3: compile
+	chmod +x tests/test_disabled.py
+	python3 tests/test_disabled.py --gtk3
+
+test-disabled-gtk4: compile
+	chmod +x tests/test_disabled.py
+	python3 tests/test_disabled.py --gtk4
+
+watch:
+	.venv/bin/python scripts/watcher.py
