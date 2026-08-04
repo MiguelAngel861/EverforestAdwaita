@@ -137,13 +137,92 @@ label selection:active {
     background-color: @theme_selected_bg_color;
 }
 
-/* Aseguramos que cualquier descendiente del elemento seleccionado herede el mismo color */
+/* Aseguramos que cualquier descendiente de la vista seleccionada normal herede el color de texto oscuro */
 :selected *,
 *:selected *,
 .selected *,
 list-row:selected *,
-treeview.view:selected * {
-    color: @theme_selected_fg_color;
+treeview.view:selected *,
+*:selected label,
+*:selected image,
+row:selected label,
+row:selected image,
+list-row:selected label,
+list-row:selected image {
+    color: @theme_selected_fg_color; /* #272E33 (oscuro) */
+}
+
+/* Excepción para Barras Laterales, StackSidebars y Pestañas de Notebook (ventana activa) - usan color verde acento claro */
+.sidebar row:selected label,
+.sidebar row:selected image,
+.sidebar list-row:selected label,
+.sidebar list-row:selected image,
+.navigation-sidebar row:selected label,
+.navigation-sidebar row:selected image,
+stacksidebar row:selected label,
+stacksidebar row:selected image,
+notebook > header > tabs > tab:checked label,
+notebook > header > tabs > tab:checked image,
+notebook > header > tabs > tab:selected label,
+notebook > header > tabs > tab:selected image,
+notebook > header tab:checked label,
+notebook > header tab:checked image,
+placessidebar row:selected label,
+placessidebar row:selected image {
+    color: #A7C080; /* verde claro acento (sobre fondo verde oscuro #3C4841) */
+}
+
+/* Selección en ventana inactiva (backdrop) - descendientes heredan color claro de backdrop */
+:selected:backdrop *,
+*:selected:backdrop *,
+.selected:backdrop *,
+list-row:selected:backdrop *,
+treeview.view:selected:backdrop *,
+*:selected:backdrop label,
+*:selected:backdrop image,
+row:selected:backdrop label,
+row:selected:backdrop image,
+list-row:selected:backdrop label,
+list-row:selected:backdrop image,
+.sidebar row:selected:backdrop label,
+.sidebar row:selected:backdrop image,
+.sidebar list-row:selected:backdrop label,
+.sidebar list-row:selected:backdrop image,
+.navigation-sidebar row:selected:backdrop label,
+.navigation-sidebar row:selected:backdrop image,
+stacksidebar row:selected:backdrop label,
+stacksidebar row:selected:backdrop image,
+notebook > header > tabs > tab:checked:backdrop label,
+notebook > header > tabs > tab:checked:backdrop image,
+notebook > header > tabs > tab:selected:backdrop label,
+notebook > header > tabs > tab:selected:backdrop image,
+notebook > header tab:backdrop:checked label,
+notebook > header tab:backdrop:checked image,
+notebook > header tab:backdrop:checked.reorderable-page label,
+notebook > header tab:backdrop:checked.reorderable-page image,
+placessidebar row:backdrop:selected label,
+placessidebar row:backdrop:selected image {
+    color: @theme_selected_fg_color_backdrop; /* #D3C6AA / #B8B095 (claro) */
+}
+
+/* Selección deshabilitada - descendientes heredan color atenuado */
+:selected:disabled *,
+*:selected:disabled *,
+list-row:selected:disabled *,
+row:selected:disabled *,
+*:selected:disabled label,
+*:selected:disabled image,
+row:selected:disabled label,
+row:selected:disabled image,
+:selected:disabled:backdrop *,
+*:selected:disabled:backdrop *,
+*:selected:disabled:backdrop label,
+*:selected:disabled:backdrop image,
+row:selected:disabled:backdrop label,
+row:selected:disabled:backdrop image,
+notebook > header > tabs > tab:disabled:backdrop label,
+notebook > header > tabs > tab:disabled:backdrop image {
+    color: #7A8478; /* Everforest grey0 */
 }
 
 /* --- OVERRIDES: Minimalist Scrollbars --- */
@@ -576,10 +655,21 @@ notebook > header > tabs > tab {
     color: #9DA9A0; /* Everforest grey2 */
     transition: all 150ms ease-in-out;
 }
+
+/* Hover en pestañas de notebook */
 notebook > header > tabs > tab:hover {
     color: #D3C6AA; /* Everforest fg */
-    background-color: rgba(211, 198, 170, 0.05);
+    background-color: #2E383C; /* bg1 - sólido y visible */
+    border-radius: 0px;
 }
+notebook > header > tabs > tab:hover.reorderable-page {
+    background-color: #2E383C;
+}
+notebook > header > tabs > tab:hover image,
+notebook > header > tabs > tab:hover label {
+    color: #D3C6AA;
+}
+
 /* Pestaña activa: fondo bg_green + texto/icono verde acento. El indicador
    posicional de 4px lo sigue pintando el base de Adwaita (especificidad mayor:
    notebook > header.left > tabs > tab:checked), asi que la seleccion queda
@@ -596,15 +686,35 @@ notebook > header > tabs > tab:checked.reorderable-page,
 notebook > header > tabs > tab:selected.reorderable-page {
     background-color: #3C4841;
 }
-notebook > header > tabs > tab:hover.reorderable-page {
-    background-color: rgba(211, 198, 170, 0.05);
-}
 
 /* Pestaña activa en backdrop: atenuada como el resto del tema */
 notebook > header > tabs > tab:checked:backdrop,
 notebook > header > tabs > tab:selected:backdrop {
     color: #B8B095;
     background-color: #2E383C;
+}
+
+/* Pestaña deshabilitada (ej. Shares inactiva en Nicotine+) */
+notebook > header > tabs > tab:disabled,
+notebook > header > tabs > tab:disabled image,
+notebook > header > tabs > tab:disabled label {
+    color: #7A8478; /* Everforest grey0 */
+}
+
+/* Hover sobre pestañas deshabilitadas */
+notebook > header > tabs > tab:disabled:hover,
+notebook > header > tabs > tab:disabled:hover image,
+notebook > header > tabs > tab:disabled:hover label {
+    color: #859289; /* Everforest grey1 (visible en hover) */
+    background-color: #2E383C; /* bg1 */
+}
+
+/* Pestaña deshabilitada en backdrop */
+notebook > header > tabs > tab:disabled:backdrop,
+notebook > header > tabs > tab:disabled:backdrop image,
+notebook > header > tabs > tab:disabled:backdrop label {
+    color: #7A8478; /* Everforest grey0 */
+    opacity: 0.5;
 }
 
 /* Iconos de pestañas: GTK 3 no siempre recolorea iconos simbolicos por herencia
@@ -627,18 +737,82 @@ notebook > header > tabs > tab button image {
     color: inherit;
 }
 
-/* 2. Refinamientos de Listas y Sidebars (Legibilidad y Foco) */
+/* 2. Refinamientos de Listas y Sidebars (Legibilidad, Esquinas de 90 grados y Foco) */
+list-row,
+listrow,
+row,
+.sidebar row,
+.sidebar list-row,
+.navigation-sidebar row,
+.navigation-sidebar list-row,
+stacksidebar row,
+stacksidebar list-row,
+listview row,
+listview > row,
+listbox row,
+list-row.activatable,
+row.activatable {
+    border-radius: 0px;
+}
+
 .sidebar list-row,
 .sidebar list-row:hover,
-list-row.activatable:hover {
+list-row.activatable:hover,
+row.activatable:hover,
+.navigation-sidebar row:hover {
     background-color: #2E383C; /* bg1 */
     color: #D3C6AA;
     transition: background-color 150ms;
+    border-radius: 0px;
 }
+.sidebar list-row:hover *,
+list-row.activatable:hover *,
+row.activatable:hover *,
+.navigation-sidebar row:hover * {
+    color: #D3C6AA;
+}
+
 .sidebar list-row:selected,
-list-row.activatable:selected {
+list-row.activatable:selected,
+row.activatable:selected {
     background-color: #3C4841; /* bg_green */
     color: #A7C080;
+    border-radius: 0px;
+}
+
+/* Filas deshabilitadas en listas/sidebars (ej. Banned Users en Nicotine+) */
+list-row:disabled,
+listrow:disabled,
+row:disabled,
+.sidebar row:disabled,
+.sidebar list-row:disabled,
+.navigation-sidebar row:disabled,
+.navigation-sidebar list-row:disabled,
+stacksidebar row:disabled,
+stacksidebar list-row:disabled,
+listview row:disabled,
+list-row:disabled *,
+listrow:disabled *,
+row:disabled * {
+    color: #859289; /* Everforest grey1 (visible pero claramente atenuado) */
+}
+
+/* Hover en filas deshabilitadas de listas/sidebars */
+list-row:disabled:hover,
+listrow:disabled:hover,
+row:disabled:hover,
+.sidebar row:disabled:hover,
+.sidebar list-row:disabled:hover,
+.navigation-sidebar row:disabled:hover,
+.navigation-sidebar list-row:disabled:hover,
+stacksidebar row:disabled:hover,
+stacksidebar list-row:disabled:hover {
+    background-color: #2E383C; /* bg1 */
+}
+list-row:disabled:hover *,
+listrow:disabled:hover *,
+row:disabled:hover * {
+    color: #859289;
 }
 
 /* 3. Ajuste de Popover Arrow (Fusión de color con el fondo) */

@@ -506,9 +506,36 @@
       "Se evito migrar el flujo a Meson o cambiar los comandos del README: el Makefile apunta al .venv y todo sigue igual (make compile / validate / test-gtk3 / test-gtk4 / watch)."
     ],
     "next_steps": [
-      "Verificar make test-gtk3 / test-gtk4 con el venv de uv (requieren display grafico).",
+      "Verificar make test-gtk3 / make test-gtk4 con el venv de uv (requieren display grafico).",
       "Actualizar README.md si se quiere documentar el flujo uv (make setup, uv add, etc.).",
       "Revisar si git status incluye cambios pendientes de src/themes/ (colors.json, overrides*.css) y docs/baseline.sha256 de sesiones anteriores."
+    ]
+  },
+  {
+    "session_id": 22,
+    "timestamp": "2026-08-03T22:42:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Fixes de visibilidad global en Nemo y Nicotine+: contraste de selección (activa/backdrop), hover sólido en pestañas y hover de deshabilitados.",
+    "objectives": [
+      "Corregir el contraste de selección (texto blanco sobre fondo verde claro) en Nemo y otras barras de herramientas GTK 3.",
+      "Solucionar la invisibilidad del texto e iconos de filas seleccionadas en backdrop (como 'Shares' en Nicotine+).",
+      "Resolver la falta de color en hover de pestañas de notebook de Nicotine+ y forzar el color correcto de iconos/texto en hover (habilitados e inactivos).",
+      "Actualizar el baseline y validar los cambios con make validate."
+    ],
+    "changes_made": [
+      "src/themes/everforest-adwaita/overrides.css: Añadidas reglas de selección de alta especificidad (`*:selected label`, `row:selected label`, etc.) para forzar color oscuro bg0 (`#272E33`) sobre fondo de selección verde acento, corrigiendo el contraste en Nemo.",
+      "src/themes/everforest-adwaita/overrides.css: Añadidas reglas de selección en backdrop (`*:selected:backdrop label`, `row:selected:backdrop label`, etc.) usando el color claro de backdrop fg (`#B8B095`) sobre el fondo verde oscuro (`#3C4841`), solucionando la legibilidad de la pestaña activa en Nicotine+.",
+      "src/themes/everforest-adwaita/overrides.css: Configurado un fondo de hover sólido visible (`#2E383C`) para pestañas de notebook y añadido el forzado de color en hover (`tab:hover image`, `tab:hover label`) para asegurar que iconos y texto se iluminen claramente en Nemo y Nicotine+.",
+      "src/themes/everforest-adwaita/overrides.css: Añadida visualización en hover para elementos deshabilitados (`tab:disabled:hover`, `row:disabled:hover`) mostrando fondo `bg1` y texto/iconos en color `grey1` (`#859289`).",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar los hashes de la versión compilada final."
+    ],
+    "key_decisions": [
+      "En Adwaita, `label:selected { color: #ffffff; }` ganaba contra `row:selected` debido a su mayor especificidad (0,1,1 vs 0,1,0). Crear selectores de especificidad (0,1,2) como `row:selected label` obliga a las etiquetas a heredar el color oscuro `#272E33` sobre el fondo verde claro.",
+      "En backdrop, `row:selected:backdrop` usa fondo verde oscuro. Si el texto o los iconos no heredan la propiedad, se pintaban con el color deshabilitado/inactivo de Adwaita que se mapeaba a un verde oscuro casi invisible. Forzar la herencia de color clara en backdrop resuelve este problema globalmente.",
+      "El hover con opacidades del 5% (`rgba(..., 0.05)`) es invisible en temas oscuros sobre fondos bg0/bg1. Usar fondos sólidos (`#2E383C`) junto con reglas específicas para imágenes e iconos (`tab:hover image`) da un feedback visual robusto e inmediato."
+    ],
+    "next_steps": [
+      "Confirmar que en Nicotine+ y Nemo, la selección activa/backdrop, el hover de pestañas/listas y los elementos deshabilitados se visualizan perfectamente."
     ]
   }
 ]
