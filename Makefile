@@ -4,11 +4,13 @@ PYTHON := python3
 # Python con watchdog para el watcher: .venv (pip user-local para evitar externally-managed)
 WATCH_PYTHON := .venv/bin/python
 
-# Scripts de test (sin extensión .py)
-TESTS := switch components changes disabled
-TEST_TARGETS := $(foreach t,$(TESTS),test-$(t)-gtk3 test-$(t)-gtk4)
-
-.PHONY: all compile clean validate baseline-update test-gtk3 test-gtk4 $(TEST_TARGETS) watch
+.PHONY: all compile clean validate baseline-update \
+        test-gtk3 test-gtk4 \
+        test-switch-gtk3 test-switch-gtk4 \
+        test-components-gtk3 test-components-gtk4 \
+        test-changes-gtk3 test-changes-gtk4 \
+        test-disabled-gtk3 test-disabled-gtk4 \
+        watch
 
 all: compile
 
@@ -28,17 +30,38 @@ clean:
 test-gtk3: test-switch-gtk3
 test-gtk4: test-switch-gtk4
 
-# Targets genéricos: test-<nombre>-gtk3 / test-<nombre>-gtk4
-define test_template
-test-$(1)-gtk3: compile
-	chmod +x tests/test_$(1).py
-	$(PYTHON) tests/test_$(1).py --gtk3
+# Testers visuales explícitos (reglas literales: el completado de make no debe ver plantillas)
+test-switch-gtk3: compile
+	chmod +x tests/test_switch.py
+	$(PYTHON) tests/test_switch.py --gtk3
 
-test-$(1)-gtk4: compile
-	chmod +x tests/test_$(1).py
-	$(PYTHON) tests/test_$(1).py --gtk4
-endef
-$(foreach t,$(TESTS),$(eval $(call test_template,$(t))))
+test-switch-gtk4: compile
+	chmod +x tests/test_switch.py
+	$(PYTHON) tests/test_switch.py --gtk4
+
+test-components-gtk3: compile
+	chmod +x tests/test_components.py
+	$(PYTHON) tests/test_components.py --gtk3
+
+test-components-gtk4: compile
+	chmod +x tests/test_components.py
+	$(PYTHON) tests/test_components.py --gtk4
+
+test-changes-gtk3: compile
+	chmod +x tests/test_changes.py
+	$(PYTHON) tests/test_changes.py --gtk3
+
+test-changes-gtk4: compile
+	chmod +x tests/test_changes.py
+	$(PYTHON) tests/test_changes.py --gtk4
+
+test-disabled-gtk3: compile
+	chmod +x tests/test_disabled.py
+	$(PYTHON) tests/test_disabled.py --gtk3
+
+test-disabled-gtk4: compile
+	chmod +x tests/test_disabled.py
+	$(PYTHON) tests/test_disabled.py --gtk4
 
 watch:
 	$(WATCH_PYTHON) scripts/watcher.py

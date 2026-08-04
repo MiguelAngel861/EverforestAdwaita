@@ -365,5 +365,23 @@
     "next_steps": [
       "Ejecutar make test-gtk3 / make test-gtk4 y el resto de testers con display para validacion visual"
     ]
+  },
+  {
+    "session_id": 15,
+    "timestamp": "2026-08-03T21:50:00-06:00",
+    "developer": "opencode",
+    "summary": "Fix completado de make: reemplazadas las reglas generadas con define/$(eval $(call)) por reglas test-* explicitas (el completado de shell expandia $(1) como variable vacia -> test--gtk3).",
+    "objectives": [
+      "Eliminar los targets fantasma test--gtk3 / test--gtk4 que aparecian en el completado de make"
+    ],
+    "changes_made": [
+      "Makefile: eliminadas TESTS/TEST_TARGETS y el bloque define test_template + $(foreach ... $(eval $(call ...))); ahora los 8 targets test-<nombre>-gtk3/4 son reglas literales y .PHONY las lista explicitamente"
+    ],
+    "key_decisions": [
+      "El completado de bash/zsh de make parsea la base de targets y expande $(1) como variable de shell vacia, generando test--gtk3; con reglas literales el completado muestra solo targets reales. Se prefiere legibilidad explicita a la generacion DRY del Makefile"
+    ],
+    "next_steps": [
+      "Verificar que el completado de make muestra los targets correctos (test-gtk3, test-switch-gtk3, test-components-gtk3, etc.)"
+    ]
   }
 ]
