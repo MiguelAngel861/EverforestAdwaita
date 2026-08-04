@@ -6,6 +6,9 @@ gtk-4.0/gtk.css
 gtk-4.0/gtk-dark.css
 gtk-4.0/assets/
 
+# Cache y diffs del compilador
+build/
+
 # Python cache
 __pycache__/
 *.pyc
