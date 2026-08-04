@@ -289,15 +289,19 @@ entry:backdrop {
 }
 
 /* Window frame/shadow for backdrop (Flat & Receded) */
+/* Sombra "recedida" tintada: ambient con tinte bg_dim #1E2326 (30,35,38), contorno
+   profundo #0F1214 (15,18,20), highlight superior fg #D3C6AA atenuado y transicion
+   de 200ms para un fundido suave entre foco y desfoco (patron Libadwaita) */
 decoration:backdrop,
 window.csd:backdrop {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35),
-                0 0 0 1px rgba(0, 0, 0, 0.75),
-                inset 0 0 0 1px #374145;
+    box-shadow: 0 4px 14px rgba(30, 35, 38, 0.35),
+                0 0 0 1px rgba(15, 18, 20, 0.6),
+                inset 0 1px 0 rgba(211, 198, 170, 0.04);
+    transition: box-shadow 200ms ease-out;
 }
 
 window.solid-csd:backdrop {
-    box-shadow: inset 0 0 0 4px #374145, inset 0 0 0 3px #1E2326, inset 0 1px rgba(238, 238, 236, 0.07);
+    box-shadow: inset 0 0 0 4px #374145, inset 0 0 0 3px #1E2326, inset 0 1px rgba(211, 198, 170, 0.04);
     border-color: #374145;
 }
 
@@ -306,7 +310,7 @@ window.tiled-top:backdrop,
 window.tiled-left:backdrop,
 window.tiled-right:backdrop,
 window.tiled-bottom:backdrop {
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.75), 0 0 0 20px transparent, inset 0 0 0 1px #374145;
+    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.6), 0 0 0 20px transparent, inset 0 0 0 1px #374145;
 }
 
 /* Treeview/columnview/listview backdrop */
@@ -385,15 +389,19 @@ switch:disabled slider {
 }
 
 /* --- OVERRIDES: Premium Multi-layered Shadows (Dimensional Layering) --- */
+/* Paleta derivada de sombras: ambient/key = tinte bg_dim #1E2326 (30,35,38);
+   contornos de elevacion = tono profundo #0F1214 (15,18,20); highlight = fg
+   #D3C6AA (211,198,170). Sin negro puro ni blanco puro: la profundidad conserva
+   la temperatura oliva/calida de Everforest en todos los componentes. */
 
 /* Level 4: Active Windows (CSD decoration / window.csd)
    Combines soft ambient shadow, vertical key shadow, top window highlight (Everforest fg at 8%), and a dark outline */
 decoration,
 window.csd {
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55),
-                0 4px 12px rgba(0, 0, 0, 0.3),
+    box-shadow: 0 12px 36px rgba(30, 35, 38, 0.55),
+                0 4px 12px rgba(30, 35, 38, 0.35),
                 inset 0 1px 0 rgba(211, 198, 170, 0.08),
-                0 0 0 1px rgba(0, 0, 0, 0.65);
+                0 0 0 1px rgba(15, 18, 20, 0.75);
 }
 
 /* Level 3: Modals, Dialogs and Popups (Alerts, Message dialogs) */
@@ -402,29 +410,39 @@ window.csd.dialog.message,
 window.csd.dialog,
 window.csd.popup,
 .csd.popup decoration {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5),
-                0 2px 8px rgba(0, 0, 0, 0.25),
+    box-shadow: 0 8px 24px rgba(30, 35, 38, 0.5),
+                0 2px 8px rgba(30, 35, 38, 0.28),
                 inset 0 1px 0 rgba(211, 198, 170, 0.08),
-                0 0 0 1px rgba(0, 0, 0, 0.6);
+                0 0 0 1px rgba(15, 18, 20, 0.7);
 }
 
 /* Level 2: Popovers, Menus and Dropdowns (Context menus, autocomplete) */
-popover.background,
+/* NOTA: `popover.background` en GTK 4 es el nodo padre transparente (flecha +
+   contents); aplicar el anillo 0 0 0 1px ahí dibuja una linea sobre la zona de la
+   flecha. El anillo/sombra va solo sobre `> contents` (caja pintada); en GTK 3 el
+   equivalente se restaura en overrides-gtk3.css (alli popover.background SI es la
+   caja pintada). */
 popover.background > contents,
 menu,
 .menu,
 .context-menu {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
-                0 1px 4px rgba(0, 0, 0, 0.2),
+    box-shadow: 0 6px 16px rgba(30, 35, 38, 0.4),
+                0 1px 4px rgba(30, 35, 38, 0.22),
                 inset 0 1px 0 rgba(211, 198, 170, 0.06),
-                0 0 0 1px rgba(0, 0, 0, 0.55);
+                0 0 0 1px rgba(15, 18, 20, 0.6);
+}
+
+/* Sombra de la flecha del popover: el base GTK 4 la deja negra (rgba(0,0,0,0.3));
+   se tiñe a la paleta para coherencia */
+popover.background > arrow {
+    box-shadow: 0 1px 2px rgba(30, 35, 38, 0.3);
 }
 
 /* Level 1: Tooltips */
 tooltip.csd decoration,
 tooltip {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35),
-                0 0 0 1px rgba(0, 0, 0, 0.65);
+    box-shadow: 0 4px 10px rgba(30, 35, 38, 0.38),
+                0 0 0 1px rgba(15, 18, 20, 0.65);
 }
 
 /* --- OVERRIDES: Shadow Extensions for Buttons, Cards and OSD --- */
@@ -432,53 +450,121 @@ tooltip {
 /* 1. Tarjetas y Hojas de Contenedor (.card, .sheet) - Nivel 1 */
 .card,
 .sheet {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25),
-                0 0 0 1px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 6px rgba(30, 35, 38, 0.3),
+                0 0 0 1px rgba(15, 18, 20, 0.5);
     border: 1px solid rgba(211, 198, 170, 0.05);
 }
 
 /* 2. Botones táctiles y con relieve */
 button:not(.flat):not(.sidebar-button) {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: 0 1px 3px rgba(30, 35, 38, 0.35),
+                inset 0 1px 0 rgba(211, 198, 170, 0.06);
     transition: box-shadow 150ms ease-in-out, background-color 150ms;
 }
 
 button:not(.flat):not(.sidebar-button):active,
 button:not(.flat):not(.sidebar-button):checked {
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 1px 3px rgba(15, 18, 20, 0.5);
 }
 
 /* Botones sugeridos y destructivos táctiles */
 button.suggested-action {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(30, 35, 38, 0.4),
+                inset 0 1px 0 rgba(211, 198, 170, 0.1);
 }
 button.suggested-action:active {
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 2px 4px rgba(15, 18, 20, 0.4);
 }
 
 button.destructive-action {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(30, 35, 38, 0.4),
+                inset 0 1px 0 rgba(211, 198, 170, 0.1);
 }
 button.destructive-action:active {
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 2px 4px rgba(15, 18, 20, 0.4);
 }
 
 /* 4. Componentes OSD (On-Screen Display) - Nivel 3-4 */
 .osd {
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55),
-                0 3px 10px rgba(0, 0, 0, 0.3),
-                0 0 0 1px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 10px 28px rgba(30, 35, 38, 0.55),
+                0 3px 10px rgba(30, 35, 38, 0.32),
+                0 0 0 1px rgba(15, 18, 20, 0.7);
     border: none;
 }
 
 /* 5. Cabecera (HeaderBar/Titlebar) Separador */
 headerbar,
 .titlebar {
-    box-shadow: inset 0 -1px rgba(0, 0, 0, 0.45),
-                inset 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 -1px rgba(15, 18, 20, 0.5),
+                inset 0 1px rgba(211, 198, 170, 0.05);
+}
+
+/* 6. Recesión en backdrop: los widgets con elevacion bajan un nivel de sombra
+   cuando la ventana pierde el foco, para que la jerarquia se distinga por
+   profundidad y no solo por color */
+button:not(.flat):not(.sidebar-button):backdrop {
+    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.03);
+}
+
+.card:backdrop,
+.sheet:backdrop {
+    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.4);
+}
+
+messagedialog.csd decoration:backdrop,
+window.csd.dialog.message:backdrop,
+window.csd.dialog:backdrop,
+window.csd.popup:backdrop,
+.csd.popup decoration:backdrop {
+    box-shadow: 0 4px 14px rgba(30, 35, 38, 0.35),
+                0 0 0 1px rgba(15, 18, 20, 0.6),
+                inset 0 1px 0 rgba(211, 198, 170, 0.04);
+    transition: box-shadow 200ms ease-out;
+}
+
+popover.background > contents:backdrop,
+menu:backdrop,
+.menu:backdrop,
+.context-menu:backdrop {
+    box-shadow: 0 3px 10px rgba(30, 35, 38, 0.3),
+                0 0 0 1px rgba(15, 18, 20, 0.5);
+}
+
+/* --- OVERRIDES: Shadow Consistency Checks / Radios / Switches / Sliders --- */
+/* El base de Adwaita usa sombras negras y highlights blancos en estos widgets;
+   se tiñen a la paleta (bg_dim / #0F1214 / fg) para coherencia con el resto */
+check,
+radio {
+    box-shadow: 0 1px rgba(30, 35, 38, 0.5);
+}
+
+check:backdrop,
+radio:backdrop {
+    box-shadow: none;
+}
+
+.osd check,
+.osd radio {
+    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.1);
+}
+
+switch > slider,
+switch slider,
+scale slider {
+    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.03),
+                0 1px rgba(30, 35, 38, 0.4),
+                0 1px 2px rgba(30, 35, 38, 0.3);
+}
+
+switch:backdrop > slider,
+switch:backdrop slider,
+scale slider:backdrop {
+    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.02);
+}
+
+/* Escala: borde negro hardcodeado de Adwaita -> borde bg2 Everforest */
+scale slider {
+    border-color: #374145;
 }
 
 /* --- OVERRIDES: UI/UX Refinements --- */
@@ -492,13 +578,53 @@ notebook > header > tabs > tab {
 }
 notebook > header > tabs > tab:hover {
     color: #D3C6AA; /* Everforest fg */
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(211, 198, 170, 0.05);
 }
+/* Pestaña activa: fondo bg_green + texto/icono verde acento. El indicador
+   posicional de 4px lo sigue pintando el base de Adwaita (especificidad mayor:
+   notebook > header.left > tabs > tab:checked), asi que la seleccion queda
+   doblemente señalada (linea + fondo) y visible en sidebars verticales */
 notebook > header > tabs > tab:checked,
 notebook > header > tabs > tab:selected {
     color: #A7C080; /* Pestaña Activa (Verde) */
-    background-color: #2E383C; /* bg1 */
-    box-shadow: inset 0 -2px #A7C080; /* Indicador inferior de 2px */
+    background-color: #3C4841; /* bg_green: contraste claro contra bg0 */
+}
+
+/* GTK 4: pestañas reordenables traen fondo propio del base que vence a la regla
+   simple; se duplica con el selector compuesto para mantener el fondo verde */
+notebook > header > tabs > tab:checked.reorderable-page,
+notebook > header > tabs > tab:selected.reorderable-page {
+    background-color: #3C4841;
+}
+notebook > header > tabs > tab:hover.reorderable-page {
+    background-color: rgba(211, 198, 170, 0.05);
+}
+
+/* Pestaña activa en backdrop: atenuada como el resto del tema */
+notebook > header > tabs > tab:checked:backdrop,
+notebook > header > tabs > tab:selected:backdrop {
+    color: #B8B095;
+    background-color: #2E383C;
+}
+
+/* Iconos de pestañas: GTK 3 no siempre recolorea iconos simbolicos por herencia
+   del color de la pestaña; se fuerza el color de estado en el nodo image */
+notebook > header > tabs > tab image {
+    color: inherit;
+}
+notebook > header > tabs > tab:checked image,
+notebook > header > tabs > tab:selected image {
+    color: #A7C080;
+}
+notebook > header > tabs > tab:checked:backdrop image,
+notebook > header > tabs > tab:selected:backdrop image {
+    color: #B8B095;
+}
+
+/* El icono del boton de cerrar dentro de una pestaña activa no debe teñirse de
+   verde: hereda el color del boton (se declara al final para ganar por orden) */
+notebook > header > tabs > tab button image {
+    color: inherit;
 }
 
 /* 2. Refinamientos de Listas y Sidebars (Legibilidad y Foco) */
