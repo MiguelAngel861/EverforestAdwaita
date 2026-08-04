@@ -383,5 +383,31 @@
     "next_steps": [
       "Verificar que el completado de make muestra los targets correctos (test-gtk3, test-switch-gtk3, test-components-gtk3, etc.)"
     ]
+  },
+  {
+    "session_id": 16,
+    "timestamp": "2026-08-03T22:10:00-06:00",
+    "developer": "opencode",
+    "summary": "Unificados los 4 testers visuales (test_switch, test_components, test_changes, test_disabled) en un solo tests/test_visual.py con 6 pestanas, eliminando widgets duplicados (switch/check/entry/radios/botones aparecian en varios testers). Makefile simplificado a test-gtk3/test-gtk4.",
+    "objectives": [
+      "Unificar los testers visuales en uno solo porque varios mostraban funciones/widgets duplicados",
+      "Simplificar el Makefile y las referencias de README y skill"
+    ],
+    "changes_made": [
+      "tests/test_visual.py (nuevo): tester unico dual GTK3/GTK4 con 6 pestanas: 1) Flotantes y Sombras (tooltip, popover, dropdown, radios, dialogo modal), 2) Controles y Listas (botones semanticos, entry, switch, check, ListBox con 14 filas), 3) Vistas y Texto (TextView + TreeView GTK3 / ListView GTK4), 4) Tooltips y Menus (menu legacy GTK3 con Gdk.Gravity / popover de menu GTK4 con destructivo circular), 5) Links, Estados y Barras (links, pares habilitado/deshabilitado de boton/switch/check/radio/entry, entries warning/error, LevelBar, ProgressBar, InfoBars), 6) Foco y Seleccion (seleccion enfocada, SpinButton, anillo de foco, DropDown GTK4)",
+      "Eliminados tests/test_switch.py, test_components.py, test_changes.py, test_disabled.py",
+      "Makefile: solo targets test-gtk3 / test-gtk4 que lanzan tests/test_visual.py --gtk3/--gtk4",
+      "README: estructura de tests y flujo de trabajo actualizados (paso 4: make test-gtk3/gtk4)",
+      "Skill: seccion de test visual apunta a make test-gtk4 y describe las 6 pestanas"
+    ],
+    "key_decisions": [
+      "Un solo tester visual con pestanas en lugar de varios scripts: cada widget aparece una sola vez; los deshabilitados se comparan con su par habilitado en la misma pestana",
+      "Bug latente corregido: en test_changes GTK3 se usaba Gdk.Gravity sin importar Gdk (NameError al hacer clic); en test_visual.py se importa Gtk y Gdk en la rama GTK3",
+      "Los pares habilitado/deshabilitado de test_disabled se integraron en la pestana 5 con los botones habilitado/deshabilitado de test_changes"
+    ],
+    "next_steps": [
+      "Ejecutar make test-gtk3 / make test-gtk4 con display para validar visualmente el tester unificado",
+      "Ajustar common.py si se detectan advertencias de CSS al cargar el tema"
+    ]
   }
 ]

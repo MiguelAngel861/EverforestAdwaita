@@ -40,11 +40,8 @@ EverforestAdwaita/
 ├─ build/cache/                # Cache del CSS base de Adwaita + diffs (generado, gitignored)
 ├─ tests/
 │  ├─ common.py                # Infraestructura compartida (--gtk3/--gtk4, carga CSS)
-│  ├─ test_validate.py         # Validación no-visual (parseo estricto, baseline, auditoría)
-│  ├─ test_switch.py           # Testers visuales (adelgazados, usan common.py)
-│  ├─ test_components.py
-│  ├─ test_changes.py
-│  └─ test_disabled.py
+│  ├─ test_visual.py           # Tester visual unificado (6 pestañas, dual GTK 3/4)
+│  └─ test_validate.py         # Validación no-visual (parseo estricto, baseline, auditoría)
 ├─ scripts/watcher.py          # Auto-compila al guardar cambios en src/themes/ y src/compiler/
 ├─ docs/
 │  ├─ baseline.sha256          # Hashes de referencia del CSS compilado
@@ -130,7 +127,10 @@ Si quieres testear el tema en una aplicación concreta sin cambiar la configurac
 2. Ejecuta `make compile` para regenerar los archivos `gtk.css`.
 3. Ejecuta `make validate` para comprobar que el CSS parsea correctamente en GTK 3 y GTK 4,
    que los hashes coinciden con el baseline y ver la auditoría de hexes sin mapear.
-4. Refresca tu entorno o aplicaciones para verificar el resultado.
+4. Ejecuta `make test-gtk3` / `make test-gtk4` para el tester visual unificado
+   (6 pestañas: flotantes y sombras, controles y listas, vistas y texto, tooltips
+   y menús, links/estados/barras, foco y selección).
+5. Refresca tu entorno o aplicaciones para verificar el resultado.
 
 ### Baseline y paridad
 
