@@ -303,5 +303,49 @@
       "Considerar añadir overrides-gtk3.css simétrico para -gtk-outline-radius (eliminar warning GTK 4)",
       "Validar skill con pruebas reales de desarrollo de tema (cambio acento, esquinas, nuevo tema variante)"
     ]
+  },
+  {
+    "session_id": 13,
+    "timestamp": "2026-08-03T21:30:00-06:00",
+    "developer": "opencode",
+    "summary": "Reestructuración del proyecto: compilador modular (src/compiler/), estructura multi-tema (src/themes/everforest-adwaita/), tests con base compartida (tests/common.py), validación no-visual (make validate), overrides-gtk3.css, Makefile con wildcards y watcher ampliado. Paridad byte-a-byte verificada con baseline.",
+    "objectives": [
+      "Hacer el proyecto más escalable y fácil de desarrollar",
+      "Soportar múltiples temas (src/themes/<nombre>/) con el compilador parametrizado por --theme",
+      "Eliminar la duplicación de infraestructura en los testers visuales",
+      "Añadir validación no-visual (parseo estricto GTK3/GTK4, baseline de hashes, auditoría de hexes sin mapear)",
+      "Eliminar el warning -gtk-outline-radius del CSS de GTK 4"
+    ],
+    "changes_made": [
+      "docs/baseline.sha256 + docs/adwaita-version.txt (nuevos): hashes SHA256 de gtk-3.0/gtk.css y gtk-4.0/gtk.css compilados con el compilador antiguo y versiones GTK 3.24.52/4.22.4 (fase de baseline previa al refactor)",
+      "Migración: src/{colors.json, overrides.css, overrides-gtk4.css} -> src/themes/everforest-adwaita/ (git mv, historial preservado) + theme.json con metadatos del tema",
+      "src/compiler/ (nuevo): theme.py (carga/validación ThemeConfig con resolve()), adwaita.py (extracción CSS base + assets por subprocess aislado por versión GTK, cache en build/cache/ con detección de cambios y diff), palette.py (aplicación del mapa + auditoría de hexes sin mapear con lookbehind para evitar falsos positivos tipo colorswatch#add-color-button), build.py (ensamblaje base + overrides comunes + overrides específicos de versión)",
+      "src/compile_theme.py: CLI delgada sobre compiler.build (--theme, --gtk3, --gtk4)",
+      "tests/common.py (nuevo): parse_gtk_args(), css_path(), load_css() dual GTK3/GTK4; test_switch/test_components/test_changes/test_disabled adelgazados a shells con los widgets intactos",
+      "tests/test_validate.py + make validate: parseo estricto Gtk.CssProvider en GTK3/GTK4 (detecta Junk at end of value), paridad con baseline.sha256, auditoría de hexes sin mapear; make baseline-update para refrescar hashes intencionales",
+      "src/themes/everforest-adwaita/overrides-gtk3.css (nuevo): -gtk-outline-radius movido de la regla global * de overrides.css (propiedad solo-GTK3); elimina el warning 'No property named' en GTK 4",
+      "Makefile: variable PYTHON (python3 del sistema con gi), WATCH_PYTHON (.venv/bin/python con watchdog), wildcards para los 8 targets test-<nombre>-gtk3/4 desde lista TESTS, targets validate y baseline-update",
+      "scripts/watcher.py: vigila src/themes/ (recursivo) y src/compiler/ con filtro de extensiones .json/.css/.py (antes solo colors.json y overrides.css)",
+      "README.md: estructura actualizada (compiler/, themes/, tests/, docs/), flujo de trabajo con make validate, sección de baseline/paridad y creación de temas hermanos",
+      "Skill gtk-theme-creator (SKILL.md): rutas actualizadas a src/themes/everforest-adwaita/, nueva sección overrides-gtk3.css y estructura multi-tema, flujo de validación con make validate, tabla de referencia actualizada; evals/evals.json y references/adwaita-base-colors.md con rutas nuevas"
+    ],
+    "key_decisions": [
+      "Outputs compilados siguen en la raíz (gtk-3.0/, gtk-4.0/): el symlink de ~/.local/share/themes no cambia y el flujo de recarga instantánea se conserva",
+      "Solo se dejó la estructura multi-tema lista (src/themes/everforest-adwaita/ + --theme), sin crear temas hermanos",
+      "Reescritura modular del compilador en lugar de refactor mínimo: se aprovechó para añadir auditoría de hexes sin mapear, cache del base de Adwaita con diff y registro de versiones GTK",
+      "La extracción de CSS base y assets usa subprocess por versión GTK (no se pueden cargar Gtk 3 y 4 en el mismo proceso); el código generado es mínimo y parametrizado, no f-strings gigantes con lógica duplicada",
+      "Gtk.init() es obligatorio antes de Gio.resources_lookup_data: sin él los resources de Adwaita no se cargan",
+      "La auditoría de hexes corre sobre el CSS base ORIGINAL (antes de mapear), no sobre el mapeado (que reportaría los valores Everforest como 'sin mapear')",
+      "El patrón de hexes necesita (?<![0-9a-zA-Z_-]) para no capturar selectores de ID como colorswatch#add-color-button (falso positivo #add -> #aadddd)",
+      ".venv solo tiene watchdog (no gi/PyGObject): make compile/tests usan python3 del sistema; make watch usa .venv/bin/python",
+      "Los avisos de hexes sin mapear (#030c17, #1a0000, #1e1e1e, #606060 en GTK3; #030c17, #1e1e1e, #2e3436, #5a5a5a en GTK4) son informativos y NO bloquean la compilación",
+      "Los hashes del baseline cambiaron intencionalmente en la Fase 3 (movimiento de -gtk-outline-radius) y se refrescaron con make baseline-update"
+    ],
+    "next_steps": [
+      "Validación visual completa: make test-gtk3/test-gtk4 y make test-changes-gtk3/4 con display, y toggle de gsettings en apps reales (Impression, Zen Browser)",
+      "Mapear los hexes sin mapear detectados (#030c17, #1a0000, #1e1e1e, #606060 GTK3; #2e3436, #5a5a5a GTK4) si se desea cobertura total del mapa",
+      "Opción: hacer que make validate falle (exit != 0) ante hexes sin mapear si se quiere política estricta de CI",
+      "Actualizar evals de la skill si se quiere reflejar el flujo con make validate y las rutas nuevas en las assertions"
+    ]
   }
 ]

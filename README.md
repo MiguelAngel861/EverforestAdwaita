@@ -22,12 +22,36 @@ Este tema es compatible tanto con **GTK 3** como con **GTK 4**. Funciona interce
 ```text
 EverforestAdwaita/
 ├─ src/
-│  ├─ colors.json        # Mapeo de colores hexadecimales (Adwaita -> Everforest)
-│  ├─ overrides.css      # Reglas personalizadas (esquinas, scrollbars, contrastes, backdrop)
-│  └─ compile_theme.py   # Script compilador en Python
-├─ Makefile              # Automatización para compilar y limpiar
-├─ index.theme           # Metadatos del tema para el entorno de escritorio
-└─ README.md             # Este archivo
+│  ├─ compiler/                # Compilador modular
+│  │  ├─ theme.py              # Carga y validación de theme.json + colors.json
+│  │  ├─ adwaita.py            # Extracción CSS base + assets (GResources), cache y detección de cambios
+│  │  ├─ palette.py            # Aplicación del mapa de colores + auditoría de hexes sin mapear
+│  │  └─ build.py              # Ensamblaje final (base mapeado + overrides) y CLI
+│  ├─ themes/
+│  │  └─ everforest-adwaita/   # Tema (estructura lista para temas hermanos)
+│  │     ├─ theme.json         # Metadatos del tema (versiones GTK, archivos, requisitos)
+│  │     ├─ colors.json        # Mapeo de colores hexadecimales (Adwaita -> Everforest)
+│  │     ├─ overrides.css      # Reglas personalizadas (esquinas, scrollbars, contrastes, backdrop)
+│  │     ├─ overrides-gtk3.css # Reglas solo-GTK 3 (ej. -gtk-outline-radius)
+│  │     └─ overrides-gtk4.css # Reglas solo-GTK 4 (anillos de foco, selección enfocada)
+│  └─ compile_theme.py         # CLI: python3 src/compile_theme.py [--theme X] [--gtk3|--gtk4]
+├─ gtk-3.0/                    # CSS y assets compilados (GTK 3)
+├─ gtk-4.0/                    # CSS y assets compilados (GTK 4)
+├─ build/cache/                # Cache del CSS base de Adwaita + diffs (generado, gitignored)
+├─ tests/
+│  ├─ common.py                # Infraestructura compartida (--gtk3/--gtk4, carga CSS)
+│  ├─ test_validate.py         # Validación no-visual (parseo estricto, baseline, auditoría)
+│  ├─ test_switch.py           # Testers visuales (adelgazados, usan common.py)
+│  ├─ test_components.py
+│  ├─ test_changes.py
+│  └─ test_disabled.py
+├─ scripts/watcher.py          # Auto-compila al guardar cambios en src/themes/ y src/compiler/
+├─ docs/
+│  ├─ baseline.sha256          # Hashes de referencia del CSS compilado
+│  └─ adwaita-version.txt      # Versiones GTK usadas para el baseline
+├─ Makefile                    # compile, validate, test-*, watch
+├─ index.theme                 # Metadatos del tema para el entorno de escritorio
+└─ README.md                   # Este archivo
 ```
 
 ---
@@ -77,7 +101,7 @@ gsettings set org.gnome.desktop.interface gtk-theme "EverforestAdwaita"
 ```
 
 ### 2. Forzar recarga rápida tras compilar
-Si realizas un cambio en `src/overrides.css` o `src/colors.json`, ejecutas `make compile` y quieres que las aplicaciones abiertas actualicen sus estilos sin tener que reiniciarlas, puedes forzar una recarga rápida alternando el tema:
+Si realizas un cambio en los archivos de `src/themes/everforest-adwaita/`, ejecutas `make compile` y quieres que las aplicaciones abiertas actualicen sus estilos sin tener que reiniciarlas, puedes forzar una recarga rápida alternando el tema:
 
 ```bash
 gsettings set org.gnome.desktop.interface gtk-theme "Adwaita" && gsettings set org.gnome.desktop.interface gtk-theme "EverforestAdwaita"
@@ -99,8 +123,33 @@ Si quieres testear el tema en una aplicación concreta sin cambiar la configurac
 
 ## Flujo de trabajo de desarrollo
 
-1. Realiza cambios en los archivos de configuración:
-   - Modifica [overrides.css](file:///home/damian/Projects/EverforestAdwaita/src/overrides.css) para ajustar márgenes, bordes, sombras o estados.
-   - Modifica [colors.json](file:///home/damian/Projects/EverforestAdwaita/src/colors.json) si deseas alterar el mapeo de colores base de Adwaita.
+1. Realiza cambios en los archivos de configuración del tema (en `src/themes/everforest-adwaita/`):
+   - Modifica [overrides.css](file:///home/damian/Projects/EverforestAdwaita/src/themes/everforest-adwaita/overrides.css) para ajustar márgenes, bordes, sombras o estados.
+   - Modifica [colors.json](file:///home/damian/Projects/EverforestAdwaita/src/themes/everforest-adwaita/colors.json) si deseas alterar el mapeo de colores base de Adwaita.
+   - Usa `overrides-gtk3.css` / `overrides-gtk4.css` para reglas válidas solo en una versión.
 2. Ejecuta `make compile` para regenerar los archivos `gtk.css`.
-3. Refresca tu entorno o aplicaciones para verificar el resultado.
+3. Ejecuta `make validate` para comprobar que el CSS parsea correctamente en GTK 3 y GTK 4,
+   que los hashes coinciden con el baseline y ver la auditoría de hexes sin mapear.
+4. Refresca tu entorno o aplicaciones para verificar el resultado.
+
+### Baseline y paridad
+
+- `docs/baseline.sha256` guarda los hashes de `gtk-3.0/gtk.css` y `gtk-4.0/gtk.css`
+  compilados como referencia.
+- `make validate` avisa si el CSS compilado cambia sin actualizar el baseline
+  (señal de cambio no intencional).
+- Si el cambio es intencional (ej. un override nuevo), actualiza el baseline con
+  `make baseline-update`.
+
+### Crear un tema hermano
+
+La estructura soporta múltiples temas en `src/themes/<nombre>/`. Para crear uno nuevo:
+
+1. Copia `src/themes/everforest-adwaita/` a `src/themes/<nombre>/`.
+2. Adapta `colors.json` (paleta y mapa), los `overrides*.css` y `theme.json`.
+3. Compila con `python3 src/compile_theme.py --theme <nombre>`.
+
+### Watch automático
+
+Ejecuta `make watch` (requiere `pip install watchdog` en `.venv/`) para que el tema
+se recompile automáticamente al guardar cambios en `src/themes/` o `src/compiler/`.
