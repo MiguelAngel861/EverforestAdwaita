@@ -537,5 +537,30 @@
     "next_steps": [
       "Confirmar que en Nicotine+ y Nemo, la selección activa/backdrop, el hover de pestañas/listas y los elementos deshabilitados se visualizan perfectamente."
     ]
+  },
+  {
+    "session_id": 23,
+    "timestamp": "2026-08-03T23:14:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Migración del sistema de overrides a Sass (SCSS) modular y compilación local mediante libsass integrado en compile_theme.py.",
+    "objectives": [
+      "Crear una rama Git para la migración de overrides a Sass de forma aislada y segura.",
+      "Estructurar overrides.css en componentes modularizados de Sass (_variables, _geometry, _selections, _widgets, _notebooks, _sidebars).",
+      "Configurar libsass para compilar overrides.scss automáticamente desde Python en compile_theme.py antes del build general, eliminando dependencias de Node."
+    ],
+    "changes_made": [
+      "Creado el directorio src/themes/everforest-adwaita/sass/ y estructurado el CSS modular en 7 archivos: _variables.scss, _geometry.scss, _selections.scss, _widgets.scss, _notebooks.scss, _sidebars.scss y overrides.scss.",
+      "Instalado libsass de forma local en el entorno de desarrollo Python del proyecto mediante 'uv add libsass'.",
+      "Modificado src/compile_theme.py para compilar de forma transparente overrides.scss a overrides.css antes de la ejecución de build_theme().",
+      "Actualizados los hashes del baseline en docs/baseline.sha256 tras compilar y validar."
+    ],
+    "key_decisions": [
+      "Usar libsass para evitar dependencias de Node/npm, logrando compilar Sass directamente con Python.",
+      "Reemplazar las variables de color @theme_* en los overrides por los valores hexadecimales literales de Everforest (#272E33, #A7C080, #3C4841, #D3C6AA) para garantizar consistencia absoluta y eludir scopes de color conflictivos en el parser de GTK."
+    ],
+    "next_steps": [
+      "Confirmar el correcto funcionamiento visual de los componentes de notebook y lista con los nuevos estilos.",
+      "Planificar el siguiente paso de evolución: la transición a un tema autónomo bifurcando directamente los fuentes SCSS originales de Adwaita."
+    ]
   }
 ]

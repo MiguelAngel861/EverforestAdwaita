@@ -1,0 +1,121 @@
+// 2. Refinamientos de Listas y Sidebars (Legibilidad, Esquinas de 90 grados y Foco)
+list-row,
+listrow,
+row,
+.sidebar row,
+.sidebar list-row,
+.navigation-sidebar row,
+.navigation-sidebar list-row,
+stacksidebar row,
+stacksidebar list-row,
+listview row,
+listview > row,
+listbox row,
+list-row.activatable,
+row.activatable {
+    border-radius: $radius;
+}
+
+// Filas en hover
+.sidebar list-row,
+.sidebar list-row:hover,
+list-row.activatable:hover,
+row.activatable:hover,
+.navigation-sidebar row:hover {
+    background-color: $bg1;
+    color: $fg;
+    transition: background-color 150ms;
+    border-radius: $radius;
+    
+    * {
+        color: $fg;
+    }
+}
+
+// Filas seleccionadas
+.sidebar list-row:selected,
+list-row.activatable:selected,
+row.activatable:selected {
+    background-color: $bg_green;
+    color: $green;
+    border-radius: $radius;
+}
+
+// Filas seleccionadas en hover (para que no desaparezca el fondo verde)
+.sidebar list-row:selected:hover,
+.sidebar row:selected:hover,
+.navigation-sidebar row:selected:hover,
+stacksidebar row:selected:hover,
+list-row.activatable:selected:hover,
+row.activatable:selected:hover {
+    background-color: $bg_green;
+    color: $green;
+    
+    label,
+    image {
+        background-color: transparent;
+        color: $green;
+    }
+}
+
+// Filas seleccionadas en hover en vistas de lista normales (fondo verde claro acento, texto oscuro)
+.view:selected:hover,
+.view row:selected:hover,
+.view list-row:selected:hover,
+treeview.view:selected:hover {
+    background-color: $green;
+    color: #272E33;
+    
+    label,
+    image {
+        background-color: transparent;
+        color: #272E33;
+    }
+}
+
+// Filas deshabilitadas
+list-row:disabled,
+listrow:disabled,
+row:disabled,
+.sidebar row:disabled,
+.sidebar list-row:disabled,
+.navigation-sidebar row:disabled,
+.navigation-sidebar list-row:disabled,
+stacksidebar row:disabled,
+stacksidebar list-row:disabled,
+listview row:disabled,
+list-row:disabled *,
+listrow:disabled *,
+row:disabled * {
+    color: $grey1;
+}
+
+// Hover en filas deshabilitadas
+list-row:disabled:hover,
+listrow:disabled:hover,
+row:disabled:hover,
+.sidebar row:disabled:hover,
+.sidebar list-row:disabled:hover,
+.navigation-sidebar row:disabled:hover,
+.navigation-sidebar list-row:disabled:hover,
+stacksidebar row:disabled:hover,
+stacksidebar list-row:disabled:hover {
+    background-color: $bg1;
+    
+    * {
+        color: $grey1;
+    }
+}
+
+// 3. Ajuste de Popover Arrow (Fusión de color con el fondo)
+popover.background > arrow,
+popover.background > contents {
+    border-color: #374145;
+    background-color: $bg1;
+}
+
+// Ajuste del borde de la flecha del popover
+popover.background > arrow {
+    background-color: $bg1;
+    border-color: #374145;
+}

@@ -1,8 +1,5 @@
-/* --- OVERRIDES: Complete removal of rounded corners --- */
-/* Forzamos esquinas completamente cuadradas (90 grados) en todos los elementos, incluyendo ventanas, diálogos, decoraciones y widgets */
-/* Nota: -gtk-outline-radius vive en overrides-gtk3.css (propiedad solo-GTK 3) */
 * {
-    border-radius: 0px;
+  border-radius: 0px;
 }
 
 window,
@@ -28,12 +25,9 @@ trough,
 list-row,
 list,
 treeview {
-    border-radius: 0px;
+  border-radius: 0px;
 }
 
-/* Selectores de Adwaita con mayor especificidad (popovers, tooltips, progressbar,
-   levelbar): se duplican aquí su selector exacto para que ganen por orden de
-   aparición (regla del tema: esquinas de 90 grados SIEMPRE) */
 popover.background,
 .csd popover.background,
 popover.background > contents,
@@ -76,20 +70,13 @@ levelbar.horizontal trough > block.full,
 levelbar.horizontal.discrete trough > block:first-child,
 levelbar.horizontal.discrete trough > block:last-child,
 levelbar.vertical trough > block {
-    border-radius: 0px;
+  border-radius: 0px;
 }
 
-/* --- OVERRIDES: High-contrast selection styling (exhaustivo) --- */
-/* fg en selección */
 @define-color theme_selected_fg_color #272E33;
-/* bg en selección */
 @define-color theme_selected_bg_color #A7C080;
-/* bg en selección (inactivo) */
 @define-color theme_selected_bg_color_backdrop #3C4841;
-/* fg en selección (inactivo) */
 @define-color theme_selected_fg_color_backdrop #D3C6AA;
-
-/* Selección normal (sin foco) */
 :selected,
 *:selected,
 .selected,
@@ -97,11 +84,10 @@ list-row:selected,
 treeview.view:selected,
 entry selection,
 label selection {
-    color: @theme_selected_fg_color;
-    background-color: @theme_selected_bg_color;
+  color: #272E33;
+  background-color: #A7C080;
 }
 
-/* Selección con foco (cuando el widget está activo) */
 :selected:focus,
 *:selected:focus,
 .selected:focus,
@@ -109,11 +95,10 @@ list-row:selected:focus,
 treeview.view:selected:focus,
 entry selection:focus,
 label selection:focus {
-    color: @theme_selected_fg_color;
-    background-color: @theme_selected_bg_color;
+  color: #272E33;
+  background-color: #A7C080;
 }
 
-/* Selección en ventana inactiva (backdrop) */
 :selected:backdrop,
 *:selected:backdrop,
 .selected:backdrop,
@@ -121,11 +106,10 @@ list-row:selected:backdrop,
 treeview.view:selected:backdrop,
 entry selection:backdrop,
 label selection:backdrop {
-    color: @theme_selected_fg_color_backdrop;
-    background-color: @theme_selected_bg_color_backdrop;
+  color: #D3C6AA;
+  background-color: #3C4841;
 }
 
-/* Selección activa (p.ej. al arrastrar) */
 :selected:active,
 *:selected:active,
 .selected:active,
@@ -133,11 +117,10 @@ list-row:selected:active,
 treeview.view:selected:active,
 entry selection:active,
 label selection:active {
-    color: @theme_selected_fg_color;
-    background-color: @theme_selected_bg_color;
+  color: #272E33;
+  background-color: #A7C080;
 }
 
-/* Aseguramos que cualquier descendiente de la vista seleccionada normal herede el color de texto oscuro */
 :selected *,
 *:selected *,
 .selected *,
@@ -149,30 +132,10 @@ row:selected label,
 row:selected image,
 list-row:selected label,
 list-row:selected image {
-    color: @theme_selected_fg_color; /* #272E33 (oscuro) */
+  color: #272E33;
+  /* oscuro */
 }
 
-/* Excepción para Barras Laterales, StackSidebars y Pestañas de Notebook (ventana activa) - usan color verde acento claro */
-.sidebar row:selected label,
-.sidebar row:selected image,
-.sidebar list-row:selected label,
-.sidebar list-row:selected image,
-.navigation-sidebar row:selected label,
-.navigation-sidebar row:selected image,
-stacksidebar row:selected label,
-stacksidebar row:selected image,
-notebook > header > tabs > tab:checked label,
-notebook > header > tabs > tab:checked image,
-notebook > header > tabs > tab:selected label,
-notebook > header > tabs > tab:selected image,
-notebook > header tab:checked label,
-notebook > header tab:checked image,
-placessidebar row:selected label,
-placessidebar row:selected image {
-    color: #A7C080; /* verde claro acento (sobre fondo verde oscuro #3C4841) */
-}
-
-/* Selección en ventana inactiva (backdrop) - descendientes heredan color claro de backdrop */
 :selected:backdrop *,
 *:selected:backdrop *,
 .selected:backdrop *,
@@ -202,10 +165,10 @@ notebook > header tab:backdrop:checked.reorderable-page label,
 notebook > header tab:backdrop:checked.reorderable-page image,
 placessidebar row:backdrop:selected label,
 placessidebar row:backdrop:selected image {
-    color: @theme_selected_fg_color_backdrop; /* #D3C6AA / #B8B095 (claro) */
+  color: #D3C6AA;
+  /* Everforest fg (claro) */
 }
 
-/* Selección deshabilitada - descendientes heredan color atenuado */
 :selected:disabled *,
 *:selected:disabled *,
 list-row:selected:disabled *,
@@ -222,237 +185,143 @@ row:selected:disabled:backdrop label,
 row:selected:disabled:backdrop image,
 notebook > header > tabs > tab:disabled:backdrop label,
 notebook > header > tabs > tab:disabled:backdrop image {
-    color: #7A8478; /* Everforest grey0 */
+  color: #7A8478;
+  /* Everforest grey0 */
 }
 
-/* --- OVERRIDES: Minimalist Scrollbars --- */
 scrollbar trough {
-    background-color: #1E2326;
-    border: none;
-}
-scrollbar slider {
-    background-color: #414B50; /* Everforest bg3 */
-    border: 2px solid #1E2326;
-    border-radius: 0px;
-}
-scrollbar slider:hover {
-    background-color: #859289; /* Everforest grey1 */
-}
-scrollbar slider:active {
-    background-color: #A7C080; /* Everforest green */
+  background-color: #1E2326;
+  border: none;
 }
 
-/* --- OVERRIDES: Semantic Action Buttons --- */
+scrollbar slider {
+  background-color: #414B50;
+  /* Everforest bg3 */
+  border: 2px solid #1E2326;
+  border-radius: 0px;
+}
+
+scrollbar slider:hover {
+  background-color: #859289;
+  /* Everforest grey1 */
+}
+
+scrollbar slider:active {
+  background-color: #A7C080;
+  /* Everforest green */
+}
+
 button.suggested-action {
-    background-color: #A7C080; /* Everforest green */
-    background-image: none;
-    color: #1E2326;
-    border: 1px solid #3C4841;
+  background-color: #A7C080;
+  /* Everforest green */
+  background-image: none;
+  color: #1E2326;
+  border: 1px solid #3C4841;
+  box-shadow: 0 2px 4px rgba(30, 35, 38, 0.4), inset 0 1px 0 rgba(211, 198, 170, 0.1);
+  transition: background-color 150ms;
 }
+
 button.suggested-action:hover {
-    background-color: #b5cfa3;
-    background-image: none;
-    color: #1E2326;
+  background-color: #b3c891;
+  background-image: none;
+  color: #1E2326;
 }
+
 button.suggested-action:active {
-    background-color: #98b073;
-    background-image: none;
-    color: #1E2326;
+  background-color: #9bb86f;
+  background-image: none;
+  color: #1E2326;
+  box-shadow: inset 0 2px 4px rgba(30, 35, 38, 0.4);
 }
 
 button.destructive-action {
-    background-color: #E67E80; /* Everforest red */
-    background-image: none;
-    color: #1E2326;
-    border: 1px solid #4C3739;
+  background-color: #E67E80;
+  /* Everforest red */
+  background-image: none;
+  color: #1E2326;
+  border: 1px solid #4C3739;
+  box-shadow: 0 2px 4px rgba(30, 35, 38, 0.4), inset 0 1px 0 rgba(211, 198, 170, 0.1);
+  transition: background-color 150ms;
 }
+
 button.destructive-action:hover {
-    background-color: #eb9496;
-    background-image: none;
-    color: #1E2326;
+  background-color: #ea9395;
+  background-image: none;
+  color: #1E2326;
 }
+
 button.destructive-action:active {
-    background-color: #d16e70;
-    background-image: none;
-    color: #1E2326;
+  background-color: #e2696b;
+  background-image: none;
+  color: #1E2326;
+  box-shadow: inset 0 2px 4px rgba(30, 35, 38, 0.4);
 }
 
-/* --- OVERRIDES: Text Entries Focus --- */
 entry:focus {
-    border: 1px solid #A7C080;
-    box-shadow: 0 0 0 3px rgba(167, 192, 128, 0.15);
-    transition: box-shadow 200ms ease-in-out, border-color 200ms;
+  border: 1px solid #A7C080;
+  box-shadow: 0 0 0 3px rgba(167, 192, 128, 0.15);
+  transition: box-shadow 200ms ease-in-out, border-color 200ms;
 }
 
-/* --- OVERRIDES: Backdrop/Unfocused Window States --- */
-/* Improve contrast and visibility for inactive windows - using solid hex colors for GTK compatibility */
-
-/* Titlebar/headerbar in backdrop */
-.titlebar:backdrop:not(headerbar),
-headerbar:backdrop {
-    border-color: #374145;
-    background-color: #1E2326;
-    background-image: none;
-    box-shadow: inset 0 -1px #374145;
+decoration,
+window.csd {
+  box-shadow: 0 12px 36px rgba(30, 35, 38, 0.55), 0 4px 12px rgba(30, 35, 38, 0.35), inset 0 1px 0 rgba(211, 198, 170, 0.08), 0 0 0 1px rgba(15, 18, 20, 0.75);
 }
 
-.titlebar:backdrop:not(headerbar) .title,
-headerbar:backdrop .title {
-    color: #B8B095;
+messagedialog.csd decoration,
+window.csd.dialog.message,
+window.csd.dialog,
+window.csd.popup,
+.csd.popup decoration {
+  box-shadow: 0 8px 24px rgba(30, 35, 38, 0.5), 0 2px 8px rgba(30, 35, 38, 0.28), inset 0 1px 0 rgba(211, 198, 170, 0.08), 0 0 0 1px rgba(15, 18, 20, 0.7);
 }
 
-/* Base text colors for backdrop windows */
-.background:backdrop {
-    color: #B8B095;
-    background-color: #1E2326;
+popover.background > contents,
+menu,
+.menu,
+.context-menu {
+  box-shadow: 0 6px 16px rgba(30, 35, 38, 0.4), 0 1px 4px rgba(30, 35, 38, 0.22), inset 0 1px 0 rgba(211, 198, 170, 0.06), 0 0 0 1px rgba(15, 18, 20, 0.6);
 }
 
-.view:backdrop,
-iconview:backdrop,
-.view text:backdrop,
-iconview text:backdrop,
-textview text:backdrop {
-    color: #D3C6AA;
-    background-color: #2E383C;
+popover.background > arrow {
+  box-shadow: 0 1px 2px rgba(30, 35, 38, 0.3);
 }
 
-label:backdrop {
-    color: #B8B095;
+tooltip.csd decoration,
+tooltip {
+  box-shadow: 0 4px 10px rgba(30, 35, 38, 0.38), 0 0 0 1px rgba(15, 18, 20, 0.65);
 }
 
-/* Button backdrop states */
-button:backdrop,
-notebook > header > tabs > arrow:backdrop {
-    color: #B8B095;
-    border-color: #374145;
-    background-image: image(#2E383C);
-    background-color: #2E383C;
+.card,
+.sheet {
+  box-shadow: 0 2px 6px rgba(30, 35, 38, 0.3), 0 0 0 1px rgba(15, 18, 20, 0.5);
+  border: 1px solid rgba(211, 198, 170, 0.05);
 }
 
-button:backdrop:active,
-button:backdrop:checked,
-notebook > header > tabs > arrow:backdrop:active,
-notebook > header > tabs > arrow:backdrop:checked {
-    color: #C7BCA2;
-    border-color: #374145;
-    background-image: image(#374145);
+button:not(.flat):not(.sidebar-button) {
+  box-shadow: 0 1px 3px rgba(30, 35, 38, 0.35), inset 0 1px 0 rgba(211, 198, 170, 0.06);
+  transition: box-shadow 150ms ease-in-out, background-color 150ms;
 }
 
-/* Flat/sidebar buttons in backdrop */
-button.sidebar-button:backdrop,
-button.flat:backdrop,
-windowcontrols button:backdrop,
-.toolbar > button:backdrop,
-.toolbar :not(.linked) > button:backdrop {
-    border-color: #374145;
-    background-color: #2E383C;
-    background-image: none;
-    box-shadow: none;
-    color: #B8B095;
+button:not(.flat):not(.sidebar-button):active, button:not(.flat):not(.sidebar-button):checked {
+  box-shadow: inset 0 1px 3px rgba(15, 18, 20, 0.5);
 }
 
-/* Selected row buttons in backdrop */
-row:selected button.sidebar-button:backdrop,
-row:selected button.flat:backdrop {
-    color: #C7BCA2;
+.osd {
+  box-shadow: 0 10px 28px rgba(30, 35, 38, 0.55), 0 3px 10px rgba(30, 35, 38, 0.32), 0 0 0 1px rgba(15, 18, 20, 0.7);
+  border: none;
 }
 
-/* Entry/spinbutton backdrop */
-spinbutton > text:backdrop,
-spinbutton:backdrop,
-entry:backdrop {
-    color: #D3C6AA;
-    border-color: #374145;
-    background-color: #2E383C;
-    box-shadow: none;
+headerbar,
+.titlebar {
+  box-shadow: inset 0 -1px rgba(15, 18, 20, 0.5), inset 0 1px rgba(211, 198, 170, 0.05);
 }
 
-/* Window frame/shadow for backdrop (Flat & Receded) */
-/* Sombra "recedida" tintada: ambient con tinte bg_dim #1E2326 (30,35,38), contorno
-   profundo #0F1214 (15,18,20), highlight superior fg #D3C6AA atenuado y transicion
-   de 200ms para un fundido suave entre foco y desfoco (patron Libadwaita) */
-decoration:backdrop,
-window.csd:backdrop {
-    box-shadow: 0 4px 14px rgba(30, 35, 38, 0.35),
-                0 0 0 1px rgba(15, 18, 20, 0.6),
-                inset 0 1px 0 rgba(211, 198, 170, 0.04);
-    transition: box-shadow 200ms ease-out;
-}
-
-window.solid-csd:backdrop {
-    box-shadow: inset 0 0 0 4px #374145, inset 0 0 0 3px #1E2326, inset 0 1px rgba(211, 198, 170, 0.04);
-    border-color: #374145;
-}
-
-window.tiled:backdrop,
-window.tiled-top:backdrop,
-window.tiled-left:backdrop,
-window.tiled-right:backdrop,
-window.tiled-bottom:backdrop {
-    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.6), 0 0 0 20px transparent, inset 0 0 0 1px #374145;
-}
-
-/* Treeview/columnview/listview backdrop */
-columnview.view:backdrop,
-treeview.view:backdrop,
-listview:backdrop,
-list:backdrop {
-    border-left-color: #374145;
-    border-top-color: #374145;
-    color: #D3C6AA;
-    background-color: #2E383C;
-    border-color: #374145;
-}
-
-/* Boxed list backdrop */
-.boxed-list > row:backdrop {
-    border-bottom-color: #374145;
-    color: #D3C6AA;
-    background-color: #2E383C;
-}
-
-/* Calendar header backdrop */
-calendar > header > button:backdrop {
-    color: #9DA9A0;
-}
-
-/* Suggested/destructive action buttons backdrop */
-button.suggested-action:backdrop {
-    color: #83C092;
-    border-color: #3C4841;
-    background-color: #3C4841;
-    background-image: none;
-    box-shadow: none;
-}
-
-button.destructive-action:backdrop {
-    color: #f0d0d2;
-    border-color: #851015;
-    background-color: #8a1116;
-    background-image: none;
-    box-shadow: none;
-}
-
-/* Progressbar selected backdrop */
-columnview.view.progressbar:selected:backdrop,
-treeview.view.progressbar:selected:backdrop {
-    background-color: #3C4841;
-    color: #D3C6AA;
-}
-
-/* Inline toolbar backdrop */
-.inline-toolbar toolbutton > button:backdrop {
-    color: #B8B095;
-    border-color: #374145;
-    background-image: image(#2E383C);
-}
-
-/* --- OVERRIDES: Square Switches --- */
 switch,
 switch:checked,
 switch:disabled,
 switch:hover {
-    border-radius: 0px;
+  border-radius: 0px;
 }
 
 switch > slider,
@@ -463,131 +332,183 @@ switch:hover > slider,
 switch:hover slider,
 switch:disabled > slider,
 switch:disabled slider {
-    border-radius: 0px;
-    transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 0px;
+  transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* --- OVERRIDES: Premium Multi-layered Shadows (Dimensional Layering) --- */
-/* Paleta derivada de sombras: ambient/key = tinte bg_dim #1E2326 (30,35,38);
-   contornos de elevacion = tono profundo #0F1214 (15,18,20); highlight = fg
-   #D3C6AA (211,198,170). Sin negro puro ni blanco puro: la profundidad conserva
-   la temperatura oliva/calida de Everforest en todos los componentes. */
-
-/* Level 4: Active Windows (CSD decoration / window.csd)
-   Combines soft ambient shadow, vertical key shadow, top window highlight (Everforest fg at 8%), and a dark outline */
-decoration,
-window.csd {
-    box-shadow: 0 12px 36px rgba(30, 35, 38, 0.55),
-                0 4px 12px rgba(30, 35, 38, 0.35),
-                inset 0 1px 0 rgba(211, 198, 170, 0.08),
-                0 0 0 1px rgba(15, 18, 20, 0.75);
+check,
+radio {
+  box-shadow: 0 1px rgba(30, 35, 38, 0.5);
 }
 
-/* Level 3: Modals, Dialogs and Popups (Alerts, Message dialogs) */
-messagedialog.csd decoration,
-window.csd.dialog.message,
-window.csd.dialog,
-window.csd.popup,
-.csd.popup decoration {
-    box-shadow: 0 8px 24px rgba(30, 35, 38, 0.5),
-                0 2px 8px rgba(30, 35, 38, 0.28),
-                inset 0 1px 0 rgba(211, 198, 170, 0.08),
-                0 0 0 1px rgba(15, 18, 20, 0.7);
+check:backdrop,
+radio:backdrop {
+  box-shadow: none;
 }
 
-/* Level 2: Popovers, Menus and Dropdowns (Context menus, autocomplete) */
-/* NOTA: `popover.background` en GTK 4 es el nodo padre transparente (flecha +
-   contents); aplicar el anillo 0 0 0 1px ahí dibuja una linea sobre la zona de la
-   flecha. El anillo/sombra va solo sobre `> contents` (caja pintada); en GTK 3 el
-   equivalente se restaura en overrides-gtk3.css (alli popover.background SI es la
-   caja pintada). */
-popover.background > contents,
-menu,
-.menu,
-.context-menu {
-    box-shadow: 0 6px 16px rgba(30, 35, 38, 0.4),
-                0 1px 4px rgba(30, 35, 38, 0.22),
-                inset 0 1px 0 rgba(211, 198, 170, 0.06),
-                0 0 0 1px rgba(15, 18, 20, 0.6);
+.osd check,
+.osd radio {
+  box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.1);
 }
 
-/* Sombra de la flecha del popover: el base GTK 4 la deja negra (rgba(0,0,0,0.3));
-   se tiñe a la paleta para coherencia */
-popover.background > arrow {
-    box-shadow: 0 1px 2px rgba(30, 35, 38, 0.3);
+switch > slider,
+switch slider,
+scale slider {
+  box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.03), 0 1px rgba(30, 35, 38, 0.4), 0 1px 2px rgba(30, 35, 38, 0.3);
 }
 
-/* Level 1: Tooltips */
-tooltip.csd decoration,
-tooltip {
-    box-shadow: 0 4px 10px rgba(30, 35, 38, 0.38),
-                0 0 0 1px rgba(15, 18, 20, 0.65);
+scale slider {
+  border-color: #374145;
 }
 
-/* --- OVERRIDES: Shadow Extensions for Buttons, Cards and OSD --- */
-
-/* 1. Tarjetas y Hojas de Contenedor (.card, .sheet) - Nivel 1 */
-.card,
-.sheet {
-    box-shadow: 0 2px 6px rgba(30, 35, 38, 0.3),
-                0 0 0 1px rgba(15, 18, 20, 0.5);
-    border: 1px solid rgba(211, 198, 170, 0.05);
+.titlebar:backdrop:not(headerbar),
+headerbar:backdrop {
+  border-color: #374145;
+  background-color: #1E2326;
+  background-image: none;
+  box-shadow: inset 0 -1px #374145;
 }
 
-/* 2. Botones táctiles y con relieve */
-button:not(.flat):not(.sidebar-button) {
-    box-shadow: 0 1px 3px rgba(30, 35, 38, 0.35),
-                inset 0 1px 0 rgba(211, 198, 170, 0.06);
-    transition: box-shadow 150ms ease-in-out, background-color 150ms;
+.titlebar:backdrop:not(headerbar) .title,
+headerbar:backdrop .title {
+  color: #B8B095;
 }
 
-button:not(.flat):not(.sidebar-button):active,
-button:not(.flat):not(.sidebar-button):checked {
-    box-shadow: inset 0 1px 3px rgba(15, 18, 20, 0.5);
+.background:backdrop {
+  color: #B8B095;
+  background-color: #1E2326;
 }
 
-/* Botones sugeridos y destructivos táctiles */
-button.suggested-action {
-    box-shadow: 0 2px 4px rgba(30, 35, 38, 0.4),
-                inset 0 1px 0 rgba(211, 198, 170, 0.1);
-}
-button.suggested-action:active {
-    box-shadow: inset 0 2px 4px rgba(15, 18, 20, 0.4);
-}
-
-button.destructive-action {
-    box-shadow: 0 2px 4px rgba(30, 35, 38, 0.4),
-                inset 0 1px 0 rgba(211, 198, 170, 0.1);
-}
-button.destructive-action:active {
-    box-shadow: inset 0 2px 4px rgba(15, 18, 20, 0.4);
+.view:backdrop,
+iconview:backdrop,
+.view text:backdrop,
+iconview text:backdrop,
+textview text:backdrop {
+  color: #D3C6AA;
+  background-color: #2E383C;
 }
 
-/* 4. Componentes OSD (On-Screen Display) - Nivel 3-4 */
-.osd {
-    box-shadow: 0 10px 28px rgba(30, 35, 38, 0.55),
-                0 3px 10px rgba(30, 35, 38, 0.32),
-                0 0 0 1px rgba(15, 18, 20, 0.7);
-    border: none;
+label:backdrop {
+  color: #B8B095;
 }
 
-/* 5. Cabecera (HeaderBar/Titlebar) Separador */
-headerbar,
-.titlebar {
-    box-shadow: inset 0 -1px rgba(15, 18, 20, 0.5),
-                inset 0 1px rgba(211, 198, 170, 0.05);
+button:backdrop,
+notebook > header > tabs > arrow:backdrop {
+  color: #B8B095;
+  border-color: #374145;
+  background-image: image(#2E383C);
+  background-color: #2E383C;
 }
 
-/* 6. Recesión en backdrop: los widgets con elevacion bajan un nivel de sombra
-   cuando la ventana pierde el foco, para que la jerarquia se distinga por
-   profundidad y no solo por color */
-button:not(.flat):not(.sidebar-button):backdrop {
-    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.03);
+button:backdrop:active, button:backdrop:checked,
+notebook > header > tabs > arrow:backdrop:active,
+notebook > header > tabs > arrow:backdrop:checked {
+  color: #C7BCA2;
+  border-color: #374145;
+  background-image: image(#374145);
+}
+
+button.sidebar-button:backdrop,
+button.flat:backdrop,
+windowcontrols button:backdrop,
+.toolbar > button:backdrop,
+.toolbar :not(.linked) > button:backdrop {
+  border-color: #374145;
+  background-color: #2E383C;
+  background-image: none;
+  box-shadow: none;
+  color: #B8B095;
+}
+
+row:selected button.sidebar-button:backdrop,
+row:selected button.flat:backdrop {
+  color: #C7BCA2;
+}
+
+spinbutton > text:backdrop,
+spinbutton:backdrop,
+entry:backdrop {
+  color: #D3C6AA;
+  border-color: #374145;
+  background-color: #2E383C;
+  box-shadow: none;
+}
+
+decoration:backdrop,
+window.csd:backdrop {
+  box-shadow: 0 4px 14px rgba(30, 35, 38, 0.35), 0 0 0 1px rgba(15, 18, 20, 0.6), inset 0 1px 0 rgba(211, 198, 170, 0.04);
+  transition: box-shadow 200ms ease-out;
+}
+
+window.solid-csd:backdrop {
+  box-shadow: inset 0 0 0 4px #374145, inset 0 0 0 3px #1E2326, inset 0 1px rgba(211, 198, 170, 0.04);
+  border-color: #374145;
+}
+
+window.tiled:backdrop,
+window.tiled-top:backdrop,
+window.tiled-left:backdrop,
+window.tiled-right:backdrop,
+window.tiled-bottom:backdrop {
+  box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.6), 0 0 0 20px transparent, inset 0 0 0 1px #374145;
+}
+
+columnview.view:backdrop,
+treeview.view:backdrop,
+listview:backdrop,
+list:backdrop {
+  border-left-color: #374145;
+  border-top-color: #374145;
+  color: #D3C6AA;
+  background-color: #2E383C;
+  border-color: #374145;
+}
+
+.boxed-list > row:backdrop {
+  border-bottom-color: #374145;
+  color: #D3C6AA;
+  background-color: #2E383C;
+}
+
+calendar > header > button:backdrop {
+  color: #9DA9A0;
+}
+
+button.suggested-action:backdrop {
+  color: #83C092;
+  border-color: #3C4841;
+  background-color: #3C4841;
+  background-image: none;
+  box-shadow: none;
+}
+
+button.destructive-action:backdrop {
+  color: #f0d0d2;
+  border-color: #851015;
+  background-color: #8a1116;
+  background-image: none;
+  box-shadow: none;
+}
+
+columnview.view.progressbar:selected:backdrop,
+treeview.view.progressbar:selected:backdrop {
+  background-color: #3C4841;
+  color: #D3C6AA;
+}
+
+.inline-toolbar toolbutton > button:backdrop {
+  color: #B8B095;
+  border-color: #374145;
+  background-image: image(#2E383C);
+}
+
+button:backdrop:not(.flat):not(.sidebar-button) {
+  box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.03);
 }
 
 .card:backdrop,
 .sheet:backdrop {
-    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.4);
+  box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.4);
 }
 
 messagedialog.csd decoration:backdrop,
@@ -595,160 +516,129 @@ window.csd.dialog.message:backdrop,
 window.csd.dialog:backdrop,
 window.csd.popup:backdrop,
 .csd.popup decoration:backdrop {
-    box-shadow: 0 4px 14px rgba(30, 35, 38, 0.35),
-                0 0 0 1px rgba(15, 18, 20, 0.6),
-                inset 0 1px 0 rgba(211, 198, 170, 0.04);
-    transition: box-shadow 200ms ease-out;
+  box-shadow: 0 4px 14px rgba(30, 35, 38, 0.35), 0 0 0 1px rgba(15, 18, 20, 0.6), inset 0 1px 0 rgba(211, 198, 170, 0.04);
+  transition: box-shadow 200ms ease-out;
 }
 
 popover.background > contents:backdrop,
 menu:backdrop,
 .menu:backdrop,
 .context-menu:backdrop {
-    box-shadow: 0 3px 10px rgba(30, 35, 38, 0.3),
-                0 0 0 1px rgba(15, 18, 20, 0.5);
-}
-
-/* --- OVERRIDES: Shadow Consistency Checks / Radios / Switches / Sliders --- */
-/* El base de Adwaita usa sombras negras y highlights blancos en estos widgets;
-   se tiñen a la paleta (bg_dim / #0F1214 / fg) para coherencia con el resto */
-check,
-radio {
-    box-shadow: 0 1px rgba(30, 35, 38, 0.5);
-}
-
-check:backdrop,
-radio:backdrop {
-    box-shadow: none;
-}
-
-.osd check,
-.osd radio {
-    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.1);
-}
-
-switch > slider,
-switch slider,
-scale slider {
-    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.03),
-                0 1px rgba(30, 35, 38, 0.4),
-                0 1px 2px rgba(30, 35, 38, 0.3);
+  box-shadow: 0 3px 10px rgba(30, 35, 38, 0.3), 0 0 0 1px rgba(15, 18, 20, 0.5);
 }
 
 switch:backdrop > slider,
 switch:backdrop slider,
 scale slider:backdrop {
-    box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.02);
+  box-shadow: inset 0 1px 0 rgba(211, 198, 170, 0.02);
 }
 
-/* Escala: borde negro hardcodeado de Adwaita -> borde bg2 Everforest */
-scale slider {
-    border-color: #374145;
-}
-
-/* --- OVERRIDES: UI/UX Refinements --- */
-
-/* 1. Estilo de Pestañas de Notebook (GtkNotebook Tabs) */
 notebook > header > tabs > tab {
-    padding: 8px 16px;
-    border: 1px solid transparent;
-    color: #9DA9A0; /* Everforest grey2 */
-    transition: all 150ms ease-in-out;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  color: #9DA9A0;
+  transition: all 150ms ease-in-out;
 }
 
-/* Hover en pestañas de notebook */
 notebook > header > tabs > tab:hover {
-    color: #D3C6AA; /* Everforest fg */
-    background-color: #2E383C; /* bg1 - sólido y visible */
-    border-radius: 0px;
+  color: #D3C6AA;
+  background-color: #2E383C;
+  border-radius: 0px;
 }
+
 notebook > header > tabs > tab:hover.reorderable-page {
-    background-color: #2E383C;
+  background-color: #2E383C;
 }
+
 notebook > header > tabs > tab:hover image,
 notebook > header > tabs > tab:hover label {
-    color: #D3C6AA;
+  color: #D3C6AA;
+  background-color: transparent;
 }
 
-/* Pestaña activa: fondo bg_green + texto/icono verde acento. El indicador
-   posicional de 4px lo sigue pintando el base de Adwaita (especificidad mayor:
-   notebook > header.left > tabs > tab:checked), asi que la seleccion queda
-   doblemente señalada (linea + fondo) y visible en sidebars verticales */
-notebook > header > tabs > tab:checked,
-notebook > header > tabs > tab:selected {
-    color: #A7C080; /* Pestaña Activa (Verde) */
-    background-color: #3C4841; /* bg_green: contraste claro contra bg0 */
+notebook > header > tabs > tab:checked, notebook > header > tabs > tab:selected {
+  color: #272E33;
+  /* oscuro sobre fondo verde claro */
+  background-color: #A7C080;
 }
 
-/* GTK 4: pestañas reordenables traen fondo propio del base que vence a la regla
-   simple; se duplica con el selector compuesto para mantener el fondo verde */
-notebook > header > tabs > tab:checked.reorderable-page,
-notebook > header > tabs > tab:selected.reorderable-page {
-    background-color: #3C4841;
+notebook > header > tabs > tab:checked.reorderable-page, notebook > header > tabs > tab:selected.reorderable-page {
+  background-color: #A7C080;
 }
 
-/* Pestaña activa en backdrop: atenuada como el resto del tema */
-notebook > header > tabs > tab:checked:backdrop,
-notebook > header > tabs > tab:selected:backdrop {
-    color: #B8B095;
-    background-color: #2E383C;
+notebook > header > tabs > tab:checked image, notebook > header > tabs > tab:selected image {
+  color: #272E33;
 }
 
-/* Pestaña activa/seleccionada en hover (para que no desaparezca el fondo verde) */
-notebook > header > tabs > tab:checked:hover,
-notebook > header > tabs > tab:selected:hover,
-notebook > header > tabs > tab:checked:hover label,
-notebook > header > tabs > tab:selected:hover label,
-notebook > header > tabs > tab:checked:hover image,
-notebook > header > tabs > tab:selected:hover image {
-    background-color: #3C4841; /* bg_green */
-    color: #A7C080; /* verde claro acento */
+notebook > header > tabs > tab:backdrop:checked, notebook > header > tabs > tab:backdrop:selected {
+  color: #B8B095;
+  background-color: #3C4841;
 }
 
-/* Pestaña deshabilitada (ej. Shares inactiva en Nicotine+) */
-notebook > header > tabs > tab:disabled,
-notebook > header > tabs > tab:disabled image,
-notebook > header > tabs > tab:disabled label {
-    color: #7A8478; /* Everforest grey0 */
+notebook > header > tabs > tab:backdrop:checked.reorderable-page, notebook > header > tabs > tab:backdrop:selected.reorderable-page {
+  background-color: #3C4841;
 }
 
-/* Hover sobre pestañas deshabilitadas */
-notebook > header > tabs > tab:disabled:hover,
-notebook > header > tabs > tab:disabled:hover image,
-notebook > header > tabs > tab:disabled:hover label {
-    color: #859289; /* Everforest grey1 (visible en hover) */
-    background-color: #2E383C; /* bg1 */
+notebook > header > tabs > tab:backdrop:checked image, notebook > header > tabs > tab:backdrop:selected image {
+  color: #B8B095;
 }
 
-/* Pestaña deshabilitada en backdrop */
-notebook > header > tabs > tab:disabled:backdrop,
-notebook > header > tabs > tab:disabled:backdrop image,
-notebook > header > tabs > tab:disabled:backdrop label {
-    color: #7A8478; /* Everforest grey0 */
-    opacity: 0.5;
+notebook > header > tabs > tab:disabled, notebook > header > tabs > tab:disabled image, notebook > header > tabs > tab:disabled label {
+  color: #7A8478;
 }
 
-/* Iconos de pestañas: GTK 3 no siempre recolorea iconos simbolicos por herencia
-   del color de la pestaña; se fuerza el color de estado en el nodo image */
+notebook > header > tabs > tab:disabled:hover, notebook > header > tabs > tab:disabled:hover image, notebook > header > tabs > tab:disabled:hover label {
+  color: #859289;
+  background-color: #2E383C;
+}
+
+notebook > header > tabs > tab:disabled:backdrop, notebook > header > tabs > tab:disabled:backdrop image, notebook > header > tabs > tab:disabled:backdrop label {
+  color: #7A8478;
+  opacity: 0.5;
+}
+
 notebook > header > tabs > tab image {
-    color: inherit;
-}
-notebook > header > tabs > tab:checked image,
-notebook > header > tabs > tab:selected image {
-    color: #A7C080;
-}
-notebook > header > tabs > tab:checked:backdrop image,
-notebook > header > tabs > tab:selected:backdrop image {
-    color: #B8B095;
+  color: inherit;
 }
 
-/* El icono del boton de cerrar dentro de una pestaña activa no debe teñirse de
-   verde: hereda el color del boton (se declara al final para ganar por orden) */
 notebook > header > tabs > tab button image {
-    color: inherit;
+  color: inherit;
 }
 
-/* 2. Refinamientos de Listas y Sidebars (Legibilidad, Esquinas de 90 grados y Foco) */
+notebook > header > tabs > tab:checked:hover, notebook > header > tabs > tab:selected:hover {
+  background-color: #A7C080;
+  color: #272E33;
+}
+
+notebook > header > tabs > tab:checked:hover label,
+notebook > header > tabs > tab:checked:hover image, notebook > header > tabs > tab:selected:hover label,
+notebook > header > tabs > tab:selected:hover image {
+  background-color: transparent;
+  color: #272E33;
+}
+
+notebook > header > tabs > tab:checked:backdrop:hover, notebook > header > tabs > tab:selected:backdrop:hover {
+  background-color: #3C4841;
+  color: #B8B095;
+}
+
+notebook > header > tabs > tab:checked:backdrop:hover label,
+notebook > header > tabs > tab:checked:backdrop:hover image, notebook > header > tabs > tab:selected:backdrop:hover label,
+notebook > header > tabs > tab:selected:backdrop:hover image {
+  background-color: transparent;
+  color: #B8B095;
+}
+
+notebook > header tab:backdrop:checked:hover {
+  background-color: transparent;
+}
+
+notebook > header tab:backdrop:checked:hover label,
+notebook > header tab:backdrop:checked:hover image {
+  background-color: transparent;
+  color: #B8B095;
+}
+
 list-row,
 listrow,
 row,
@@ -763,7 +653,7 @@ listview > row,
 listbox row,
 list-row.activatable,
 row.activatable {
-    border-radius: 0px;
+  border-radius: 0px;
 }
 
 .sidebar list-row,
@@ -771,33 +661,38 @@ row.activatable {
 list-row.activatable:hover,
 row.activatable:hover,
 .navigation-sidebar row:hover {
-    background-color: #2E383C; /* bg1 */
-    color: #D3C6AA;
-    transition: background-color 150ms;
-    border-radius: 0px;
+  background-color: #2E383C;
+  color: #D3C6AA;
+  transition: background-color 150ms;
+  border-radius: 0px;
 }
+
+.sidebar list-row *,
 .sidebar list-row:hover *,
 list-row.activatable:hover *,
 row.activatable:hover *,
 .navigation-sidebar row:hover * {
-    color: #D3C6AA;
+  color: #D3C6AA;
 }
 
 .sidebar list-row:selected,
 list-row.activatable:selected,
 row.activatable:selected {
-    background-color: #3C4841; /* bg_green */
-    color: #A7C080;
-    border-radius: 0px;
+  background-color: #3C4841;
+  color: #A7C080;
+  border-radius: 0px;
 }
 
-/* Filas seleccionadas en hover en sidebars/listas (para que no desaparezca el fondo verde) */
 .sidebar list-row:selected:hover,
 .sidebar row:selected:hover,
 .navigation-sidebar row:selected:hover,
 stacksidebar row:selected:hover,
 list-row.activatable:selected:hover,
-row.activatable:selected:hover,
+row.activatable:selected:hover {
+  background-color: #3C4841;
+  color: #A7C080;
+}
+
 .sidebar list-row:selected:hover label,
 .sidebar list-row:selected:hover image,
 .sidebar row:selected:hover label,
@@ -805,25 +700,35 @@ row.activatable:selected:hover,
 .navigation-sidebar row:selected:hover label,
 .navigation-sidebar row:selected:hover image,
 stacksidebar row:selected:hover label,
-stacksidebar row:selected:hover image {
-    background-color: #3C4841; /* bg_green (verde oscuro) */
-    color: #A7C080; /* verde claro acento */
+stacksidebar row:selected:hover image,
+list-row.activatable:selected:hover label,
+list-row.activatable:selected:hover image,
+row.activatable:selected:hover label,
+row.activatable:selected:hover image {
+  background-color: transparent;
+  color: #A7C080;
 }
 
-/* Filas seleccionadas en hover en vistas de lista normales (fondo verde claro acento, texto oscuro) */
 .view:selected:hover,
 .view row:selected:hover,
 .view list-row:selected:hover,
-treeview.view:selected:hover,
-.view:selected:hover label,
-.view:selected:hover image,
-treeview.view:selected:hover label,
-treeview.view:selected:hover image {
-    background-color: #A7C080; /* verde claro */
-    color: #272E33; /* oscuro */
+treeview.view:selected:hover {
+  background-color: #A7C080;
+  color: #272E33;
 }
 
-/* Filas deshabilitadas en listas/sidebars (ej. Banned Users en Nicotine+) */
+.view:selected:hover label,
+.view:selected:hover image,
+.view row:selected:hover label,
+.view row:selected:hover image,
+.view list-row:selected:hover label,
+.view list-row:selected:hover image,
+treeview.view:selected:hover label,
+treeview.view:selected:hover image {
+  background-color: transparent;
+  color: #272E33;
+}
+
 list-row:disabled,
 listrow:disabled,
 row:disabled,
@@ -837,10 +742,9 @@ listview row:disabled,
 list-row:disabled *,
 listrow:disabled *,
 row:disabled * {
-    color: #859289; /* Everforest grey1 (visible pero claramente atenuado) */
+  color: #859289;
 }
 
-/* Hover en filas deshabilitadas de listas/sidebars */
 list-row:disabled:hover,
 listrow:disabled:hover,
 row:disabled:hover,
@@ -850,168 +754,28 @@ row:disabled:hover,
 .navigation-sidebar list-row:disabled:hover,
 stacksidebar row:disabled:hover,
 stacksidebar list-row:disabled:hover {
-    background-color: #2E383C; /* bg1 */
+  background-color: #2E383C;
 }
+
 list-row:disabled:hover *,
 listrow:disabled:hover *,
-row:disabled:hover * {
-    color: #859289;
+row:disabled:hover *,
+.sidebar row:disabled:hover *,
+.sidebar list-row:disabled:hover *,
+.navigation-sidebar row:disabled:hover *,
+.navigation-sidebar list-row:disabled:hover *,
+stacksidebar row:disabled:hover *,
+stacksidebar list-row:disabled:hover * {
+  color: #859289;
 }
 
-/* 3. Ajuste de Popover Arrow (Fusión de color con el fondo) */
 popover.background > arrow,
 popover.background > contents {
-    background-color: #272E33; /* bg0 */
-    border-color: #374145; /* bg2 */
+  border-color: #374145;
+  background-color: #2E383C;
 }
 
-/* --- OVERRIDES: Popover / Menu / Dropdown Text Colors --- */
-/* Ensure all text in popovers, menus, dropdowns uses Everforest fg (not Adwaita black/white) */
-
-popover.background,
-popover.background > contents,
-popover.background > contents *,
-menu,
-.menu,
-.context-menu,
-menu *,
-.context-menu *,
-dropdown > popover.menu > contents,
-dropdown > popover.menu > contents *,
-combobox > popover.menu > contents,
-combobox > popover.menu > contents * {
-    color: #D3C6AA; /* Everforest fg */
-}
-
-popover.background > contents label,
-popover.background > contents button,
-popover.background > contents modelbutton,
-menu menuitem,
-.context-menu menuitem,
-dropdown popover listview > row label,
-combobox popover listview > row label {
-    color: #D3C6AA;
-}
-
-/* Hover/selected states in menus/dropdowns */
-menu menuitem:hover,
-.menu menuitem:hover,
-.context-menu menuitem:hover,
-dropdown popover listview > row.activatable:hover,
-combobox popover listview > row.activatable:hover {
-    color: #A7C080; /* Everforest green accent */
-    background-color: #3C4841; /* bg_green */
-}
-
-menu menuitem:selected,
-.menu menuitem:selected,
-.context-menu menuitem:selected,
-dropdown popover listview > row.activatable:selected,
-combobox popover listview > row.activatable:selected {
-    color: #A7C080;
-    background-color: #3C4841;
-}
-
-/* Disabled state */
-menu menuitem:disabled,
-.menu menuitem:disabled,
-.context-menu menuitem:disabled,
-dropdown popover listview > row.activatable:disabled,
-combobox popover listview > row.activatable:disabled {
-    color: #7A8478; /* grey0 */
-}
-
-/* Backdrop state for popovers/menus */
-popover.background:backdrop,
-popover.background:backdrop > contents,
-popover.background:backdrop > contents *,
-menu:backdrop,
-.menu:backdrop,
-.context-menu:backdrop,
-menu:backdrop *,
-.context-menu:backdrop * {
-    color: #B8B095; /* muted fg for backdrop */
-}
-
-menu menuitem:backdrop:hover,
-.menu menuitem:backdrop:hover,
-.context-menu menuitem:backdrop:hover {
-    color: #C7BCA2;
-    background-color: #374145; /* bg2 */
-}
-
-/* --- OVERRIDES: Texto principal de vistas (.view) --- */
-/* Adwaita usa la palabra clave 'white' (no es hex, el mapa no la toca):
-   se fuerza el fg Everforest y un caret visible */
-.view,
-iconview,
-.view text,
-iconview text,
-textview text {
-    color: #D3C6AA;
-    caret-color: #A7C080;
-}
-
-.view:disabled,
-iconview:disabled,
-.view text:disabled,
-iconview text:disabled,
-textview text:disabled {
-    color: #9DA9A0;
-}
-
-.view:backdrop,
-iconview:backdrop,
-.view text:backdrop,
-iconview text:backdrop,
-textview text:backdrop {
-    color: #B8B095;
-}
-
-/* --- OVERRIDES: Tooltips Everforest --- */
-/* Adwaita pinta tooltips negros con texto blanco; se fuerza fondo bg0,
-   borde bg2 y texto fg */
-tooltip.background,
-tooltip {
-    background-color: #272E33;
-    border: 1px solid #374145;
-    color: #D3C6AA;
-}
-
-tooltip.background *,
-tooltip *,
-tooltip label {
-    color: #D3C6AA;
-}
-
-/* --- OVERRIDES: Fondo de menús legacy (GTK 3) --- */
-/* El base de GTK 3 usa #2f2f2f (fuera del mapa); se fuerza el bg0 Everforest */
-menu,
-.menu,
-.context-menu {
-    background-color: #272E33;
-}
-
-menu:backdrop,
-.menu:backdrop,
-.context-menu:backdrop {
-    background-color: #1E2326;
-}
-
-/* --- OVERRIDES: Links Everforest --- */
-/* Los links usan rgba() azul de Adwaita (el mapa solo cubre hex):
-   azul Everforest semántico de la paleta */
-*:link,
-*:visited {
-    color: #7FBBB3;
-}
-
-*:link:hover,
-*:visited:hover {
-    color: #7FBBB3;
-}
-
-*:link:backdrop,
-*:visited:backdrop {
-    color: #9DA9A0;
+popover.background > arrow {
+  background-color: #2E383C;
+  border-color: #374145;
 }

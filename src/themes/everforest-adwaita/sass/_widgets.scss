@@ -1,0 +1,360 @@
+// 1. Scrollbars Minimalistas
+scrollbar trough {
+    background-color: $bg0;
+    border: none;
+}
+scrollbar slider {
+    background-color: $bg3; /* Everforest bg3 */
+    border: 2px solid $bg0;
+    border-radius: $radius;
+}
+scrollbar slider:hover {
+    background-color: $grey1; /* Everforest grey1 */
+}
+scrollbar slider:active {
+    background-color: $green; /* Everforest green */
+}
+
+// 2. Botones de Acción Semánticos
+button.suggested-action {
+    background-color: $green; /* Everforest green */
+    background-image: none;
+    color: $bg0;
+    border: 1px solid $bg_green;
+    box-shadow: 0 2px 4px rgba($bg0, 0.4), inset 0 1px 0 rgba($fg, 0.1);
+    transition: background-color 150ms;
+    
+    &:hover {
+        background-color: lighten($green, 5%);
+        background-image: none;
+        color: $bg0;
+    }
+    &:active {
+        background-color: darken($green, 5%);
+        background-image: none;
+        color: $bg0;
+        box-shadow: inset 0 2px 4px rgba($bg0, 0.4);
+    }
+}
+
+button.destructive-action {
+    background-color: $red; /* Everforest red */
+    background-image: none;
+    color: $bg0;
+    border: 1px solid #4C3739;
+    box-shadow: 0 2px 4px rgba($bg0, 0.4), inset 0 1px 0 rgba($fg, 0.1);
+    transition: background-color 150ms;
+    
+    &:hover {
+        background-color: lighten($red, 5%);
+        background-image: none;
+        color: $bg0;
+    }
+    &:active {
+        background-color: darken($red, 5%);
+        background-image: none;
+        color: $bg0;
+        box-shadow: inset 0 2px 4px rgba($bg0, 0.4);
+    }
+}
+
+// 3. Foco en Entradas de Texto
+entry:focus {
+    border: 1px solid $green;
+    box-shadow: 0 0 0 3px rgba($green, 0.15);
+    transition: box-shadow 200ms ease-in-out, border-color 200ms;
+}
+
+// 4. Sombras Multicapa Premium (Dimensional Layering)
+decoration,
+window.csd {
+    box-shadow: 0 12px 36px rgba($bg0, 0.55),
+                0 4px 12px rgba($bg0, 0.35),
+                inset 0 1px 0 rgba($fg, 0.08),
+                0 0 0 1px rgba(15, 18, 20, 0.75);
+}
+
+messagedialog.csd decoration,
+window.csd.dialog.message,
+window.csd.dialog,
+window.csd.popup,
+.csd.popup decoration {
+    box-shadow: 0 8px 24px rgba($bg0, 0.5),
+                0 2px 8px rgba($bg0, 0.28),
+                inset 0 1px 0 rgba($fg, 0.08),
+                0 0 0 1px rgba(15, 18, 20, 0.7);
+}
+
+popover.background > contents,
+menu,
+.menu,
+.context-menu {
+    box-shadow: 0 6px 16px rgba($bg0, 0.4),
+                0 1px 4px rgba($bg0, 0.22),
+                inset 0 1px 0 rgba($fg, 0.06),
+                0 0 0 1px rgba(15, 18, 20, 0.6);
+}
+
+popover.background > arrow {
+    box-shadow: 0 1px 2px rgba($bg0, 0.3);
+}
+
+tooltip.csd decoration,
+tooltip {
+    box-shadow: 0 4px 10px rgba($bg0, 0.38),
+                0 0 0 1px rgba(15, 18, 20, 0.65);
+}
+
+.card,
+.sheet {
+    box-shadow: 0 2px 6px rgba($bg0, 0.3),
+                0 0 0 1px rgba(15, 18, 20, 0.5);
+    border: 1px solid rgba($fg, 0.05);
+}
+
+button:not(.flat):not(.sidebar-button) {
+    box-shadow: 0 1px 3px rgba($bg0, 0.35),
+                inset 0 1px 0 rgba($fg, 0.06);
+    transition: box-shadow 150ms ease-in-out, background-color 150ms;
+    
+    &:active,
+    &:checked {
+        box-shadow: inset 0 1px 3px rgba(15, 18, 20, 0.5);
+    }
+}
+
+.osd {
+    box-shadow: 0 10px 28px rgba($bg0, 0.55),
+                0 3px 10px rgba($bg0, 0.32),
+                0 0 0 1px rgba(15, 18, 20, 0.7);
+    border: none;
+}
+
+headerbar,
+.titlebar {
+    box-shadow: inset 0 -1px rgba(15, 18, 20, 0.5),
+                inset 0 1px rgba($fg, 0.05);
+}
+
+// 5. Switches / Checkboxes / Sliders
+switch,
+switch:checked,
+switch:disabled,
+switch:hover {
+    border-radius: $radius;
+}
+
+switch > slider,
+switch slider,
+switch:checked > slider,
+switch:checked slider,
+switch:hover > slider,
+switch:hover slider,
+switch:disabled > slider,
+switch:disabled slider {
+    border-radius: $radius;
+    transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+check,
+radio {
+    box-shadow: 0 1px rgba($bg0, 0.5);
+    
+    &:backdrop {
+        box-shadow: none;
+    }
+}
+
+.osd check,
+.osd radio {
+    box-shadow: inset 0 1px 0 rgba($fg, 0.1);
+}
+
+switch > slider,
+switch slider,
+scale slider {
+    box-shadow: inset 0 1px 0 rgba($fg, 0.03),
+                0 1px rgba($bg0, 0.4),
+                0 1px 2px rgba($bg0, 0.3);
+}
+
+scale slider {
+    border-color: #374145;
+}
+
+// 6. Estados de Backdrop / Ventanas Inactivas (Coherencia y Contraste)
+.titlebar:backdrop:not(headerbar),
+headerbar:backdrop {
+    border-color: #374145;
+    background-color: $bg0;
+    background-image: none;
+    box-shadow: inset 0 -1px #374145;
+}
+
+.titlebar:backdrop:not(headerbar) .title,
+headerbar:backdrop .title {
+    color: $muted_fg;
+}
+
+.background:backdrop {
+    color: $muted_fg;
+    background-color: $bg0;
+}
+
+.view:backdrop,
+iconview:backdrop,
+.view text:backdrop,
+iconview text:backdrop,
+textview text:backdrop {
+    color: $fg;
+    background-color: $bg1;
+}
+
+label:backdrop {
+    color: $muted_fg;
+}
+
+button:backdrop,
+notebook > header > tabs > arrow:backdrop {
+    color: $muted_fg;
+    border-color: #374145;
+    background-image: image($bg1);
+    background-color: $bg1;
+    
+    &:active,
+    &:checked {
+        color: #C7BCA2;
+        border-color: #374145;
+        background-image: image(#374145);
+    }
+}
+
+button.sidebar-button:backdrop,
+button.flat:backdrop,
+windowcontrols button:backdrop,
+.toolbar > button:backdrop,
+.toolbar :not(.linked) > button:backdrop {
+    border-color: #374145;
+    background-color: $bg1;
+    background-image: none;
+    box-shadow: none;
+    color: $muted_fg;
+}
+
+row:selected button.sidebar-button:backdrop,
+row:selected button.flat:backdrop {
+    color: #C7BCA2;
+}
+
+spinbutton > text:backdrop,
+spinbutton:backdrop,
+entry:backdrop {
+    color: $fg;
+    border-color: #374145;
+    background-color: $bg1;
+    box-shadow: none;
+}
+
+decoration:backdrop,
+window.csd:backdrop {
+    box-shadow: 0 4px 14px rgba($bg0, 0.35),
+                0 0 0 1px rgba(15, 18, 20, 0.6),
+                inset 0 1px 0 rgba($fg, 0.04);
+    transition: box-shadow 200ms ease-out;
+}
+
+window.solid-csd:backdrop {
+    box-shadow: inset 0 0 0 4px #374145, inset 0 0 0 3px $bg0, inset 0 1px rgba($fg, 0.04);
+    border-color: #374145;
+}
+
+window.tiled:backdrop,
+window.tiled-top:backdrop,
+window.tiled-left:backdrop,
+window.tiled-right:backdrop,
+window.tiled-bottom:backdrop {
+    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.6), 0 0 0 20px transparent, inset 0 0 0 1px #374145;
+}
+
+columnview.view:backdrop,
+treeview.view:backdrop,
+listview:backdrop,
+list:backdrop {
+    border-left-color: #374145;
+    border-top-color: #374145;
+    color: $fg;
+    background-color: $bg1;
+    border-color: #374145;
+}
+
+.boxed-list > row:backdrop {
+    border-bottom-color: #374145;
+    color: $fg;
+    background-color: $bg1;
+}
+
+calendar > header > button:backdrop {
+    color: $grey2;
+}
+
+button.suggested-action:backdrop {
+    color: #83C092;
+    border-color: $bg_green;
+    background-color: $bg_green;
+    background-image: none;
+    box-shadow: none;
+}
+
+button.destructive-action:backdrop {
+    color: #f0d0d2;
+    border-color: #851015;
+    background-color: #8a1116;
+    background-image: none;
+    box-shadow: none;
+}
+
+columnview.view.progressbar:selected:backdrop,
+treeview.view.progressbar:selected:backdrop {
+    background-color: $bg_green;
+    color: $fg;
+}
+
+.inline-toolbar toolbutton > button:backdrop {
+    color: $muted_fg;
+    border-color: #374145;
+    background-image: image($bg1);
+}
+
+button:backdrop:not(.flat):not(.sidebar-button) {
+    box-shadow: inset 0 1px 0 rgba($fg, 0.03);
+}
+
+.card:backdrop,
+.sheet:backdrop {
+    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.4);
+}
+
+messagedialog.csd decoration:backdrop,
+window.csd.dialog.message:backdrop,
+window.csd.dialog:backdrop,
+window.csd.popup:backdrop,
+.csd.popup decoration:backdrop {
+    box-shadow: 0 4px 14px rgba($bg0, 0.35),
+                0 0 0 1px rgba(15, 18, 20, 0.6),
+                inset 0 1px 0 rgba($fg, 0.04);
+    transition: box-shadow 200ms ease-out;
+}
+
+popover.background > contents:backdrop,
+menu:backdrop,
+.menu:backdrop,
+.context-menu:backdrop {
+    box-shadow: 0 3px 10px rgba($bg0, 0.3),
+                0 0 0 1px rgba(15, 18, 20, 0.5);
+}
+
+switch:backdrop > slider,
+switch:backdrop slider,
+scale slider:backdrop {
+    box-shadow: inset 0 1px 0 rgba($fg, 0.02);
+}

@@ -1,0 +1,127 @@
+// 1. Estilo de Pestañas de Notebook (GtkNotebook Tabs)
+notebook > header > tabs > tab {
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    color: $grey2;
+    transition: all 150ms ease-in-out;
+    
+    // Hover
+    &:hover {
+        color: $fg;
+        background-color: $bg1;
+        border-radius: $radius;
+        
+        &.reorderable-page {
+            background-color: $bg1;
+        }
+        
+        image,
+        label {
+            color: $fg;
+            background-color: transparent;
+        }
+    }
+    
+    // Seleccionada / Activa
+    &:checked,
+    &:selected {
+        color: #272E33; /* oscuro sobre fondo verde claro */
+        background-color: $green;
+        
+        &.reorderable-page {
+            background-color: $green;
+        }
+        
+        image {
+            color: #272E33;
+        }
+    }
+    
+    // Backdrop
+    &:backdrop {
+        &:checked,
+        &:selected {
+            color: $muted_fg;
+            background-color: $bg_green;
+            
+            &.reorderable-page {
+                background-color: $bg_green;
+            }
+            
+            image {
+                color: $muted_fg;
+            }
+        }
+    }
+    
+    // Deshabilitada
+    &:disabled {
+        &, image, label {
+            color: $grey0;
+        }
+        
+        // Hover
+        &:hover {
+            &, image, label {
+                color: $grey1;
+                background-color: $bg1;
+            }
+        }
+        
+        // Backdrop
+        &:backdrop {
+            &, image, label {
+                color: $grey0;
+                opacity: 0.5;
+            }
+        }
+    }
+}
+
+// Icono cerrar en pestaña activa hereda color
+notebook > header > tabs > tab {
+    image {
+        color: inherit;
+    }
+    button image {
+        color: inherit;
+    }
+}
+
+// Estados combinados hover para pestañas activas
+notebook > header > tabs > tab {
+    // Activa en hover (focused window)
+    &:checked:hover,
+    &:selected:hover {
+        background-color: $green;
+        color: #272E33;
+        
+        label,
+        image {
+            background-color: transparent;
+            color: #272E33;
+        }
+    }
+    
+    // Activa en hover (backdrop window)
+    &:checked:backdrop:hover,
+    &:selected:backdrop:hover {
+        background-color: $bg_green;
+        color: $muted_fg;
+        
+        label,
+        image {
+            background-color: transparent;
+            color: $muted_fg;
+        }
+    }
+}
+notebook > header tab:backdrop:checked:hover {
+    background-color: transparent;
+    
+    label,
+    image {
+        background-color: transparent;
+        color: $muted_fg;
+    }
+}
