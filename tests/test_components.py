@@ -1,44 +1,20 @@
 #!/usr/bin/env python3
 import sys
 import os
-import argparse
 import gi
 
-# Configurar argumentos de línea de comandos para seleccionar la versión de GTK
-parser = argparse.ArgumentParser(description="Prueba visual exhaustiva de componentes y sombras para EverforestAdwaita.")
-parser.add_argument("--gtk3", action="store_true", help="Ejecutar prueba con GTK 3")
-parser.add_argument("--gtk4", action="store_true", help="Ejecutar prueba con GTK 4 (predeterminado)")
-args = parser.parse_args()
+sys.path.insert(0, os.path.dirname(__file__))
+import common
 
-use_gtk3 = args.gtk3
-if not use_gtk3 and not args.gtk4:
-    try:
-        gi.require_version('Gtk', '4.0')
-        use_gtk3 = False
-    except ValueError:
-        use_gtk3 = True
+use_gtk3 = common.parse_gtk_args()
+common.load_css(use_gtk3)
 
 if use_gtk3:
     print("Iniciando visualizador de componentes con GTK 3...")
     gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk, Gdk
+    from gi.repository import Gtk
     
     Gtk.init([])
-    
-    # Cargar CSS
-    css_provider = Gtk.CssProvider()
-    css_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gtk-3.0", "gtk.css")
-    if os.path.exists(css_path):
-        try:
-            css_provider.load_from_path(css_path)
-            print(f"-> CSS cargado desde: {css_path}")
-        except Exception as e:
-            print(f"-> Advertencia al cargar CSS: {e}")
-        Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(),
-            css_provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-        )
     
     # Crear Ventana Principal (Sombra Nivel 4)
     win = Gtk.Window(title="EverforestAdwaita - Visualizador GTK 3")
@@ -186,27 +162,9 @@ if use_gtk3:
 else:
     print("Iniciando visualizador de componentes con GTK 4...")
     gi.require_version('Gtk', '4.0')
-    from gi.repository import Gtk, Gdk
-    
-    css_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gtk-4.0", "gtk.css")
+    from gi.repository import Gtk
     
     def on_activate(app):
-        # Cargar CSS
-        if os.path.exists(css_path):
-            css_provider = Gtk.CssProvider()
-            try:
-                css_provider.load_from_path(css_path)
-                print(f"-> CSS cargado desde: {css_path}")
-            except Exception as e:
-                print(f"-> Advertencia al cargar CSS: {e}")
-            display = Gdk.Display.get_default()
-            if display:
-                Gtk.StyleContext.add_provider_for_display(
-                    display,
-                    css_provider,
-                    Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-                )
-        
         # Crear Ventana Principal (Sombra Nivel 4)
         win = Gtk.ApplicationWindow(application=app, title="EverforestAdwaita - Visualizador GTK 4")
         win.set_default_size(500, 600)

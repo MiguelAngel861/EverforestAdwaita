@@ -1,9 +1,15 @@
-.PHONY: all compile clean test-gtk3 test-gtk4 test-components-gtk3 test-components-gtk4 test-changes-gtk3 test-changes-gtk4 test-disabled-gtk3 test-disabled-gtk4 watch
+.PHONY: all compile clean validate baseline-update test-gtk3 test-gtk4 test-components-gtk3 test-components-gtk4 test-changes-gtk3 test-changes-gtk4 test-disabled-gtk3 test-disabled-gtk4 watch
 
 all: compile
 
 compile:
 	python3 src/compile_theme.py
+
+validate: compile
+	python3 tests/test_validate.py
+
+baseline-update:
+	sha256sum gtk-3.0/gtk.css gtk-4.0/gtk.css > docs/baseline.sha256
 
 clean:
 	rm -rf gtk-3.0/gtk.css gtk-3.0/gtk-dark.css gtk-3.0/assets gtk-4.0/gtk.css gtk-4.0/gtk-dark.css gtk-4.0/assets

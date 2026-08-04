@@ -1,37 +1,18 @@
 #!/usr/bin/env python3
 """Test minimalista para diagnosticar switch y checkbox deshabilitados."""
-import sys, os, argparse, gi
+import sys, os, gi
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--gtk3", action="store_true")
-parser.add_argument("--gtk4", action="store_true")
-args = parser.parse_args()
+sys.path.insert(0, os.path.dirname(__file__))
+import common
 
-use_gtk3 = args.gtk3
-if not use_gtk3 and not args.gtk4:
-    try:
-        gi.require_version('Gtk', '4.0')
-        use_gtk3 = False
-    except ValueError:
-        use_gtk3 = True
+use_gtk3 = common.parse_gtk_args()
+common.load_css(use_gtk3)
 
 if use_gtk3:
     print("GTK 3 - Diagnosticando switch y checkbox deshabilitados")
     gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk, Gdk
+    from gi.repository import Gtk
     Gtk.init([])
-
-    css_provider = Gtk.CssProvider()
-    css_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gtk-3.0", "gtk.css")
-    if os.path.exists(css_path):
-        try:
-            css_provider.load_from_path(css_path)
-            print(f"-> CSS cargado: {css_path}")
-        except Exception as e:
-            print(f"-> Error: {e}")
-        Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(), css_provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     win = Gtk.Window(title="Diagnóstico Disabled GTK 3")
     win.set_default_size(400, 300)
@@ -96,24 +77,9 @@ if use_gtk3:
 else:
     print("GTK 4 - Diagnosticando switch y checkbox deshabilitados")
     gi.require_version('Gtk', '4.0')
-    from gi.repository import Gtk, Gdk
-
-    css_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gtk-4.0", "gtk.css")
+    from gi.repository import Gtk
 
     def on_activate(app):
-        if os.path.exists(css_path):
-            css_provider = Gtk.CssProvider()
-            try:
-                css_provider.load_from_path(css_path)
-                print(f"-> CSS cargado: {css_path}")
-            except Exception as e:
-                print(f"-> Error: {e}")
-            display = Gdk.Display.get_default()
-            if display:
-                Gtk.StyleContext.add_provider_for_display(
-                    display, css_provider,
-                    Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-
         win = Gtk.ApplicationWindow(application=app, title="Diagnóstico Disabled GTK 4")
         win.set_default_size(400, 300)
 
