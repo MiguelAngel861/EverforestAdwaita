@@ -694,6 +694,17 @@ notebook > header > tabs > tab:selected:backdrop {
     background-color: #2E383C;
 }
 
+/* Pestaña activa/seleccionada en hover (para que no desaparezca el fondo verde) */
+notebook > header > tabs > tab:checked:hover,
+notebook > header > tabs > tab:selected:hover,
+notebook > header > tabs > tab:checked:hover label,
+notebook > header > tabs > tab:selected:hover label,
+notebook > header > tabs > tab:checked:hover image,
+notebook > header > tabs > tab:selected:hover image {
+    background-color: #3C4841; /* bg_green */
+    color: #A7C080; /* verde claro acento */
+}
+
 /* Pestaña deshabilitada (ej. Shares inactiva en Nicotine+) */
 notebook > header > tabs > tab:disabled,
 notebook > header > tabs > tab:disabled image,
@@ -778,6 +789,38 @@ row.activatable:selected {
     background-color: #3C4841; /* bg_green */
     color: #A7C080;
     border-radius: 0px;
+}
+
+/* Filas seleccionadas en hover en sidebars/listas (para que no desaparezca el fondo verde) */
+.sidebar list-row:selected:hover,
+.sidebar row:selected:hover,
+.navigation-sidebar row:selected:hover,
+stacksidebar row:selected:hover,
+list-row.activatable:selected:hover,
+row.activatable:selected:hover,
+.sidebar list-row:selected:hover label,
+.sidebar list-row:selected:hover image,
+.sidebar row:selected:hover label,
+.sidebar row:selected:hover image,
+.navigation-sidebar row:selected:hover label,
+.navigation-sidebar row:selected:hover image,
+stacksidebar row:selected:hover label,
+stacksidebar row:selected:hover image {
+    background-color: #3C4841; /* bg_green (verde oscuro) */
+    color: #A7C080; /* verde claro acento */
+}
+
+/* Filas seleccionadas en hover en vistas de lista normales (fondo verde claro acento, texto oscuro) */
+.view:selected:hover,
+.view row:selected:hover,
+.view list-row:selected:hover,
+treeview.view:selected:hover,
+.view:selected:hover label,
+.view:selected:hover image,
+treeview.view:selected:hover label,
+treeview.view:selected:hover image {
+    background-color: #A7C080; /* verde claro */
+    color: #272E33; /* oscuro */
 }
 
 /* Filas deshabilitadas en listas/sidebars (ej. Banned Users en Nicotine+) */
