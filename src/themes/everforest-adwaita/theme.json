@@ -1,0 +1,33 @@
+{
+  "name": "EverforestAdwaita",
+  "display_name": "Everforest Adwaita",
+  "description": "Tema GTK programático basado en Adwaita con la paleta Everforest Dark Hard, esquinas de 90 grados y mejoras de contraste para ventanas inactivas (backdrop). Compatible con GTK 3 y GTK 4.",
+  "version": "1.0.0",
+  "palette": "Everforest Dark Hard",
+  "base_theme": "Adwaita",
+  "gtk_versions": {
+    "gtk3": "3.24.52",
+    "gtk4": "4.22.4"
+  },
+  "files": {
+    "colors": "colors.json",
+    "overrides": "overrides.css",
+    "overrides_gtk4": "overrides-gtk4.css",
+    "overrides_gtk3": "overrides-gtk3.css"
+  },
+  "features": [
+    "esquinas_cuadradas",
+    "alto_contraste_seleccion",
+    "backdrop_ventanas_inactivas",
+    "scrollbars_minimalistas",
+    "botones_semanticos",
+    "sombras_multicapa",
+    "compatibilidad_dual_gtk3_gtk4"
+  ],
+  "requirements": {
+    "python": ">=3.8",
+    "gtk3": ">=3.24",
+    "gtk4": ">=4.10",
+    "pygobject": ">=3.40"
+  }
+}

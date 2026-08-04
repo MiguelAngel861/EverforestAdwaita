@@ -12,9 +12,11 @@ GTK3_DIR = os.path.join(THEME_DIR, "gtk-3.0")
 GTK4_DIR = os.path.join(THEME_DIR, "gtk-4.0")
 
 # Cargar archivos de configuración
-colors_path = os.path.join(SRC_DIR, "colors.json")
-overrides_path = os.path.join(SRC_DIR, "overrides.css")
-overrides_gtk4_path = os.path.join(SRC_DIR, "overrides-gtk4.css")
+THEME_NAME = "everforest-adwaita"
+THEME_DIR_SRC = os.path.join(SRC_DIR, "themes", THEME_NAME)
+colors_path = os.path.join(THEME_DIR_SRC, "colors.json")
+overrides_path = os.path.join(THEME_DIR_SRC, "overrides.css")
+overrides_gtk4_path = os.path.join(THEME_DIR_SRC, "overrides-gtk4.css")
 
 if not os.path.exists(colors_path):
     print(f"Error: No se encontró {colors_path}")
