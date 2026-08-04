@@ -14,6 +14,7 @@ GTK4_DIR = os.path.join(THEME_DIR, "gtk-4.0")
 # Cargar archivos de configuración
 colors_path = os.path.join(SRC_DIR, "colors.json")
 overrides_path = os.path.join(SRC_DIR, "overrides.css")
+overrides_gtk4_path = os.path.join(SRC_DIR, "overrides-gtk4.css")
 
 if not os.path.exists(colors_path):
     print(f"Error: No se encontró {colors_path}")
@@ -29,6 +30,12 @@ with open(colors_path, "r", encoding="utf-8") as f:
 
 with open(overrides_path, "r", encoding="utf-8") as f:
     SUFFIX = f.read()
+
+if os.path.exists(overrides_gtk4_path):
+    with open(overrides_gtk4_path, "r", encoding="utf-8") as f:
+        SUFFIX_GTK4 = f.read()
+else:
+    SUFFIX_GTK4 = ""
 
 def compile_gtk3():
     print("Compilando tema GTK 3...")
@@ -84,6 +91,7 @@ def compile_gtk4():
     print("Compilando tema GTK 4...")
     color_map_str = json.dumps(COLOR_MAP)
     suffix_str = json.dumps(SUFFIX)
+    suffix_gtk4_str = json.dumps(SUFFIX_GTK4)
     
     py_code = f"""
 import re, os, gi, sys, json
@@ -99,7 +107,8 @@ try:
         css_content = re.sub(src, dest, css_content, flags=re.IGNORECASE)
         
     suffix = json.loads({repr(suffix_str)})
-    css_content += suffix
+    suffix_gtk4 = json.loads({repr(suffix_gtk4_str)})
+    css_content += suffix + suffix_gtk4
     
     # Extraer assets locales
     assets_dir = os.path.join({repr(GTK4_DIR)}, "assets")

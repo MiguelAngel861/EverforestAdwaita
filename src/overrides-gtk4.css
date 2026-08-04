@@ -1,0 +1,45 @@
+/* --- OVERRIDES GTK4-ONLY: Anillos de foco y selección enfocada --- */
+/* :focus-visible y :focus-within son selectores CSS Level 4 que GTK 3 no soporta.
+   Este archivo solo se anexa a gtk-4.0/gtk.css por compile_theme.py.
+   El azul de Adwaita (rgba(21, 83, 158, ...)) no puede mapearse en colors.json
+   porque el mapa solo reemplaza hex completos: se fuerza el verde Everforest. */
+
+*:focus:focus-visible {
+    outline-color: rgba(167, 192, 128, 0.7);
+}
+
+entry > text > selection:focus-within,
+label > selection:focus-within,
+textview > text > selection:focus-within,
+spinbutton:not(.vertical) > text > selection:focus-within,
+editablelabel > stack > text > selection:focus-within {
+    background-color: rgba(167, 192, 128, 0.8);
+    color: #272E33;
+}
+
+/* Botón destructivo circular en popovers GTK 4: Adwaita pinta degradado rojo
+   oscuro con especificidad superior; se duplica el selector exacto y se fuerza
+   el rojo Everforest plano (regla 4: background-image: none) */
+popover.menu box.circular-buttons button.destructive-action.circular.image-button.model,
+list > row button.image-button:not(.flat).destructive-action {
+    background-image: none;
+    background-color: #E67E80;
+    color: #1E2326;
+    border-color: #4C3739;
+}
+
+popover.menu box.circular-buttons button.destructive-action.circular.image-button.model:hover,
+list > row button.image-button:not(.flat).destructive-action:hover {
+    background-image: none;
+    background-color: #EB9496;
+    color: #1E2326;
+}
+
+popover.menu box.circular-buttons button.destructive-action.circular.image-button.model:active,
+popover.menu box.circular-buttons button.destructive-action.circular.image-button.model:checked,
+list > row button.image-button:not(.flat).destructive-action:active,
+list > row button.image-button:not(.flat).destructive-action:checked {
+    background-image: none;
+    background-color: #D16E70;
+    color: #1E2326;
+}
