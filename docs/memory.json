@@ -347,5 +347,23 @@
       "Opción: hacer que make validate falle (exit != 0) ante hexes sin mapear si se quiere política estricta de CI",
       "Actualizar evals de la skill si se quiere reflejar el flujo con make validate y las rutas nuevas en las assertions"
     ]
+  },
+  {
+    "session_id": 14,
+    "timestamp": "2026-08-03T21:45:00-06:00",
+    "developer": "opencode",
+    "summary": "Fix post-refactor: restaurados los atajos make test-gtk3 / make test-gtk4 perdidos en la reescritura del Makefile (Fase 3).",
+    "objectives": [
+      "Restaurar los targets historicos make test-gtk3 / test-gtk4 que apuntaban al tester de switch"
+    ],
+    "changes_made": [
+      "Makefile: anadidos test-gtk3: test-switch-gtk3 y test-gtk4: test-switch-gtk4 (aliases), y agregados ambos al .PHONY"
+    ],
+    "key_decisions": [
+      "La reescritura del Makefile con wildcards (test-<nombre>-gtk3/4) dejo sin atajos a test-gtk3/gtk4; se restauran como aliases en lugar de mantener targets duplicados"
+    ],
+    "next_steps": [
+      "Ejecutar make test-gtk3 / make test-gtk4 y el resto de testers con display para validacion visual"
+    ]
   }
 ]
