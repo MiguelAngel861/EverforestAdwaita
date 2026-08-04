@@ -1,0 +1,16 @@
+[project]
+name = "everforest-adwaita"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = []
+
+[tool.uv]
+default-groups = ["dev", "test"]
+
+[dependency-groups]
+dev = [
+    "watchdog>=6.0.0",
+]
+test = [
+    "pygobject>=3.56.3",
+]

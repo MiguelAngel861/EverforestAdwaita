@@ -17,3 +17,6 @@ __pycache__/
 .agents/
 .gemini/
 skills-lock.json
+
+# Entorno uv
+.venv/

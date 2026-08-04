@@ -1,12 +1,13 @@
-# Python con PyGObject (gi) para compilar y testear: el python del sistema
-PYTHON := python3
-
-# Python con watchdog para el watcher: .venv (pip user-local para evitar externally-managed)
+# Python del entorno uv (Python 3.13 + PyGObject en .venv): compilar y testear
+PYTHON := .venv/bin/python
 WATCH_PYTHON := .venv/bin/python
 
-.PHONY: all compile clean validate baseline-update test-gtk3 test-gtk4 watch
+.PHONY: all setup compile clean validate baseline-update test-gtk3 test-gtk4 watch
 
 all: compile
+
+setup:
+	uv sync
 
 compile:
 	$(PYTHON) src/compile_theme.py
