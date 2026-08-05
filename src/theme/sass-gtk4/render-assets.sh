@@ -1,11 +1,16 @@
-#! /bin/bash
+#!/bin/bash
 
-INKSCAPE="/usr/bin/inkscape"
-OPTIPNG="/usr/bin/optipng"
+INKSCAPE="inkscape"
 
 INDEX="assets.txt"
 SRC_FILE="assets.svg"
 ASSETS_DIR="assets"
+
+optimize_png() {
+    if command -v optipng >/dev/null 2>&1; then
+        optipng -o7 --quiet "$1"
+    fi
+}
 
 for contrast in "" "hc-";
 do
@@ -21,8 +26,8 @@ do
                 --export-id-only \
                 --export-type="png" \
                 --export-filename=$ASSETS_DIR/$contrast$i.png \
-                $SRC_FILE >/dev/null \
-       && $OPTIPNG -o7 --quiet $ASSETS_DIR/$contrast$i.png
+                $SRC_FILE >/dev/null
+      optimize_png $ASSETS_DIR/$contrast$i.png
     fi
     if [ -f $ASSETS_DIR/$contrast$i@2.png ]; then
       echo $ASSETS_DIR/$contrast$i@2.png exists.
@@ -34,9 +39,10 @@ do
                 --export-id-only \
                 --export-type="png" \
                 --export-filename=$ASSETS_DIR/$contrast$i@2.png \
-                $SRC_FILE >/dev/null \
-       && $OPTIPNG -o7 --quiet $ASSETS_DIR/$contrast$i@2.png
+                $SRC_FILE >/dev/null
+      optimize_png $ASSETS_DIR/$contrast$i@2.png
     fi
   done
 done
 exit 0
+
