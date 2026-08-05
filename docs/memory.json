@@ -584,12 +584,15 @@
       "Simplificada la compilación a un único script unificado `src/compile.py` en Python puro con `libsass`.",
       "Eliminada la carpeta `src/compiler/` y los archivos de scripting obsoletos (`adwaita.py`, `palette.py`, `theme.py`, `colors.json`, `theme.json` y `overrides.css`).",
       "Simplificado `tests/test_validate.py` removiendo la auditoría obsoleta de hexes.",
+      "Creado el script `src/recolor_assets.py` para reemplazar de forma automática los colores de acento azul por verde Everforest en los SVG maestros.",
+      "Actualizados los scripts `render-assets.sh` para compatibilidad nativa con Inkscape moderno (1.0+) y tolerancia al compresor `optipng` si no está instalado.",
       "Actualizado el baseline y hashes verificados en docs/baseline.sha256."
     ],
     "key_decisions": [
       "El fork de Adwaita elimina la necesidad de extraer CSS del sistema (GResources) y aplicar expresiones regulares propensas a errores, haciendo que el tema compile de forma autónoma en cualquier entorno de manera instantánea.",
       "Al compilar mediante Sass con variables de color en el origen, el CSS resultante hereda de manera natural todas las reglas, hovers y estados que GNOME ya maneja, logrando una consistencia estética superior.",
-      "Eliminar los archivos residuales de la estrategia anterior y consolidar la compilación en un único script unificado reduce la complejidad técnica y mejora la escalabilidad del proyecto."
+      "Eliminar los archivos residuales de la estrategia anterior y consolidar la compilación en un único script unificado reduce la complejidad técnica y mejora la escalabilidad del proyecto.",
+      "Automatizar la recoloración en el archivo SVG maestro en lugar de editar individualmente los PNGs permite que los cambios de acentos cromáticos sean escalables en el futuro."
     ],
     "next_steps": [
       "Realizar pruebas visuales exhaustivas del tema autónomo compilado.",
