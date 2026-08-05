@@ -5,14 +5,11 @@ Comprueba:
 1. Parseo estricto de gtk-3.0/gtk.css y gtk-4.0/gtk.css con Gtk.CssProvider
    (detecta "Junk at end of value" y propiedades no válidas).
 2. Paridad de hashes contra docs/baseline.sha256 (aviso si cambió sin actualizar baseline).
-3. Hexes del CSS base de Adwaita sin mapear en colors.json (aviso informativo).
 
 Requiere display gráfico para el parseo (Gtk.init), igual que los testers visuales.
 """
 import hashlib
-import json
 import os
-import re
 import subprocess
 import sys
 
@@ -20,11 +17,6 @@ TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(TESTS_DIR)
 DOCS_DIR = os.path.join(REPO_ROOT, "docs")
 BASELINE_FILE = os.path.join(DOCS_DIR, "baseline.sha256")
-
-# Añadir el compilador al path para reutilizar la auditoría de hexes
-sys.path.insert(0, os.path.join(REPO_ROOT, "src"))
-from compiler.adwaita import extract_css_base  # noqa: E402
-from compiler.palette import audit_unmapped_hexes  # noqa: E402
 
 
 def sha256_file(path):
@@ -101,27 +93,6 @@ def check_baseline():
     return warnings
 
 
-def check_unmapped_hexes():
-    """Extrae el base de Adwaita y reporta hexes sin mapear. Devuelve lista de avisos."""
-    warnings = []
-    try:
-        from compiler.theme import load_theme
-        from pathlib import Path
-
-        theme = load_theme(Path(REPO_ROOT) / "src" / "themes" / "everforest-adwaita")
-        for gtk in ("3", "4"):
-            base = extract_css_base(gtk)
-            unmapped = audit_unmapped_hexes(base.css_content, theme.colors_map)
-            suspicious = {h for h in unmapped if h not in ("#ffffff", "#000000", "#fff", "#000")}
-            if suspicious:
-                warnings.append(
-                    f"GTK {gtk}: hexes de Adwaita sin mapear en colors.json: {sorted(suspicious)}"
-                )
-    except Exception as e:
-        warnings.append(f"No se pudo auditar hexes: {e}")
-    return warnings
-
-
 def main():
     failed = False
     all_warnings = []
@@ -148,15 +119,6 @@ def main():
             all_warnings.append(w)
     else:
         print("  OK: hashes idénticos al baseline")
-
-    print("=== Auditoría de hexes sin mapear ===")
-    hex_warnings = check_unmapped_hexes()
-    if hex_warnings:
-        for w in hex_warnings:
-            print(f"  AVISO: {w}")
-            all_warnings.append(w)
-    else:
-        print("  OK: todos los hexes del base de Adwaita están mapeados")
 
     if failed:
         print("\nRESULTADO: FAIL (errores de parseo)")

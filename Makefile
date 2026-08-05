@@ -10,7 +10,7 @@ setup:
 	uv sync
 
 compile:
-	$(PYTHON) src/compile_theme.py
+	$(PYTHON) src/compile.py
 
 validate: compile
 	$(PYTHON) tests/test_validate.py

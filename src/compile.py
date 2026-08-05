@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
-"""Ensamblaje final: Compilación autónoma con Sass de Adwaita forkeado."""
+"""CLI y motor de compilación autónomo EverforestAdwaitaHard con Sass."""
 import os
 import sys
 import shutil
 from pathlib import Path
 import sass
 
-from .theme import ThemeConfig, load_theme
 
-
-def compile_gtk(theme: ThemeConfig, gtk_version: str, output_dir: Path) -> None:
+def compile_gtk(gtk_version: str, output_dir: Path) -> None:
     """Compila el tema autónomo de forma nativa utilizando Sass de Adwaita."""
     print(f"Compilando tema GTK {gtk_version} desde fuentes SCSS...")
 
-    theme_dir = Path(theme.theme_dir)
+    theme_dir = Path(__file__).parent / "theme"
 
     # 1. Determinar rutas del punto de entrada Sass y destino
     if gtk_version == "3":
@@ -59,34 +57,35 @@ def compile_gtk(theme: ThemeConfig, gtk_version: str, output_dir: Path) -> None:
     print(f"-> GTK {gtk_version} compilado correctamente.")
 
 
-def build_theme(theme_name: str = "everforest-adwaita", gtk3: bool = True, gtk4: bool = True) -> None:
-    """Punto de entrada principal para compilar un tema."""
-    src_dir = Path(__file__).parent.parent
-    theme_dir = src_dir / "themes" / theme_name
+def build_theme(gtk3: bool = True, gtk4: bool = True) -> None:
+    """Punto de entrada principal para compilar el tema."""
+    src_dir = Path(__file__).parent
     output_root = src_dir.parent
 
-    if not theme_dir.exists():
-        print(f"Error: Tema no encontrado: {theme_dir}")
-        sys.exit(1)
-
-    theme = load_theme(theme_dir)
+    # Copiamos index.theme del origen a la raíz de salida.
+    src_index = src_dir / "theme" / "index.theme"
+    dest_index = output_root / "index.theme"
+    if src_index.exists():
+        shutil.copy2(src_index, dest_index)
 
     if gtk3:
-        compile_gtk(theme, "3", output_root / "gtk-3.0")
+        compile_gtk("3", output_root / "gtk-3.0")
     if gtk4:
-        compile_gtk(theme, "4", output_root / "gtk-4.0")
+        compile_gtk("4", output_root / "gtk-4.0")
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Compilar tema EverforestAdwaitaHard")
+    parser.add_argument("--gtk3", action="store_true", help="Compilar solo GTK 3")
+    parser.add_argument("--gtk4", action="store_true", help="Compilar solo GTK 4")
+    args = parser.parse_args()
+
+    do_gtk3 = args.gtk3 or (not args.gtk3 and not args.gtk4)
+    do_gtk4 = args.gtk4 or (not args.gtk3 and not args.gtk4)
+
+    build_theme(do_gtk3, do_gtk4)
 
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description="Compilar tema EverforestAdwaita")
-    parser.add_argument("--theme", default="everforest-adwaita", help="Nombre del tema en src/themes/")
-    parser.add_argument("--gtk3", action="store_true", help="Compilar solo GTK 3")
-    parser.add_argument("--gtk4", action="store_true", help="Compilar solo GTK 4")
-    parser.add_argument("--both", action="store_true", help="Compilar ambos (default)")
-    args = parser.parse_args()
-
-    do_gtk3 = args.gtk3 or args.both or (not args.gtk3 and not args.gtk4)
-    do_gtk4 = args.gtk4 or args.both or (not args.gtk3 and not args.gtk4)
-
-    build_theme(args.theme, do_gtk3, do_gtk4)
+    main()
