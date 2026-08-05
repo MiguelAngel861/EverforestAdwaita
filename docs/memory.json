@@ -569,7 +569,7 @@
     "session_id": 24,
     "timestamp": "2026-08-04T18:56:00-06:00",
     "developer": "Antigravity",
-    "summary": "Transición del tema a una arquitectura autónoma (fork) basada en los fuentes SCSS oficiales de Adwaita GTK 3 y GTK 4.",
+    "summary": "Transición del tema a una arquitectura autónoma (fork) basada en los fuentes SCSS oficiales de Adwaita GTK 3 y GTK 4, y posterior limpieza de archivos obsoletos bajo una estructura unificada.",
     "objectives": [
       "Descargar los fuentes SCSS originales de Adwaita GTK 3 (rama `gtk-3-24`) y GTK 4 (tag `4.22.4` del sistema del usuario) desde GitLab de GNOME.",
       "Integrar los fuentes en el tema bajo `sass-gtk3` y `sass-gtk4`.",
@@ -578,16 +578,18 @@
     ],
     "changes_made": [
       "Descargados y extraídos los SCSS originales de Adwaita a `src/sass/adwaita-gtk3/` y `src/sass/adwaita-gtk4/`.",
-      "Copiados y forkeados los fuentes dentro de `src/themes/everforest-adwaita/sass-gtk3` y `sass-gtk4`.",
+      "Copiados y forkeados los fuentes dentro de `src/theme/sass-gtk3` y `src/theme/sass-gtk4`.",
       "Creados `_colors.scss` para GTK 3 y GTK 4 con las variables de color correspondientes a Everforest Dark Hard.",
       "Modificados los puntos de entrada SCSS `gtk-contained-dark.scss` y `Default-dark.scss` para importar nuestros `overrides` locales de Sass al final de la compilación.",
-      "Simplificados `src/compiler/build.py` y `src/compile_theme.py` a compiladores nativos limpios en Python puro con `libsass`.",
-      "Eliminado el archivo heredado `overrides.css` físico del directorio del tema.",
+      "Simplificada la compilación a un único script unificado `src/compile.py` en Python puro con `libsass`.",
+      "Eliminada la carpeta `src/compiler/` y los archivos de scripting obsoletos (`adwaita.py`, `palette.py`, `theme.py`, `colors.json`, `theme.json` y `overrides.css`).",
+      "Simplificado `tests/test_validate.py` removiendo la auditoría obsoleta de hexes.",
       "Actualizado el baseline y hashes verificados en docs/baseline.sha256."
     ],
     "key_decisions": [
       "El fork de Adwaita elimina la necesidad de extraer CSS del sistema (GResources) y aplicar expresiones regulares propensas a errores, haciendo que el tema compile de forma autónoma en cualquier entorno de manera instantánea.",
-      "Al compilar mediante Sass con variables de color en el origen, el CSS resultante hereda de manera natural todas las reglas, hovers y estados que GNOME ya maneja, logrando una consistencia estética superior."
+      "Al compilar mediante Sass con variables de color en el origen, el CSS resultante hereda de manera natural todas las reglas, hovers y estados que GNOME ya maneja, logrando una consistencia estética superior.",
+      "Eliminar los archivos residuales de la estrategia anterior y consolidar la compilación en un único script unificado reduce la complejidad técnica y mejora la escalabilidad del proyecto."
     ],
     "next_steps": [
       "Realizar pruebas visuales exhaustivas del tema autónomo compilado.",
