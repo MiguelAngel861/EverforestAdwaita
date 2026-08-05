@@ -1,72 +1,62 @@
 #!/usr/bin/env python3
-"""Ensamblaje final: base mapeado + overrides → salida."""
+"""Ensamblaje final: Compilación autónoma con Sass de Adwaita forkeado."""
 import os
-import json
 import sys
+import shutil
 from pathlib import Path
-from typing import Optional
+import sass
 
 from .theme import ThemeConfig, load_theme
-from .adwaita import (
-    extract_css_base,
-    extract_assets,
-    save_base_cache,
-    check_base_changed,
-    AdwaitaBase,
-)
-from .palette import process_palette, PaletteResult
 
 
 def compile_gtk(theme: ThemeConfig, gtk_version: str, output_dir: Path) -> None:
-    """Compila el tema para una versión GTK específica."""
-    print(f"Compilando tema GTK {gtk_version}...")
+    """Compila el tema autónomo de forma nativa utilizando Sass de Adwaita."""
+    print(f"Compilando tema GTK {gtk_version} desde fuentes SCSS...")
 
-    # 1. Extraer CSS base de Adwaita (con cache y detección de cambios)
-    base = extract_css_base(gtk_version)
-    if check_base_changed(base, gtk_version):
-        save_base_cache(base, gtk_version)
+    theme_dir = Path(theme.theme_dir)
 
-    # 2. Aplicar mapa de colores + auditoría
-    palette_result: PaletteResult = process_palette(base.css_content, theme.colors_map)
-    for w in palette_result.warnings:
-        print(f"  ADVERTENCIA: {w}")
+    # 1. Determinar rutas del punto de entrada Sass y destino
+    if gtk_version == "3":
+        scss_entry = theme_dir / "sass-gtk3" / "gtk-contained-dark.scss"
+        src_assets = theme_dir / "sass-gtk3" / "assets"
+    elif gtk_version == "4":
+        scss_entry = theme_dir / "sass-gtk4" / "Default-dark.scss"
+        src_assets = theme_dir / "sass-gtk4" / "assets"
+    else:
+        raise ValueError(f"Versión GTK no soportada: {gtk_version}")
 
-    # 3. Cargar overrides comunes
-    overrides_path = theme.resolve(theme.overrides_path)
-    with open(overrides_path, "r", encoding="utf-8") as f:
-        overrides_css = f.read()
+    if not scss_entry.exists():
+        print(f"Error: No se encontró el punto de entrada SCSS en {scss_entry}", file=sys.stderr)
+        sys.exit(1)
 
-    # 4. Cargar overrides específicos de versión
-    version_overrides = ""
-    if gtk_version == "4" and theme.overrides_gtk4_path:
-        overrides_gtk4_path = theme.resolve(theme.overrides_gtk4_path)
-        if overrides_gtk4_path.exists():
-            with open(overrides_gtk4_path, "r", encoding="utf-8") as f:
-                version_overrides = f.read()
-    elif gtk_version == "3" and theme.overrides_gtk3_path:
-        overrides_gtk3_path = theme.resolve(theme.overrides_gtk3_path)
-        if overrides_gtk3_path.exists():
-            with open(overrides_gtk3_path, "r", encoding="utf-8") as f:
-                version_overrides = f.read()
+    # 2. Compilar el SCSS a CSS final
+    try:
+        final_css = sass.compile(
+            filename=str(scss_entry),
+            output_style='expanded'
+        )
+    except Exception as e:
+        print(f"ERROR de compilación Sass para GTK {gtk_version}: {e}", file=sys.stderr)
+        sys.exit(1)
 
-    # 5. Ensamblar CSS final
-    final_css = palette_result.css_content + overrides_css + version_overrides
-
-    # 6. Escribir salida
+    # 3. Escribir salida (gtk.css y gtk-dark.css)
     output_dir.mkdir(parents=True, exist_ok=True)
-    assets_dir = output_dir / "assets"
-
-    # 7. Extraer assets
-    extract_assets(gtk_version, output_dir)
-
-    # 8. Escribir gtk.css y gtk-dark.css
+    
     with open(output_dir / "gtk.css", "w", encoding="utf-8") as f:
         f.write(final_css)
 
     with open(output_dir / "gtk-dark.css", "w", encoding="utf-8") as f:
         f.write('@import url("gtk.css");\n')
 
-    print(f"-> GTK {gtk_version} compilado correctamente (mapeos: {palette_result.mapped_count}).")
+    # 4. Copiar assets locales
+    dest_assets = output_dir / "assets"
+    if src_assets.exists():
+        if dest_assets.exists():
+            shutil.rmtree(dest_assets)
+        shutil.copytree(src_assets, dest_assets)
+        print(f"-> Assets de GTK {gtk_version} copiados correctamente.")
+
+    print(f"-> GTK {gtk_version} compilado correctamente.")
 
 
 def build_theme(theme_name: str = "everforest-adwaita", gtk3: bool = True, gtk4: bool = True) -> None:
