@@ -101,10 +101,9 @@
      transform="translate(-381.00015,-339)">
     <path
        inkscape:connector-curvature="0"
-       d="m 388.00015,341.99995 c -2.20743,0 -4.00005,1.79261 -4.00005,4.00005 0,2.20743 1.79262,4.00005 4.00005,4.00005 2.20743,0 4.00005,-1.79262 4.00005,-4.00005 0,-2.20744 -1.79262,-4.00005 -4.00005,-4.00005 z"
+       d="m 385.00015,343 h 6 v 6 h -6 z"
        id="path9555"
-       sodipodi:nodetypes="csssc"
-       style="color:#bebebe;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Andale Mono';text-indent:0pt;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.38899732;marker:none" />
+       style="color:#bebebe;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Andale Mono';text-indent:0pt;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none" />
   </g>
   <g
      inkscape:groupmode="layer"
