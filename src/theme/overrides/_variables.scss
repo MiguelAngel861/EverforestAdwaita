@@ -1,16 +1,39 @@
-// Paleta de colores Everforest Dark Hard
-$bg0: #1E2326;
-$bg1: #2E383C;
-$bg2: #374145;
-$bg3: #414B50;
-$bg_green: #3C4841;
-$fg: #D3C6AA;
-$muted_fg: #B8B095;
-$green: #A7C080;
-$red: #E67E80;
-$grey0: #7A8478;
-$grey1: #859289;
-$grey2: #9DA9A0;
+// Paleta oficial Everforest Dark Hard (sainnhe/everforest)
 
-// Geometría
-$radius: 0px;
+// Backgrounds (palette1 - hard)
+$bg_dim:     #1E2326; // Superficie más profunda (ventanas secundarias, terminal, backdrop profundo)
+$bg0:        #272E33; // Superficie estándar base (fondo principal de ventanas en Dark Hard)
+$bg1:        #2E383C; // Superficie elevada nivel 1 (text views, list views, cards, inputs, hover)
+$bg2:        #374145; // Superficie elevada nivel 2 (popovers, menus, diálogos, bordes principales)
+$bg3:        #414B50; // Superficie elevada nivel 3 (sliders scrollbar, bordes alternativos, tabs inactivas)
+$bg4:        #495156; // Separadores sutiles, divisiones, espacios
+$bg5:        #4F5B58; // Acentos neutros oscuros
+
+// Backgrounds semánticos (tintes de fondo para estados y alertas)
+$bg_visual:  #4C3743; // Fondo de selección visual / tintado sutil púrpura
+$bg_red:     #493B40; // Fondo de acciones destructivas / diff delete / alertas de error
+$bg_yellow:  #45443C; // Fondo de advertencias / alertas warning / búsqueda
+$bg_green:   #3C4841; // Fondo de selección activa/backdrop / botones sugeridos inactivos
+$bg_blue:    #384B55; // Fondo de información / diff change / hover de links
+$bg_purple:  #463F48; // Fondo de elementos especiales
+
+// Foreground & Text (palette2)
+$fg:         #D3C6AA; // Texto principal y elementos de primer plano
+$muted_fg:   #B8B095; // Texto en backdrop, etiquetas secundarias, texto atenuado
+
+// Acentos cromáticos (palette2)
+$red:        #E67E80; // Acciones destructivas, errores, alertas críticas
+$orange:     #E69875; // Constantes, advertencias secundarias
+$yellow:     #DBBC7F; // Advertencias, elementos destacados
+$green:      #A7C080; // Acento principal Everforest, selección activa, switches ON, sugeridos
+$aqua:       #83C092; // Verde/aqua secundario, texto sugerido en backdrop, éxito
+$blue:       #7FBBB3; // Enlaces, información interactiva (corregido #7FBBB3)
+$purple:     #D699B6; // Enlaces visitados, etiquetas moradas
+
+// Escala de grises (palette2)
+$grey0:      #7A8478; // Comentarios, texto/iconos deshabilitados
+$grey1:      #859289; // Bordes sutiles, hover en elementos deshabilitados
+$grey2:      #9DA9A0; // Pestañas inactivas, subtítulos, placeholders
+
+// Geometría y Sistema de Bordes
+$radius:     0px;     // Regla del proyecto: esquinas rectas a 90 grados

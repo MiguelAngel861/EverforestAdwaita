@@ -1,6 +1,6 @@
 // 1. Estilo de Pestañas de Notebook (GtkNotebook Tabs)
 notebook > header > tabs > tab {
-    padding: 8px 16px;
+    padding: 6px 12px;
     border: 1px solid transparent;
     color: $grey2;
     transition: all 150ms ease-in-out;
@@ -25,7 +25,7 @@ notebook > header > tabs > tab {
     // Seleccionada / Activa
     &:checked,
     &:selected {
-        color: #272E33; /* oscuro sobre fondo verde claro */
+        color: $bg0; /* oscuro sobre fondo verde claro */
         background-color: $green;
         
         &.reorderable-page {
@@ -33,7 +33,7 @@ notebook > header > tabs > tab {
         }
         
         image {
-            color: #272E33;
+            color: $bg0;
         }
     }
     
@@ -94,12 +94,12 @@ notebook > header > tabs > tab {
     &:checked:hover,
     &:selected:hover {
         background-color: $green;
-        color: #272E33;
+        color: $bg0;
         
         label,
         image {
             background-color: transparent;
-            color: #272E33;
+            color: $bg0;
         }
     }
     

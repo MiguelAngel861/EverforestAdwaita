@@ -1,11 +1,11 @@
 // 1. Scrollbars Minimalistas
 scrollbar trough {
-    background-color: $bg0;
+    background-color: $bg_dim;
     border: none;
 }
 scrollbar slider {
     background-color: $bg3; /* Everforest bg3 */
-    border: 2px solid $bg0;
+    border: 2px solid $bg_dim;
     border-radius: $radius;
 }
 scrollbar slider:hover {
@@ -21,7 +21,7 @@ button.suggested-action {
     background-image: none;
     color: $bg0;
     border: 1px solid $bg_green;
-    box-shadow: 0 2px 4px rgba($bg0, 0.4), inset 0 1px 0 rgba($fg, 0.1);
+    box-shadow: 0 2px 4px rgba($bg_dim, 0.4), inset 0 1px 0 rgba($fg, 0.1);
     transition: background-color 150ms;
     
     &:hover {
@@ -33,7 +33,7 @@ button.suggested-action {
         background-color: darken($green, 5%);
         background-image: none;
         color: $bg0;
-        box-shadow: inset 0 2px 4px rgba($bg0, 0.4);
+        box-shadow: inset 0 2px 4px rgba($bg_dim, 0.4);
     }
 }
 
@@ -41,8 +41,8 @@ button.destructive-action {
     background-color: $red; /* Everforest red */
     background-image: none;
     color: $bg0;
-    border: 1px solid #4C3739;
-    box-shadow: 0 2px 4px rgba($bg0, 0.4), inset 0 1px 0 rgba($fg, 0.1);
+    border: 1px solid $bg_red; /* Everforest bg_red */
+    box-shadow: 0 2px 4px rgba($bg_dim, 0.4), inset 0 1px 0 rgba($fg, 0.1);
     transition: background-color 150ms;
     
     &:hover {
@@ -54,24 +54,290 @@ button.destructive-action {
         background-color: darken($red, 5%);
         background-image: none;
         color: $bg0;
-        box-shadow: inset 0 2px 4px rgba($bg0, 0.4);
+        box-shadow: inset 0 2px 4px rgba($bg_dim, 0.4);
     }
 }
 
-// 3. Foco en Entradas de Texto
-entry:focus {
-    border: 1px solid $green;
-    box-shadow: 0 0 0 3px rgba($green, 0.15);
-    transition: box-shadow 200ms ease-in-out, border-color 200ms;
+// 3. Entradas de Texto Sólidas y Definidas (Fondo rehundido $bg0 y bordes estructurados $bg3)
+entry,
+spinbutton:not(.vertical),
+spinbutton.vertical > text {
+    color: $fg;
+    background-color: $bg0;
+    border: 1px solid $bg3;
+    border-radius: $radius;
+    box-shadow: inset 0 1px 3px rgba($bg_dim, 0.5);
+    transition: border-color 150ms ease-in-out, box-shadow 150ms ease-in-out, background-color 150ms;
+    
+    // Sub-nodo de texto (GTK 4)
+    > text {
+        color: $fg;
+        background-color: transparent;
+    }
+    
+    // Hover
+    &:hover {
+        border-color: $bg4;
+        background-color: lighten($bg0, 2%);
+    }
+    
+    // Foco activo (GTK 3 y GTK 4)
+    &:focus,
+    &:focus-within {
+        color: $fg;
+        background-color: $bg0;
+        border-color: $green;
+        box-shadow: 0 0 0 3px rgba($green, 0.22), inset 0 1px 2px rgba($bg_dim, 0.35);
+        outline: none;
+    }
+    
+    // Deshabilitado
+    &:disabled {
+        color: $grey0;
+        background-color: $bg_dim;
+        border: 1px solid $bg3;
+        box-shadow: none;
+    }
+    
+    // Ventana inactiva (Backdrop)
+    &:backdrop {
+        color: $muted_fg;
+        background-color: $bg0;
+        border: 1px solid $bg3;
+        box-shadow: none;
+        
+        &:disabled {
+            color: $grey0;
+            background-color: $bg_dim;
+            border: 1px solid $bg3;
+        }
+    }
+    
+    // Iconos dentro de la entrada
+    image {
+        color: $grey2;
+        
+        &:hover {
+            color: $fg;
+        }
+        
+        &:active {
+            color: $green;
+        }
+    }
 }
 
-// 4. Sombras Multicapa Premium (Dimensional Layering)
+// 3.1 Vistas Multilínea, Listas y Contenedores con Desplazamiento (GtkTextView, GtkTreeView, GtkListView, GtkScrolledWindow)
+scrolledwindow {
+    border: 1px solid $bg3;
+    border-radius: $radius;
+    background-color: $bg0;
+    
+    // Contenido interno no duplica bordes
+    > textview,
+    > listview,
+    > treeview,
+    > list,
+    > columnview,
+    > viewport {
+        border: none;
+        background-color: $bg0;
+    }
+}
+
+// Reset de bordes para ScrolledWindows integrados en barras laterales y menús flotantes
+popover scrolledwindow,
+dropdown popover scrolledwindow,
+combobox popover scrolledwindow,
+sidebar scrolledwindow,
+.sidebar scrolledwindow,
+placessidebar scrolledwindow,
+stacksidebar scrolledwindow,
+pathbar scrolledwindow,
+headerbar scrolledwindow {
+    border: none;
+    background-color: transparent;
+}
+
+// Vistas individuales
+textview,
+treeview,
+listview,
+columnview {
+    border: 1px solid $bg3;
+    border-radius: $radius;
+    background-color: $bg0;
+}
+
+// Anulación de borde individual cuando están dentro de ScrolledWindow o Popover
+scrolledwindow textview,
+scrolledwindow treeview,
+scrolledwindow listview,
+scrolledwindow columnview,
+scrolledwindow list,
+popover listview,
+popover treeview {
+    border: none;
+}
+
+textview,
+textview.view {
+    background-color: $bg0;
+    color: $fg;
+    
+    > text {
+        background-color: $bg0;
+        color: $fg;
+        
+        > selection {
+            background-color: $bg_green;
+            color: $fg;
+        }
+    }
+    
+    > border {
+        background-color: $bg_dim;
+    }
+}
+
+treeview.view,
+treeview {
+    background-color: $bg0;
+    color: $fg;
+    border-radius: $radius;
+    
+    header button {
+        background-color: $bg1;
+        border-bottom: 1px solid $bg3;
+        border-right: 1px solid $bg2;
+        color: $fg;
+        border-radius: 0;
+        
+        &:hover {
+            background-color: $bg2;
+        }
+    }
+}
+
+listview,
+columnview,
+list {
+    background-color: $bg0;
+    color: $fg;
+    border-radius: $radius;
+    
+    > row {
+        border-bottom: 1px solid rgba($bg3, 0.4);
+        
+        &:last-child {
+            border-bottom: none;
+        }
+        
+        &:selected {
+            background-color: $bg_green;
+            color: $fg;
+            
+            &:focus-within {
+                background-color: $green;
+                color: $bg0;
+            }
+        }
+    }
+}
+
+scrolledwindow.frame,
+scrolledwindow frame,
+frame,
+.frame {
+    border: 1px solid $bg3;
+}
+
+separator,
+headerbar separator,
+paned > separator {
+    background-color: $bg3;
+    min-width: 1px;
+    min-height: 1px;
+}
+
+// Entradas en cabeceras, barras de búsqueda y barras de herramientas
+headerbar entry,
+headerbar searchbar entry,
+searchbar entry,
+search-bar entry,
+.toolbar entry,
+toolbar entry {
+    background-color: $bg0;
+    border: 1px solid $bg3;
+    color: $fg;
+    
+    &:hover {
+        border-color: $bg4;
+        background-color: lighten($bg0, 2%);
+    }
+    
+    &:focus,
+    &:focus-within {
+        background-color: $bg0;
+        border-color: $green;
+        box-shadow: 0 0 0 3px rgba($green, 0.22);
+    }
+    
+    &:backdrop {
+        background-color: $bg0;
+        border-color: $bg2;
+        color: $muted_fg;
+    }
+}
+
+// Entradas con clase .flat en foco o hover
+entry.flat {
+    &:focus,
+    &:focus-within {
+        background-color: $bg0;
+        border: 1px solid $green;
+        box-shadow: 0 0 0 3px rgba($green, 0.22);
+    }
+}
+
+// Estados semánticos de error y advertencia en entradas (borde explícito para superar reglas base de Adwaita)
+entry.error,
+spinbutton.error:not(.vertical),
+spinbutton.error.vertical > text {
+    color: $red;
+    background-color: $bg0;
+    border: 1px solid $red;
+    box-shadow: inset 0 1px 3px rgba($bg_dim, 0.4);
+    
+    &:focus,
+    &:focus-within {
+        border: 1px solid $red;
+        box-shadow: 0 0 0 3px rgba($red, 0.25), inset 0 1px 2px rgba($bg_dim, 0.35);
+    }
+}
+
+entry.warning,
+spinbutton.warning:not(.vertical),
+spinbutton.warning.vertical > text {
+    color: $yellow;
+    background-color: $bg0;
+    border: 1px solid $yellow;
+    box-shadow: inset 0 1px 3px rgba($bg_dim, 0.4);
+    
+    &:focus,
+    &:focus-within {
+        border: 1px solid $yellow;
+        box-shadow: 0 0 0 3px rgba($yellow, 0.25), inset 0 1px 2px rgba($bg_dim, 0.35);
+    }
+}
+
+// 4. Sombras Multicapa Premium (Dimensional Layering con paleta Everforest Dark Hard)
 decoration,
 window.csd {
-    box-shadow: 0 12px 36px rgba($bg0, 0.55),
-                0 4px 12px rgba($bg0, 0.35),
+    box-shadow: 0 12px 36px rgba($bg_dim, 0.55),
+                0 4px 12px rgba($bg_dim, 0.35),
                 inset 0 1px 0 rgba($fg, 0.08),
-                0 0 0 1px rgba(15, 18, 20, 0.75);
+                0 0 0 1px rgba($bg_dim, 0.75);
 }
 
 messagedialog.csd decoration,
@@ -79,60 +345,91 @@ window.csd.dialog.message,
 window.csd.dialog,
 window.csd.popup,
 .csd.popup decoration {
-    box-shadow: 0 8px 24px rgba($bg0, 0.5),
-                0 2px 8px rgba($bg0, 0.28),
+    box-shadow: 0 8px 24px rgba($bg_dim, 0.5),
+                0 2px 8px rgba($bg_dim, 0.28),
                 inset 0 1px 0 rgba($fg, 0.08),
-                0 0 0 1px rgba(15, 18, 20, 0.7);
+                0 0 0 1px rgba($bg_dim, 0.7);
 }
 
-popover.background > contents,
 menu,
 .menu,
 .context-menu {
-    box-shadow: 0 6px 16px rgba($bg0, 0.4),
-                0 1px 4px rgba($bg0, 0.22),
+    background-color: $bg1;
+    border: 1px solid $bg3;
+    box-shadow: 0 6px 16px rgba($bg_dim, 0.4),
+                0 1px 4px rgba($bg_dim, 0.22),
                 inset 0 1px 0 rgba($fg, 0.06),
-                0 0 0 1px rgba(15, 18, 20, 0.6);
+                0 0 0 1px rgba($bg_dim, 0.6);
 }
 
-popover.background > arrow {
-    box-shadow: 0 1px 2px rgba($bg0, 0.3);
+@if variable-exists(gtk_version) and $gtk_version == 4 {
+    // GTK 4: el contenedor raíz popover.background debe ser transparente para no ocluir widgets
+    popover.background {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    
+    popover.background > contents {
+        background-color: $bg1;
+        border: 1px solid $bg3;
+        box-shadow: 0 6px 16px rgba($bg_dim, 0.4),
+                    0 1px 4px rgba($bg_dim, 0.22),
+                    inset 0 1px 0 rgba($fg, 0.06),
+                    0 0 0 1px rgba($bg_dim, 0.6);
+    }
+    
+    popover.background > arrow {
+        background-color: $bg1;
+        border-color: $bg3;
+        box-shadow: 0 1px 2px rgba($bg_dim, 0.3);
+    }
+} @else {
+    // GTK 3: popover.background es el nodo único y real dibujado por Cairo
+    popover.background {
+        background-color: $bg1;
+        border: 1px solid $bg3;
+        box-shadow: 0 6px 16px rgba($bg_dim, 0.4),
+                    0 1px 4px rgba($bg_dim, 0.22),
+                    inset 0 1px 0 rgba($fg, 0.06),
+                    0 0 0 1px rgba($bg_dim, 0.6);
+    }
 }
 
 tooltip.csd decoration,
 tooltip {
-    box-shadow: 0 4px 10px rgba($bg0, 0.38),
-                0 0 0 1px rgba(15, 18, 20, 0.65);
+    box-shadow: 0 4px 10px rgba($bg_dim, 0.38),
+                0 0 0 1px rgba($bg_dim, 0.65);
 }
 
 .card,
 .sheet {
-    box-shadow: 0 2px 6px rgba($bg0, 0.3),
-                0 0 0 1px rgba(15, 18, 20, 0.5);
+    box-shadow: 0 2px 6px rgba($bg_dim, 0.3),
+                0 0 0 1px rgba($bg_dim, 0.5);
     border: 1px solid rgba($fg, 0.05);
 }
 
 button:not(.flat):not(.sidebar-button) {
-    box-shadow: 0 1px 3px rgba($bg0, 0.35),
+    box-shadow: 0 1px 3px rgba($bg_dim, 0.35),
                 inset 0 1px 0 rgba($fg, 0.06);
     transition: box-shadow 150ms ease-in-out, background-color 150ms;
     
     &:active,
     &:checked {
-        box-shadow: inset 0 1px 3px rgba(15, 18, 20, 0.5);
+        box-shadow: inset 0 1px 3px rgba($bg_dim, 0.5);
     }
 }
 
 .osd {
-    box-shadow: 0 10px 28px rgba($bg0, 0.55),
-                0 3px 10px rgba($bg0, 0.32),
-                0 0 0 1px rgba(15, 18, 20, 0.7);
+    box-shadow: 0 10px 28px rgba($bg_dim, 0.55),
+                0 3px 10px rgba($bg_dim, 0.32),
+                0 0 0 1px rgba($bg_dim, 0.7);
     border: none;
 }
 
 headerbar,
 .titlebar {
-    box-shadow: inset 0 -1px rgba(15, 18, 20, 0.5),
+    box-shadow: inset 0 -1px rgba($bg_dim, 0.5),
                 inset 0 1px rgba($fg, 0.05);
 }
 
@@ -158,7 +455,7 @@ switch:disabled slider {
 
 check,
 radio {
-    box-shadow: 0 1px rgba($bg0, 0.5);
+    box-shadow: 0 1px rgba($bg_dim, 0.5);
     
     &:backdrop {
         box-shadow: none;
@@ -174,21 +471,21 @@ switch > slider,
 switch slider,
 scale slider {
     box-shadow: inset 0 1px 0 rgba($fg, 0.03),
-                0 1px rgba($bg0, 0.4),
-                0 1px 2px rgba($bg0, 0.3);
+                0 1px rgba($bg_dim, 0.4),
+                0 1px 2px rgba($bg_dim, 0.3);
 }
 
 scale slider {
-    border-color: #374145;
+    border-color: $bg2;
 }
 
 // 6. Estados de Backdrop / Ventanas Inactivas (Coherencia y Contraste)
 .titlebar:backdrop:not(headerbar),
 headerbar:backdrop {
-    border-color: #374145;
-    background-color: $bg0;
+    border-color: $bg2;
+    background-color: $bg_dim;
     background-image: none;
-    box-shadow: inset 0 -1px #374145;
+    box-shadow: inset 0 -1px $bg2;
 }
 
 .titlebar:backdrop:not(headerbar) .title,
@@ -198,7 +495,7 @@ headerbar:backdrop .title {
 
 .background:backdrop {
     color: $muted_fg;
-    background-color: $bg0;
+    background-color: $bg_dim;
 }
 
 .view:backdrop,
@@ -217,15 +514,15 @@ label:backdrop {
 button:backdrop,
 notebook > header > tabs > arrow:backdrop {
     color: $muted_fg;
-    border-color: #374145;
+    border-color: $bg2;
     background-image: image($bg1);
     background-color: $bg1;
     
     &:active,
     &:checked {
-        color: #C7BCA2;
-        border-color: #374145;
-        background-image: image(#374145);
+        color: $fg;
+        border-color: $bg2;
+        background-image: image($bg2);
     }
 }
 
@@ -234,7 +531,7 @@ button.flat:backdrop,
 windowcontrols button:backdrop,
 .toolbar > button:backdrop,
 .toolbar :not(.linked) > button:backdrop {
-    border-color: #374145;
+    border-color: $bg2;
     background-color: $bg1;
     background-image: none;
     box-shadow: none;
@@ -243,29 +540,29 @@ windowcontrols button:backdrop,
 
 row:selected button.sidebar-button:backdrop,
 row:selected button.flat:backdrop {
-    color: #C7BCA2;
+    color: $fg;
 }
 
 spinbutton > text:backdrop,
 spinbutton:backdrop,
 entry:backdrop {
     color: $fg;
-    border-color: #374145;
+    border-color: $bg2;
     background-color: $bg1;
     box-shadow: none;
 }
 
 decoration:backdrop,
 window.csd:backdrop {
-    box-shadow: 0 4px 14px rgba($bg0, 0.35),
-                0 0 0 1px rgba(15, 18, 20, 0.6),
+    box-shadow: 0 4px 14px rgba($bg_dim, 0.35),
+                0 0 0 1px rgba($bg_dim, 0.6),
                 inset 0 1px 0 rgba($fg, 0.04);
     transition: box-shadow 200ms ease-out;
 }
 
 window.solid-csd:backdrop {
-    box-shadow: inset 0 0 0 4px #374145, inset 0 0 0 3px $bg0, inset 0 1px rgba($fg, 0.04);
-    border-color: #374145;
+    box-shadow: inset 0 0 0 4px $bg2, inset 0 0 0 3px $bg_dim, inset 0 1px rgba($fg, 0.04);
+    border-color: $bg2;
 }
 
 window.tiled:backdrop,
@@ -273,22 +570,22 @@ window.tiled-top:backdrop,
 window.tiled-left:backdrop,
 window.tiled-right:backdrop,
 window.tiled-bottom:backdrop {
-    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.6), 0 0 0 20px transparent, inset 0 0 0 1px #374145;
+    box-shadow: 0 0 0 1px rgba($bg_dim, 0.6), 0 0 0 20px transparent, inset 0 0 0 1px $bg2;
 }
 
 columnview.view:backdrop,
 treeview.view:backdrop,
 listview:backdrop,
 list:backdrop {
-    border-left-color: #374145;
-    border-top-color: #374145;
+    border-left-color: $bg2;
+    border-top-color: $bg2;
     color: $fg;
     background-color: $bg1;
-    border-color: #374145;
+    border-color: $bg2;
 }
 
 .boxed-list > row:backdrop {
-    border-bottom-color: #374145;
+    border-bottom-color: $bg2;
     color: $fg;
     background-color: $bg1;
 }
@@ -298,7 +595,7 @@ calendar > header > button:backdrop {
 }
 
 button.suggested-action:backdrop {
-    color: #83C092;
+    color: $aqua; /* Everforest aqua */
     border-color: $bg_green;
     background-color: $bg_green;
     background-image: none;
@@ -306,9 +603,9 @@ button.suggested-action:backdrop {
 }
 
 button.destructive-action:backdrop {
-    color: #f0d0d2;
-    border-color: #851015;
-    background-color: #8a1116;
+    color: $red; /* Everforest red */
+    border-color: $bg_red; /* Everforest bg_red */
+    background-color: $bg_red; /* Everforest bg_red */
     background-image: none;
     box-shadow: none;
 }
@@ -321,7 +618,7 @@ treeview.view.progressbar:selected:backdrop {
 
 .inline-toolbar toolbutton > button:backdrop {
     color: $muted_fg;
-    border-color: #374145;
+    border-color: $bg2;
     background-image: image($bg1);
 }
 
@@ -331,7 +628,7 @@ button:backdrop:not(.flat):not(.sidebar-button) {
 
 .card:backdrop,
 .sheet:backdrop {
-    box-shadow: 0 0 0 1px rgba(15, 18, 20, 0.4);
+    box-shadow: 0 0 0 1px rgba($bg_dim, 0.4);
 }
 
 messagedialog.csd decoration:backdrop,
@@ -339,18 +636,41 @@ window.csd.dialog.message:backdrop,
 window.csd.dialog:backdrop,
 window.csd.popup:backdrop,
 .csd.popup decoration:backdrop {
-    box-shadow: 0 4px 14px rgba($bg0, 0.35),
-                0 0 0 1px rgba(15, 18, 20, 0.6),
+    box-shadow: 0 4px 14px rgba($bg_dim, 0.35),
+                0 0 0 1px rgba($bg_dim, 0.6),
                 inset 0 1px 0 rgba($fg, 0.04);
     transition: box-shadow 200ms ease-out;
 }
 
-popover.background > contents:backdrop,
 menu:backdrop,
 .menu:backdrop,
 .context-menu:backdrop {
-    box-shadow: 0 3px 10px rgba($bg0, 0.3),
-                0 0 0 1px rgba(15, 18, 20, 0.5);
+    background-color: $bg1;
+    border-color: $bg2;
+    box-shadow: 0 3px 10px rgba($bg_dim, 0.3),
+                0 0 0 1px rgba($bg_dim, 0.5);
+}
+
+@if variable-exists(gtk_version) and $gtk_version == 4 {
+    popover.background:backdrop {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    
+    popover.background > contents:backdrop {
+        background-color: $bg1;
+        border-color: $bg2;
+        box-shadow: 0 3px 10px rgba($bg_dim, 0.3),
+                    0 0 0 1px rgba($bg_dim, 0.5);
+    }
+} @else {
+    popover.background:backdrop {
+        background-color: $bg1;
+        border-color: $bg2;
+        box-shadow: 0 3px 10px rgba($bg_dim, 0.3),
+                    0 0 0 1px rgba($bg_dim, 0.5);
+    }
 }
 
 switch:backdrop > slider,
@@ -358,3 +678,300 @@ switch:backdrop slider,
 scale slider:backdrop {
     box-shadow: inset 0 1px 0 rgba($fg, 0.02);
 }
+
+// 7. InfoBars Semánticas Everforest (Fondos y acentos cromáticos reales)
+infobar {
+    border-style: none;
+    
+    > revealer > box {
+        color: $fg;
+        background-color: $bg1;
+        border-bottom: 1px solid $bg2;
+    }
+    
+    // InfoBar Info & Question -> Fondo azul Everforest ($bg_blue)
+    &.info,
+    &.question {
+        &,
+        &:backdrop {
+            > revealer > box {
+                background-color: $bg_blue;
+                border-bottom: 1px solid $blue;
+                color: $fg;
+                
+                label {
+                    color: $fg;
+                }
+                
+                image {
+                    color: $blue;
+                }
+            }
+        }
+    }
+    
+    // InfoBar Warning -> Fondo amarillo Everforest ($bg_yellow)
+    &.warning {
+        &,
+        &:backdrop {
+            > revealer > box {
+                background-color: $bg_yellow;
+                border-bottom: 1px solid $yellow;
+                color: $fg;
+                
+                label {
+                    color: $fg;
+                }
+                
+                image {
+                    color: $yellow;
+                }
+            }
+        }
+    }
+    
+    // InfoBar Error -> Fondo rojo Everforest ($bg_red)
+    &.error {
+        &,
+        &:backdrop {
+            > revealer > box {
+                background-color: $bg_red;
+                border-bottom: 1px solid $red;
+                color: $fg;
+                
+                label {
+                    color: $fg;
+                }
+                
+                image {
+                    color: $red;
+                }
+            }
+        }
+    }
+    
+    // InfoBar Success -> Fondo verde Everforest ($bg_green)
+    &.success {
+        &,
+        &:backdrop {
+            > revealer > box {
+                background-color: $bg_green;
+                border-bottom: 1px solid $green;
+                color: $fg;
+                
+                label {
+                    color: $fg;
+                }
+                
+                image {
+                    color: $green;
+                }
+            }
+        }
+    }
+    
+    // Botones dentro de InfoBars
+    button {
+        background-color: rgba($bg_dim, 0.45);
+        background-image: none;
+        color: $fg;
+        border: 1px solid rgba($fg, 0.15);
+        box-shadow: none;
+        
+        &:hover {
+            background-color: rgba($bg_dim, 0.7);
+            color: $fg;
+            border-color: rgba($fg, 0.25);
+        }
+        
+        &:active,
+        &:checked {
+            background-color: $bg_dim;
+            color: $green;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        &:disabled {
+            background-color: rgba($bg_dim, 0.2);
+            color: $grey0;
+            border-color: transparent;
+        }
+        
+        &:backdrop {
+            background-color: rgba($bg_dim, 0.3);
+            color: $muted_fg;
+            border-color: transparent;
+        }
+    }
+    
+    // Botón de cerrar de InfoBar
+    .close {
+        color: $muted_fg;
+        border: none;
+        background: transparent;
+        
+        &:hover {
+            color: $fg;
+            background-color: rgba($fg, 0.1);
+        }
+    }
+    
+    // Enlaces dentro de InfoBars
+    *:link {
+        color: $blue;
+        
+        &:hover {
+            color: lighten($blue, 10%);
+        }
+    }
+}
+
+// 8. LevelBars y ProgressBars Semánticos Everforest (Fondos $bg1 / $bg0 y acentos de color reales)
+levelbar {
+    trough,
+    > trough {
+        padding: 2px;
+        background-color: $bg0;
+        border: 1px solid $bg3;
+        border-radius: $radius;
+        box-shadow: inset 0 1px 2px rgba($bg_dim, 0.4);
+    }
+    
+    // Bloques del LevelBar
+    trough > block,
+    > trough > block,
+    block {
+        border-radius: $radius;
+        border: 1px solid transparent;
+        
+        // Bloques vacíos (fondo sutil $bg1 con borde $bg2, nunca negro plano)
+        &.empty {
+            background-color: $bg1;
+            border-color: $bg2;
+            box-shadow: none;
+            
+            &:backdrop {
+                background-color: $bg0;
+                border-color: $bg2;
+            }
+        }
+        
+        // Nivel bajo (alerta ámbar / naranja Everforest)
+        &.low {
+            background-color: $orange;
+            border-color: $orange;
+            
+            &:backdrop {
+                background-color: $bg_yellow;
+                border-color: $yellow;
+            }
+        }
+        
+        // Nivel medio / alto (Everforest Yellow)
+        &.high,
+        &:not(.empty) {
+            background-color: $yellow;
+            border-color: $yellow;
+            
+            &:backdrop {
+                background-color: $bg_yellow;
+                border-color: $yellow;
+            }
+        }
+        
+        // Nivel lleno / completo (Everforest Green)
+        &.full {
+            background-color: $green;
+            border-color: $green;
+            
+            &:backdrop {
+                background-color: $bg_green;
+                border-color: $green;
+            }
+        }
+    }
+}
+
+// ProgressBars Semánticos Everforest
+progressbar {
+    color: $fg;
+    
+    trough,
+    > trough {
+        background-color: $bg0;
+        border: 1px solid $bg3;
+        border-radius: $radius;
+        box-shadow: inset 0 1px 2px rgba($bg_dim, 0.4);
+        padding: 0;
+    }
+    
+    progress,
+    > trough > progress {
+        background-color: $green;
+        border: 1px solid $green;
+        border-radius: $radius;
+        
+        &:backdrop {
+            background-color: $bg_green;
+            border-color: $green;
+        }
+    }
+    
+    text,
+    label {
+        color: $fg;
+        font-weight: 500;
+        text-shadow: none;
+    }
+}
+
+// Escalas / Deslizadores (GtkScale)
+scale {
+    trough,
+    > trough {
+        background-color: $bg0;
+        border: 1px solid $bg3;
+        border-radius: $radius;
+        box-shadow: inset 0 1px 2px rgba($bg_dim, 0.4);
+    }
+    
+    highlight,
+    > trough > highlight,
+    fill,
+    > trough > fill {
+        background-color: $green;
+        border: 1px solid $green;
+        border-radius: $radius;
+        
+        &:backdrop {
+            background-color: $bg_green;
+            border-color: $green;
+        }
+    }
+    
+    slider,
+    > trough > slider {
+        background-color: $bg2;
+        border: 1px solid $bg3;
+        border-radius: $radius;
+        box-shadow: 0 1px 3px rgba($bg_dim, 0.4);
+        
+        &:hover {
+            background-color: lighten($bg2, 4%);
+            border-color: $bg4;
+        }
+        
+        &:active {
+            background-color: $green;
+            border-color: $green;
+        }
+        
+        &:disabled {
+            background-color: $bg1;
+            border-color: $bg2;
+        }
+    }
+}
+
+
+

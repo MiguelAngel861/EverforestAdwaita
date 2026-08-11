@@ -1,55 +1,110 @@
 // Definición de variables heredadas de Adwaita (accedidas mediante @ en GTK CSS)
-@define-color theme_selected_fg_color #272E33;
-@define-color theme_selected_bg_color #A7C080;
-@define-color theme_selected_bg_color_backdrop #3C4841;
-@define-color theme_selected_fg_color_backdrop #D3C6AA;
+@define-color theme_selected_fg_color #{$bg0};
+@define-color theme_selected_bg_color #{$green};
+@define-color theme_selected_bg_color_backdrop #{$bg_green};
+@define-color theme_selected_fg_color_backdrop #{$fg};
 
-// 1. Selección normal
+// 1. Selección de elementos (Filas, Listas, Árboles)
 :selected,
 *:selected,
 .selected,
 list-row:selected,
 treeview.view:selected,
-entry selection,
-label selection {
-    color: #272E33;
+row:selected,
+flowboxchild:selected {
+    color: $bg0;
     background-color: $green;
 }
 
-// 2. Selección con foco
+// 2. Selección de elementos con foco
 :selected:focus,
 *:selected:focus,
 .selected:focus,
 list-row:selected:focus,
 treeview.view:selected:focus,
-entry selection:focus,
-label selection:focus {
-    color: #272E33;
+row:selected:focus,
+flowboxchild:selected:focus {
+    color: $bg0;
     background-color: $green;
 }
 
-// 3. Selección en ventana inactiva (backdrop)
+// 3. Selección de elementos en ventana inactiva (backdrop)
 :selected:backdrop,
 *:selected:backdrop,
 .selected:backdrop,
 list-row:selected:backdrop,
 treeview.view:selected:backdrop,
-entry selection:backdrop,
-label selection:backdrop {
+row:selected:backdrop,
+flowboxchild:selected:backdrop {
     color: $fg;
     background-color: $bg_green;
 }
 
-// 4. Selección activa (p.ej. al arrastrar)
+// 4. Selección de elementos activa (al arrastrar)
 :selected:active,
 *:selected:active,
 .selected:active,
 list-row:selected:active,
 treeview.view:selected:active,
-entry selection:active,
-label selection:active {
-    color: #272E33;
+row:selected:active,
+flowboxchild:selected:active {
+    color: $bg0;
     background-color: $green;
+}
+
+// ==========================================================================
+// SELECCIÓN DE TEXTO (Entradas, Editores, Búsquedas, Spinners y Etiquetas)
+// Confort visual: fondo verde bosque oscuro ($bg_green #3C4841) y texto claro ($fg #D3C6AA)
+// ==========================================================================
+entry selection,
+entry text selection,
+entry:focus selection,
+entry:focus text selection,
+entry > text > selection,
+entry > text > selection:focus-within,
+entry:focus > text > selection,
+entry:focus > text > selection:focus-within,
+textview text selection,
+textview.view text selection,
+textview selection,
+textview:focus text selection,
+textview:focus selection,
+textview > text > selection,
+textview > text > selection:focus-within,
+spinbutton selection,
+spinbutton text selection,
+spinbutton:focus selection,
+spinbutton:focus text selection,
+spinbutton > text > selection,
+spinbutton > text > selection:focus-within,
+searchentry selection,
+searchentry text selection,
+searchentry:focus selection,
+searchentry:focus text selection,
+searchentry > text > selection,
+searchentry > text > selection:focus-within,
+label selection,
+label:focus selection,
+label > selection,
+label > selection:focus-within {
+    color: $fg;
+    background-color: $bg_green;
+}
+
+entry selection:backdrop,
+entry text selection:backdrop,
+entry > text > selection:backdrop,
+textview text selection:backdrop,
+textview selection:backdrop,
+textview > text > selection:backdrop,
+spinbutton selection:backdrop,
+spinbutton > text > selection:backdrop,
+searchentry selection:backdrop,
+searchentry > text > selection:backdrop,
+label selection:backdrop,
+label > selection:backdrop {
+    color: $muted_fg;
+    background-color: rgba($bg_green, 0.7);
 }
 
 // 5. Aseguramos que cualquier descendiente de la vista seleccionada normal herede el color de texto oscuro
@@ -64,7 +119,7 @@ row:selected label,
 row:selected image,
 list-row:selected label,
 list-row:selected image {
-    color: #272E33; /* oscuro */
+    color: $bg0; /* oscuro sobre verde claro */
 }
 
 // 6. Selección en ventana inactiva (backdrop) - descendientes heredan color claro de backdrop

@@ -1,8 +1,14 @@
-// Quitar bordes redondeados a nivel global
+// =============================================================================
+// REGLAS GLOBALES DE GEOMETRÍA: ESQUINAS A 90 GRADOS (border-radius: 0px)
+// EverforestAdwaitaHard
+// =============================================================================
+
+// 1. Selector Universal Base
 * {
     border-radius: $radius;
 }
 
+// 2. Elementos y Contenedores Base
 window,
 dialog,
 messagedialog,
@@ -13,10 +19,42 @@ windowdecoration,
 headerbar,
 .titlebar,
 button,
+menubutton,
+menubutton > button,
+menubutton button,
+splitbutton,
+splitbutton > button,
+combobox,
+combobox > box,
+combobox > box > button,
+combobox > box > button.combo,
+combobox button,
+button.combo,
+dropdown,
+dropdown > button,
+dropdown > button > box,
+dropdown button,
+appchooserbutton,
+appchooserbutton button,
+colorbutton,
+colorbutton button,
+fontbutton,
+fontbutton button,
+filechooserbutton,
+filechooserbutton button,
+.linked button,
+.linked > button,
+.linked > combobox > box > button.combo,
+.linked > entry,
+.linked:not(.vertical) > button,
+.linked.vertical > button,
 entry,
 notebook,
 tab,
 menu,
+.menu,
+menuitem,
+.menuitem,
 popover,
 .card,
 .sheet,
@@ -25,19 +63,80 @@ trough,
 .sidebar,
 list-row,
 list,
-treeview {
+treeview,
+frame,
+shortcut,
+colorswatch,
+calendar {
     border-radius: $radius;
 }
 
-// Selectores específicos de Adwaita que requieren mayor especificidad
+// 3. Ventanas, Diálogos y Decoraciones Específicas
+window.csd,
+window.solid-csd,
+window.solid-csd decoration,
+.background .titlebar,
+.background.solid-csd .titlebar,
+window headerbar:first-child,
+window headerbar:last-child,
+window stack headerbar,
+messagedialog .titlebar,
+messagedialog.csd,
+messagedialog.csd.background,
+messagedialog.csd decoration,
+window.dialog.message .titlebar,
+window.dialog.message.csd,
+window.dialog.message.csd.background,
+window.dialog.message.csd decoration,
+messagedialog .dialog-action-area button,
+messagedialog .dialog-action-area button:first-child,
+messagedialog .dialog-action-area button:last-child,
+window.dialog.message .dialog-action-area button,
+window.dialog.message .dialog-action-area button:first-child,
+window.dialog.message .dialog-action-area button:last-child,
+.app-notification,
+.app-notification.frame,
+.inline-toolbar {
+    border-radius: $radius;
+}
+
+// 4. Botones Circulares, Controles de Ventana y Botones Especiales
+button.circular,
+.circular,
+button.titlebutton,
+button.titlebutton:not(.appmenu),
+windowcontrols button,
+windowcontrols button > image,
+windowcontrols > button,
+windowcontrols > button > image,
+searchbar .close,
+search-bar .close,
+placessidebar button.sidebar-button,
+placessidebar row button.sidebar-button,
+scrollbar.overlay-indicator button,
+scrollbar.overlay-indicator:not(.dragging):not(.hovering) button,
+expander-widget > box > title,
+.menuitem.button.flat,
+.scale-popup button,
+.scale-popup .osd button.flat {
+    border-radius: $radius;
+}
+
+// 5. Popovers, Menús y Tooltips
 popover.background,
 .csd popover.background,
 popover.background > contents,
+popover.menu,
+popover.menu.background,
+popover.menu.background > contents,
 menubar > item popover.menu.background popover.menu.background > contents,
 popover.menu modelbutton,
+modelbutton,
 colorchooser .popover.osd,
+colorchooser popover,
 popover.emoji-picker .emoji,
-popover.emoji-picker .emoji :hover,
+popover.emoji-picker .emoji:hover,
+popover.emoji-picker emoji,
 dropdown popover listview > row.activatable:selected,
 dropdown popover listview > row.activatable:selected:hover,
 combobox popover listview > row.activatable:selected,
@@ -45,15 +144,59 @@ combobox popover listview > row.activatable:selected:hover,
 tooltip,
 tooltip.csd,
 tooltip.csd decoration,
-progressbar trough,
-progressbar > trough,
-scale fill,
+menu,
+.menu,
+.context-menu,
+.context-menu > arrow {
+    border-radius: $radius;
+}
+
+// 6. Contenedores Modernos, Listas Agrupadas y Marcos
+.boxed-list,
+.boxed-list > row,
+.boxed-list > row:first-child,
+.boxed-list > row:last-child,
+listbox.boxed-list,
+listbox.boxed-list > row,
+filechooser gridview child,
+video image.osd {
+    border-radius: $radius;
+}
+
+// 7. Switches, Checkboxes, Radios y Sliders
+switch,
+switch:checked,
+switch:disabled,
+switch:hover,
+switch > slider,
+switch slider,
+check,
+radio,
+checkbutton,
 scale trough,
 scale > trough,
-progressbar progress,
-progressbar > trough > progress,
 scale highlight,
 scale > trough > highlight,
+scale fill,
+scale > trough > fill,
+scale slider,
+scale > trough > slider,
+scale.fine-tune trough,
+scale.fine-tune > trough,
+scale.fine-tune slider,
+scale.color trough,
+scale.color > trough,
+scrollbar slider,
+scrollbar trough,
+scrollbar > range > trough > slider {
+    border-radius: $radius;
+}
+
+// 8. Barras de Progreso y Medidores de Nivel
+progressbar trough,
+progressbar > trough,
+progressbar progress,
+progressbar > trough > progress,
 progressbar progress.left,
 progressbar progress.right,
 progressbar progress.top,
@@ -63,14 +206,44 @@ progressbar > trough > progress.right,
 progressbar > trough > progress.top,
 progressbar > trough > progress.bottom,
 levelbar trough,
+levelbar > trough,
 levelbar block,
+levelbar > trough > block,
 levelbar.horizontal trough > block,
 levelbar.horizontal trough > block:dir(rtl),
 levelbar.horizontal trough > block:dir(ltr),
 levelbar.horizontal trough > block.empty,
 levelbar.horizontal trough > block.full,
+levelbar.horizontal.discrete trough > block,
 levelbar.horizontal.discrete trough > block:first-child,
 levelbar.horizontal.discrete trough > block:last-child,
 levelbar.vertical trough > block {
+    border-radius: $radius;
+}
+
+// 9. Selectores de Color, Atajos de Teclado y Calendario
+colorswatch,
+colorswatch overlay,
+colorswatch > overlay,
+colorswatch.top,
+colorswatch.top > overlay,
+colorswatch.bottom,
+colorswatch.bottom > overlay,
+colorswatch:first-child:not(.top),
+colorswatch:first-child:not(.top) > overlay,
+colorswatch:last-child:not(.bottom),
+colorswatch:last-child:not(.bottom) > overlay,
+colorswatch#add-color-button,
+colorswatch#add-color-button:only-child,
+colorswatch#editor-color-sample,
+colorswatch#editor-color-sample > overlay,
+shortcut,
+shortcut > .keycap,
+.keycap,
+calendar,
+calendar:selected,
+calendar label.day-number,
+calendar label.day-number:selected,
+calendar > grid > label.day-number:selected {
     border-radius: $radius;
 }

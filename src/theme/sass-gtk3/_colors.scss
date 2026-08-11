@@ -1,38 +1,38 @@
-// Everforest Dark Hard Palette Colors for GTK 3
+// Everforest Dark Hard Palette Colors for GTK 3 (sainnhe/everforest)
 $variant: 'dark';
 
-// Variables Base
-$base_color: #2E383C; // bg1 (text/list background)
-$text_color: #D3C6AA; // fg
-$caret_color: #A7C080; // green
-$bg_color: #1E2326; // bg0 (window background)
-$fg_color: #D3C6AA; // fg
+// Variables Base de Superficie y Texto
+$base_color: #272E33; // bg0 (fondo rehundido para entradas de texto, vistas y listas)
+$text_color: #D3C6AA; // fg (texto principal)
+$caret_color: #A7C080; // green (cursor de edición)
+$bg_color: #1E2326; // bg_dim (superficie más profunda para contraste)
+$fg_color: #D3C6AA; // fg (primer plano principal)
 
-$selected_fg_color: #272E33; // oscuro para contrastar con el fondo de selección
-$selected_bg_color: #A7C080; // green (accent)
+$selected_fg_color: #272E33; // bg0 (contraste óptimo sobre verde claro #A7C080)
+$selected_bg_color: #A7C080; // green (acento principal)
 $selected_borders_color: #3C4841; // bg_green (borde oscuro de selección)
 
-$borders_color: #374145; // bg2 (borders)
-$alt_borders_color: #414B50; // bg3 (alternative borders)
+$borders_color: #414B50; // bg3 (bordes estándar estructurados de alto contraste)
+$alt_borders_color: #495156; // bg4 (bordes alternativos y separadores definidos)
 $borders_edge: rgba(211, 198, 170, 0.07); // highlight sutil de bordes (fg al 7%)
 
-$link_color: #7FBBB4; // blue/aqua
-$link_visited_color: #D699B6; // purple
+$link_color: #7FBBB3; // blue (Everforest exact #7FBBB3)
+$link_visited_color: #D699B6; // purple (Everforest purple)
 $top_hilight: $borders_edge;
-$dark_fill: #1E2326; // bg0
+$dark_fill: #272E33; // bg0 (evita que Adwaita genere fondos negros #0e1112)
 
-$headerbar_color: #1E2326; // bg0
+$headerbar_color: #1E2326; // bg_dim
 $menu_color: #2E383C; // bg1
 $popover_bg_color: #2E383C; // bg1
 $popover_hover_color: #374145; // bg2
 
-// Scrollbars (aunque en los overrides los forzamos a minimalistas)
-$scrollbar_bg_color: #1E2326;
-$scrollbar_slider_color: #414B50;
-$scrollbar_slider_hover_color: #859289;
-$scrollbar_slider_active_color: #A7C080;
+// Scrollbars minimalistas
+$scrollbar_bg_color: #1E2326; // bg_dim
+$scrollbar_slider_color: #414B50; // bg3
+$scrollbar_slider_hover_color: #859289; // grey1
+$scrollbar_slider_active_color: #A7C080; // green
 
-// Alertas semánticas
+// Alertas semánticas y estados cromáticos
 $warning_color: #DBBC7F; // yellow
 $error_color: #E67E80; // red
 $success_color: #A7C080; // green
@@ -41,45 +41,46 @@ $destructive_color: #E67E80; // red
 // OSD (On-Screen Display)
 $osd_fg_color: #D3C6AA;
 $osd_text_color: #D3C6AA;
-$osd_bg_color: rgba(30, 35, 38, 0.9); // bg0 con opacidad 90%
-$osd_insensitive_bg_color: rgba(46, 56, 60, 0.5);
-$osd_insensitive_fg_color: #859289;
-$osd_borders_color: rgba(15, 18, 20, 0.6);
+$osd_bg_color: rgba(30, 35, 38, 0.92); // bg_dim al 92%
+$osd_insensitive_bg_color: rgba(46, 56, 60, 0.5); // bg1 al 50%
+$osd_insensitive_fg_color: #859289; // grey1
+$osd_borders_color: rgba(30, 35, 38, 0.8);
 
-$sidebar_bg_color: #1E2326; // bg0 para sidebars
-$base_hover_color: rgba(211, 198, 170, 0.05); // hover sutil al 5%
+$sidebar_bg_color: #1E2326; // bg_dim para barras laterales
+$base_hover_color: rgba(211, 198, 170, 0.05); // hover sutil de fg al 5%
 
-$tooltip_borders_color: rgba(15, 18, 20, 0.6);
-$shadow_color: rgba(15, 18, 20, 0.5);
+$tooltip_borders_color: rgba(30, 35, 38, 0.8);
+$shadow_color: rgba(30, 35, 38, 0.55);
 
-$drop_target_color: #A7C080;
+$drop_target_color: #A7C080; // green
 
 // Estados insensibles (deshabilitados)
 $insensitive_fg_color: #7A8478; // grey0
-$insensitive_bg_color: #272E33; // bg_dim
+$insensitive_bg_color: #272E33; // bg0
 $insensitive_borders_color: #374145; // bg2
 
 // Estados de Backdrop (Ventana inactiva)
-$backdrop_base_color: #2E383C;
-$backdrop_text_color: #B8B095;
-$backdrop_bg_color: #1E2326;
-$backdrop_fg_color: #B8B095;
-$backdrop_insensitive_color: #7A8478;
-$backdrop_selected_fg_color: #D3C6AA; // claro en backdrop
-$backdrop_borders_color: #374145;
-$backdrop_dark_fill: #1E2326;
-$backdrop_sidebar_bg_color: #1E2326;
+$backdrop_base_color: #2E383C; // bg1
+$backdrop_text_color: #B8B095; // muted_fg
+$backdrop_bg_color: #1E2326; // bg_dim
+$backdrop_fg_color: #B8B095; // muted_fg
+$backdrop_insensitive_color: #7A8478; // grey0
+$backdrop_selected_fg_color: #D3C6AA; // fg (claro sobre fondo verde oscuro)
+$backdrop_selected_bg_color: #3C4841; // bg_green
+$backdrop_borders_color: #374145; // bg2
+$backdrop_dark_fill: #1E2326; // bg_dim
+$backdrop_sidebar_bg_color: #1E2326; // bg_dim
 
 $backdrop_scrollbar_bg_color: #1E2326;
 $backdrop_scrollbar_slider_color: #414B50;
 
-$backdrop_menu_color: #2E383C;
+$backdrop_menu_color: #2E383C; // bg1
 
 // Widgets especiales
-$suggested_bg_color: #A7C080;
-$suggested_border_color: #3C4841;
-$progress_bg_color: #A7C080;
-$progress_border_color: #3C4841;
-$checkradio_bg_color: #A7C080;
-$checkradio_fg_color: #272E33;
-$checkradio_borders_color: #3C4841;
+$suggested_bg_color: #A7C080; // green
+$suggested_border_color: #3C4841; // bg_green
+$progress_bg_color: #A7C080; // green
+$progress_border_color: #3C4841; // bg_green
+$checkradio_bg_color: #A7C080; // green
+$checkradio_fg_color: #272E33; // bg0
+$checkradio_borders_color: #3C4841; // bg_green

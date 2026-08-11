@@ -64,12 +64,12 @@ row.activatable:selected:hover {
 .view list-row:selected:hover,
 treeview.view:selected:hover {
     background-color: $green;
-    color: #272E33;
+    color: $bg0;
     
     label,
     image {
         background-color: transparent;
-        color: #272E33;
+        color: $bg0;
     }
 }
 
@@ -107,15 +107,21 @@ stacksidebar list-row:disabled:hover {
     }
 }
 
-// 3. Ajuste de Popover Arrow (Fusión de color con el fondo)
-popover.background > arrow,
-popover.background > contents {
-    border-color: #374145;
-    background-color: $bg1;
-}
-
-// Ajuste del borde de la flecha del popover
-popover.background > arrow {
-    background-color: $bg1;
-    border-color: #374145;
+// 3. Ajuste de Popover
+@if variable-exists(gtk_version) and $gtk_version == 4 {
+    popover.background {
+        background-color: transparent;
+        border: none;
+    }
+    
+    popover.background > arrow,
+    popover.background > contents {
+        border-color: $bg3;
+        background-color: $bg1;
+    }
+} @else {
+    popover.background {
+        border-color: $bg3;
+        background-color: $bg1;
+    }
 }

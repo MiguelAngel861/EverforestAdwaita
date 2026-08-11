@@ -6,10 +6,10 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $asset_suffix: if($variant=='dark', '-dark', '');
 $backdrop_transition: 200ms ease-out;
 $button_transition: all 200ms $ease-out-quad;
-$button_radius: 5px;
-$menu_radius: 5px;
-$window_radius: $button_radius + 3;
-$popover_radius: $button_radius + 4;
+$button_radius: 0px;
+$menu_radius: 0px;
+$window_radius: 0px;
+$popover_radius: 0px;
 
 // Optional compact sizes for buttons, headerbar and headerbar widgets
 $_sizevariant: 'default'; //compact otherwise
@@ -50,7 +50,7 @@ $_switch_margin: if($_sizevariant=='default', 10px, 7px);
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  -gtk-outline-radius: $button-radius - 2;
+  -gtk-outline-radius: 0px;
 
   -gtk-secondary-caret-color: $selected_bg_color
 }
@@ -2316,8 +2316,10 @@ menuitem {
  ***************/
 
 popover.background {
-  padding: 2px;
+  padding: 6px;
   background-color: $popover_bg_color;
+  border: 1px solid $borders_color;
+  border-radius: $popover_radius;
 
   .csd &, & {
     border: 1px solid $borders_color;
@@ -2325,16 +2327,14 @@ popover.background {
   }
 
   .csd & {
-    $_popover_border: if($variant=='light', transparentize(black, 0.77), transparentize(black, 0.25));
-
-    background-clip: padding-box;
-    border-color: $_popover_border;
+    border-color: $borders_color;
   }
 
-  box-shadow: 0 1px 2px transparentize(black, 0.7);
+  box-shadow: 0 1px 3px transparentize(black, 0.6);
 
   &:backdrop {
     background-color: $backdrop_bg_color;
+    border-color: $backdrop_borders_color;
     box-shadow: none;
   }
 
@@ -3995,13 +3995,13 @@ messagedialog { // Message Dialog styling
 
       &:first-child {
         border-left-style: none;
-        border-bottom-left-radius: $button_radius + 2;
-        -gtk-outline-bottom-left-radius: $button_radius + 2;
+        border-bottom-left-radius: 0;
+        -gtk-outline-bottom-left-radius: 0;
       }
 
       &:last-child {
-        border-bottom-right-radius: $button_radius + 2;
-        -gtk-outline-bottom-right-radius: $button_radius + 2;
+        border-bottom-right-radius: 0;
+        -gtk-outline-bottom-right-radius: 0;
       }
     }
   }
