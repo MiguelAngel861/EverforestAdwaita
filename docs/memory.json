@@ -598,5 +598,455 @@
       "Realizar pruebas visuales exhaustivas del tema autónomo compilado.",
       "Limpiar directorios de caché y carpetas temporales huérfanas en el repositorio si aplica."
     ]
+  },
+  {
+    "session_id": 25,
+    "timestamp": "2026-08-10T23:46:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Análisis riguroso de esquemas de color con design-taste y calibración de la paleta oficial Everforest Dark Hard en todos los archivos SCSS y assets del tema.",
+    "objectives": [
+      "Analizar en profundidad la especificación oficial de la paleta Everforest Dark Hard (sainnhe/everforest) aplicando principios de diseño y taste frontend/UI.",
+      "Corregir inconsistencias cromáticas y hexes residuales (ej. #7FBBB4 -> #7FBBB3, #8fbcbb -> #83C092, #8a1116/#851015 -> #493B40/$bg_red, #C7BCA2 -> #D3C6AA/$fg).",
+      "Unificar tokens de fondo (bg_dim #1E2326, bg0 #272E33, bg1 #2E383C, bg2 #374145, bg3 #414B50, bg4 #495156, bg5 #4F5B58) y fondos semánticos (bg_green #3C4841, bg_red #493B40, bg_yellow #45443C, bg_blue #384B55, bg_visual #4C3743, bg_purple #463F48).",
+      "Recompilar el tema GTK 3 y GTK 4, validar parseo y actualizar baseline.sha256."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_variables.scss: Definición integral y exhaustiva de todas las variables de superficie, tintes semánticos, acentos de primer plano y escala de grises correspondientes a la especificación oficial de Everforest Dark Hard.",
+      "src/theme/sass-gtk3/_colors.scss y src/theme/sass-gtk4/_colors.scss: Actualización y alineación de variables de origen ($link_color a #7FBBB3, corrección de comentarios de jerarquía bg_dim/bg0, definición de fondos insensibles y colores de acción).",
+      "src/theme/overrides/_widgets.scss: Reemplazo de colores literales no estandarizados por las variables semánticas ($bg_red, $bg_green, $aqua, $bg_dim, $bg0, $bg1, $bg2, $bg3), corrigiendo los fondos y bordes de botones destructivos y sugeridos en estado normal y backdrop.",
+      "src/theme/overrides/_notebooks.scss, _selections.scss y _sidebars.scss: Migración de colores hardcodeados (#272E33, #374145) hacia las variables tokenizadas correspondientes ($bg0, $bg2).",
+      "src/recolor_assets.py: Sustitución de tonos no oficiales como #8fbcbb por #83C092 (Everforest Aqua) para el estado hover de assets vectoriales.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras recompilar y verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "En la especificación oficial de Everforest Dark Hard, el fondo base estándar (Normal canvas) es bg0 (#272E33) mientras que bg_dim (#1E2326) se reserva para superficies profundas y contraste de marcos/sidebars.",
+      "El color de enlace oficial Everforest es #7FBBB3 (terminado en 3, no en 4) y el acento aqua oficial es #83C092.",
+      "Los botones de acción destructiva en backdrop se mapean de forma coherente a $bg_red (#493B40) y texto $red (#E67E80), eliminando los remanentes del tema Adwaita original."
+    ],
+    "next_steps": [
+      "Verificar visualmente en el entorno gráfico con 'make test-gtk3' y 'make test-gtk4' la armonía cromática general.",
+      "Comprobar que en aplicaciones del sistema (Nemo, Nicotine+, Zen Browser, etc.) la paleta refleje con exactitud la identidad estética de Everforest Dark Hard."
+    ]
+  },
+  {
+    "session_id": 26,
+    "timestamp": "2026-08-10T23:56:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Auditoría exhaustiva de border-radius en Adwaita e implementación de cobertura universal de esquinas de 90 grados (0px) para todos los botones, diálogos y componentes especiales.",
+    "objectives": [
+      "Investigar todas las declaraciones de border-radius no nulas en los fuentes SCSS de Adwaita GTK 3 y GTK 4.",
+      "Identificar selectores de alta especificidad donde persistían esquinas redondeadas o formas circulares.",
+      "Implementar la regla global de 90 grados ($radius: 0px) en _geometry.scss abarcando todos los componentes identificados.",
+      "Recompilar el tema, validar la sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_geometry.scss: Estructuración completa y categorizada con más de 80 selectores específicos cubriendo botones circulares (titlebutton, windowcontrols, search close, placessidebar eject), diálogos modales (messagedialog, dialog-action-area buttons), listas agrupadas (.boxed-list), selectores de color (colorswatch), atajos (.keycap), calendario, sliders y notificaciones (.app-notification).",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Adwaita hardcodea formas circulares mediante border-radius: 50%, 100% y 9999px en botones específicos que el selector universal '*' no vencía por especificidad CSS; se agregaron selectores explícitos para garantizar 90 grados absolutos en todo el sistema.",
+      "Los botones de acción en diálogos modales (.dialog-action-area button:first-child/:last-child) requerían anulación explícita de sus radios inferiores (7px)."
+    ],
+    "next_steps": [
+      "Ejecutar pruebas visuales locales con 'make test-gtk3' y 'make test-gtk4' para validar el acabado geométrico recto en todos los widgets."
+    ]
+  },
+  {
+    "session_id": 27,
+    "timestamp": "2026-08-10T23:58:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Corrección del fondo negro en InfoBars: implementación de fondos y acentos semánticos Everforest (#384B55 info, #45443C warning, #493B40 error, #3C4841 success) y botones dedicados.",
+    "objectives": [
+      "Investigar por qué las InfoBars se visualizaban en color negro.",
+      "Identificar la fórmula heredada de Adwaita 'desaturate(darken(invert($selected_bg_color), 40%), 70%)' que colapsaba a negro opaco con el verde Everforest.",
+      "Implementar reglas semánticas explícitas en _widgets.scss con los fondos oficiales ($bg_blue, $bg_yellow, $bg_red, $bg_green), bordes de acento y botones ajustados.",
+      "Recompilar el tema, validar la sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_widgets.scss: Añadida sección '7. InfoBars Semánticas Everforest' con reglas para infobar.info/question (fondo $bg_blue #384B55, borde $blue #7FBBB3), infobar.warning (fondo $bg_yellow #45443C, borde $yellow #DBBC7F), infobar.error (fondo $bg_red #493B40, borde $red #E67E80), infobar.success (fondo $bg_green #3C4841, borde $green #A7C080), además de botones estilizados, botón de cierre y enlaces.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Adwaita calculaba el fondo de las InfoBars en dark mode invirtiendo el acento azul original; al usar el verde #A7C080 de Everforest, la fórmula matemática de Adwaita producía un tono negro/grisáceo plano (#1e1e1e). Se reemplazó por la paleta semántica explícita de Everforest Dark Hard."
+    ],
+    "next_steps": [
+      "Validar visualmente en la pestaña 5 del tester ('make test-gtk3' y 'make test-gtk4') y en aplicaciones con InfoBars (Gedit, Nemo, etc.) que los colores azul, amarillo, rojo y verde se muestren vivos y legibles."
+    ]
+  },
+  {
+    "session_id": 28,
+    "timestamp": "2026-08-11T00:04:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Corrección de entradas de texto transparentes/sin contraste: implementación de fondos sólidos ($bg1 #2E383C), bordes definidos ($bg2 #374145), sombra interior, feedback de hover y soporte para entradas en cabeceras y barras de búsqueda.",
+    "objectives": [
+      "Investigar por qué las entradas de texto (GtkEntry, search entries, spinbuttons) podían verse transparentes o sin contraste con el fondo de la ventana.",
+      "Identificar las reglas de Adwaita que forzaban background-color: transparent en .flat, headerbar entry y searchbar.",
+      "Definir un estilo sólido, táctil y de alto contraste para todas las entradas de texto en _widgets.scss con soporte para focus glow, hover, backdrop y estados error/warning.",
+      "Recompilar el tema, validar sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_widgets.scss: Ampliada la sección 3 con reglas sólidas para entry, spinbutton, headerbar entry, searchbar entry, .toolbar entry, entry.flat en foco, además de estilizar iconos internos y sombras interiores (inset 0 1px 2px rgba($bg_dim, 0.35)).",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Las entradas de texto en un tema oscuro nunca deben ser transparentes: deben tener un contenedor visible y sólido ($bg1 #2E383C) con borde estructurado ($bg2 #374145) y sombra interior para dar sensación de hendidura/profundidad (recessed input box).",
+      "En barras de herramientas y cabeceras (headerbar, searchbar), se garantiza que las entradas mantengan fondo sólido y no se confundan con el lienzo de la ventana."
+    ],
+    "next_steps": [
+      "Validar visualmente en aplicaciones con campos de búsqueda y formularios (Zen Browser, Nemo, Gedit, Nicotine+) que todas las entradas se distingan con nitidez."
+    ]
+  },
+  {
+    "session_id": 29,
+    "timestamp": "2026-08-11T00:08:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Cuadratura del icono interior del Radio Button (bullet-symbolic.svg): conversión del punto circular a un bloque cuadrado de 90 grados centrado (6x6 px).",
+    "objectives": [
+      "Investigar por qué el botón de opción (radio button) se mostraba cuadrado por fuera pero con un icono indicador circular adentro.",
+      "Identificar los assets vectoriales (bullet-symbolic.svg y hc-bullet-symbolic.svg) que dibujaban un círculo mediante curvas Bézier.",
+      "Rediseñar bullet-symbolic.svg y hc-bullet-symbolic.svg en GTK 3 y GTK 4 transformando el punto circular en un bloque cuadrado centrado de 6x6 px.",
+      "Recompilar el tema y validar paridad y parseo."
+    ],
+    "changes_made": [
+      "src/theme/sass-gtk3/assets/bullet-symbolic.svg: Rediseñado el path de la capa de estado para generar un cuadrado perfecto de 6x6 px centrado.",
+      "src/theme/sass-gtk4/assets/bullet-symbolic.svg y hc-bullet-symbolic.svg: Sustituido el trazado circular por un polígono cuadrado <path d='M 4,4 H 10 V 10 H 4 Z' />.",
+      "gtk-3.0/assets/ y gtk-4.0/assets/: Sincronizados los assets compilados mediante make compile."
+    ],
+    "key_decisions": [
+      "El sistema de diseño de 90 grados debe ser consistente tanto en los contenedores exteriores como en los glifos de estado interactivo (el indicador de selección de radio button ahora es un bloque angular en lugar de un círculo)."
+    ],
+    "next_steps": [
+      "Validar visualmente en la pestaña 2 del tester interactivo ('make test-gtk3' y 'make test-gtk4') que los radio buttons activos muestren su bloque cuadrado interior alineado."
+    ]
+  },
+  {
+    "session_id": 30,
+    "timestamp": "2026-08-11T00:13:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Calibración de contraste en entradas de texto y bordes estructurales: migración de $base_color a $bg0 (#272E33), bordes a $bg3 (#414B50) y soporte completo para GtkTextView.",
+    "objectives": [
+      "Resolver el problema de entradas de texto que se percibían transparentes o indistinguibles dentro de pestañas de notebooks y contenedores de GTK 4.",
+      "Corregir bordes con contraste deficiente ($borders_color #374145 vs #2E383C) que resultaban casi invisibles.",
+      "Asignar $base_color a $bg0 (#272E33) para lograr campos de entrada rehundidos con contraste claro frente a superficies $bg1 (#2E383C).",
+      "Elevar $borders_color a $bg3 (#414B50) y $alt_borders_color a $bg4 (#495156) para estructuración geométrica nítida en widgets, separadores, textviews y frames.",
+      "Recompilar el tema, verificar sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/sass-gtk3/_colors.scss y src/theme/sass-gtk4/_colors.scss: Actualizado $base_color a #272E33 ($bg0), $borders_color a #414B50 ($bg3), $alt_borders_color a #495156 ($bg4).",
+      "src/theme/overrides/_widgets.scss: Reestructurada la sección de inputs con fondo rehundido $bg0, bordes $bg3, sombra interior de profundidad, reglas sólidas para GtkTextView / ScrolledWindow y separadores definidos.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "En temas oscuros, las áreas editables (entries, textviews, searchbars) funcionan visualmente como 'pozos rehundidos' con un fondo más oscuro ($bg0 #272E33) que la tarjeta/pestaña contenedora ($bg1 #2E383C).",
+      "Los bordes estructurales estándar deben usar $bg3 (#414B50) para proporcionar un ratio de contraste adecuado frente a $bg0 y $bg1, evitando la sensación de elementos flotantes o transparentes."
+    ],
+    "next_steps": [
+      "Verificar visualmente con 'make test-gtk4' que los inputs en todas las pestañas y los editores de texto en la pestaña 3 tengan contraste definido y bordes nítidos."
+    ]
+  },
+  {
+    "session_id": 31,
+    "timestamp": "2026-08-11T00:17:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Enmarcado y bordes para componentes de vistas y texto (GtkScrolledWindow, GtkTextView, GtkTreeView, GtkListView): aplicación de bordes $bg3 (#414B50) y esquinas a 90 grados.",
+    "objectives": [
+      "Resolver la falta de bordes en los componentes de la pestaña 3 ('Vistas y Texto') del tester interactivo.",
+      "Identificar que Adwaita no aplica bordes por defecto a GtkScrolledWindow, GtkTextView, GtkTreeView y GtkListView a menos que tengan clases explícitas.",
+      "Definir un marco estructural de 1px ($bg3 #414B50) para scrolledwindow y vistas independientes con esquinas a 90 grados ($radius: 0px), reseteando bordes en sub-vistas anidadas para evitar duplicación.",
+      "Recompilar el tema, verificar sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_widgets.scss: Estilizado scrolledwindow con border: 1px solid $bg3 y fondo $bg0, reseteo de bordes para vistas anidadas (textview, listview, treeview, list, columnview, viewport), exclusión limpia para barras laterales y popovers, y bordes para vistas individuales.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Todo contenedor de vistas de texto y listas (GtkScrolledWindow, GtkTextView, GtkTreeView, GtkListView) debe tener un borde exterior visible ($bg3 #414B50) para delimitar con claridad el área de contenido dentro de pestañas y ventanas."
+    ],
+    "next_steps": [
+      "Comprobar visualmente en la pestaña 3 de 'make test-gtk3' y 'make test-gtk4' que los bloques de GtkTextView, GtkTreeView y GtkListView se muestren claramente enmarcados."
+    ]
+  },
+  {
+    "session_id": 32,
+    "timestamp": "2026-08-11T00:21:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Bordes estructurados y de alta especificidad para estados de entradas (deshabilitado, warning, error) en la pestaña 'Links y Estados'.",
+    "objectives": [
+      "Investigar por qué las entradas de texto en la pestaña 'Links y Estados' (deshabilitada, warning, error) carecían de bordes visibles.",
+      "Identificar que Adwaita asignaba bordes casi negros (#1a0000 para error, #4a2800 para warning) en modo oscuro que resultaban invisibles contra fondos oscuros, y bordes apagados $bg2 para entradas deshabilitadas.",
+      "Asignar reglas explícitas con border: 1px solid $red (#E67E80) para entry.error, border: 1px solid $yellow (#DBBC7F) para entry.warning y border: 1px solid $bg3 (#414B50) para entry:disabled.",
+      "Recompilar el tema, validar sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_widgets.scss: Actualizadas las reglas de entry:disabled, entry:backdrop, entry.error y entry.warning con declaraciones de borde de 1px explícitas y colores semánticos de alta visibilidad.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Las entradas en estados semánticos de alerta (warning/error) deben tener un borde cromático continuo y luminoso ($yellow/$red) incluso en estado de reposo para comunicar su estado sin depender únicamente del foco.",
+      "Las entradas deshabilitadas requieren un contorno definido de 1px ($bg3 #414B50) para que su caja de texto no desaparezca sobre el fondo de la pestaña."
+    ],
+    "next_steps": [
+      "Comprobar visualmente en la pestaña 5 del tester ('make test-gtk4' y 'make test-gtk3') que la entrada deshabilitada, warning y error exhiban bordes nítidos y bien contrastados."
+    ]
+  },
+  {
+    "session_id": 33,
+    "timestamp": "2026-08-11T00:24:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Corrección del fondo negro en LevelBars de GTK 4: implementación de bloques vacíos $bg1 (#2E383C), canal $bg0 (#272E33) y estados cromáticos de nivel (naranja low, amarillo high, verde full).",
+    "objectives": [
+      "Investigar por qué los LevelBars (GtkLevelBar) mostraban un fondo negro plano en GTK 4.",
+      "Identificar la regla de Adwaita GTK 4 que calculaba 'darken($bg_color, 5%)' para block.empty, produciendo un color casi negro absoluto (#111416).",
+      "Implementar la sección 8 en _widgets.scss con canal estructurado ($bg0, borde $bg3), bloques vacíos en $bg1 con borde $bg2, y niveles de color Everforest ($orange para low, $yellow para high, $green para full).",
+      "Recompilar el tema, validar sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_widgets.scss: Añadida sección '8. LevelBars y ProgressBars Semánticos Everforest' para estilizar levelbar trough, block.empty, block.low, block.high, block.full y progressbars con la paleta oficial.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "En lugar de oscurecer matemáticamente al negro, los bloques vacíos de las barras de nivel deben usar la capa base de superficie $bg1 (#2E383C) con borde $bg2 (#374145), manteniendo la coherencia visual con el resto de la interfaz.",
+      "Los niveles de llenado del LevelBar se sincronizan con los acentos de la paleta Everforest (naranja $orange #E69875 para low, amarillo $yellow #DBBC7F para high, verde $green #A7C080 para full)."
+    ],
+    "next_steps": [
+      "Validar visualmente en la pestaña 5 ('Links y Estados') con 'make test-gtk4' que los LevelBars al 100% y al 45% muestren fondos sutiles y colores definidos."
+    ]
+  },
+  {
+    "session_id": 34,
+    "timestamp": "2026-08-11T00:27:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Auditoría y corrección en ProgressBars y Scales (GtkProgressBar, GtkScale): eliminación de canal oscuro $dark_fill y texto con bajo contraste.",
+    "objectives": [
+      "Auditar si las barras de progreso (GtkProgressBar) y deslizadores (GtkScale) compartían el problema de fondos negros.",
+      "Identificar que Adwaita aplicaba '%scale_trough' con '$dark_fill' (#1E2326) y en headerbars 'darken($dark_fill, 8%)' (#0e1112 negro puro), además de texto casi transparente para los porcentajes de progreso.",
+      "Actualizar $dark_fill a $bg0 (#272E33) en sass-gtk3/_colors.scss y sass-gtk4/_colors.scss.",
+      "Implementar reglas en _widgets.scss para progressbar y scale con trough $bg0, borde $bg3, indicador verde $green (#A7C080), texto de alto contraste $fg (#D3C6AA) y deslizadores $bg2.",
+      "Recompilar el tema, validar sintaxis estricta y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/sass-gtk3/_colors.scss y src/theme/sass-gtk4/_colors.scss: Actualizado $dark_fill de #1E2326 a #272E33 ($bg0).",
+      "src/theme/overrides/_widgets.scss: Estilizados progressbar y scale con canal estructurado ($bg0, borde $bg3), indicador $green, texto nítido $fg y slider $bg2 con hover $bg3 y activo $green.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Las barras de progreso y los canales de escalas deben compartir la arquitectura de profundidad ($bg0 con borde $bg3) y acento verde Everforest ($green), garantizando legibilidad total del porcentaje o etiqueta."
+    ],
+    "next_steps": [
+      "Verificar visualmente en la pestaña 5 de 'make test-gtk4' y 'make test-gtk3' que la ProgressBar al 66% y las escalas muestren texto nítido y canal bien contrastado."
+    ]
+  },
+  {
+    "session_id": 35,
+    "timestamp": "2026-08-11T00:30:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Erradicación de esquinas redondeadas residuales en GTK 3 (dropdowns, comboboxes, botones vinculados): migración de variables raíz a 0px en sass-gtk3 y sass-gtk4.",
+    "objectives": [
+      "Investigar por qué en GTK 3 aún se apreciaban esquinas redondeadas en dropdowns (combobox), botones vinculados y menús.",
+      "Identificar la causa raíz: variables base de Adwaita ($button_radius: 5px, $menu_radius: 5px, $window_radius: 8px, $popover_radius: 9px) que generaban cientos de reglas con radio positivo.",
+      "Configurar $button_radius, $menu_radius, $menu_margin, $window_radius y $popover_radius a 0px en sass-gtk3/_common.scss y sass-gtk4/_common.scss.",
+      "Añadir selectores explícitos en _geometry.scss para combobox, button.combo, dropdown, menubutton, splitbutton y .linked.",
+      "Corregir -gtk-outline-radius: 0px para cumplir estrictamente con el parser de GTK 3.",
+      "Recompilar el tema, validar paridad y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/sass-gtk3/_common.scss y src/theme/sass-gtk4/_common.scss: Establecidas variables base de radio a 0px.",
+      "src/theme/overrides/_geometry.scss: Añadidos selectores exhaustivos para combobox, dropdown, menubutton, splitbutton y linked buttons.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "La fijación de radios debe realizarse a nivel de variable SCSS base ($button_radius: 0px) para que todas las macros internas de Adwaita (%linked_left, %linked_right, etc.) compilen de forma nativa a 90 grados sin depender únicamente de overrides posteriores."
+    ],
+    "next_steps": [
+      "Comprobar visualmente en 'make test-gtk3' (pestañas 1 y 2) que los ComboBoxes, Dropdowns y botones agrupados tengan esquinas perfectamente rectas a 90 grados."
+    ]
+  },
+  {
+    "session_id": 36,
+    "timestamp": "2026-08-11T00:39:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Corrección de renderizado en Popovers de GTK 3: eliminación de background-clip restrictivo y borde oscuro, soporte unificado para popover.background.",
+    "objectives": [
+      "Investigar por qué el menú popover no renderizaba correctamente en GTK 3 (flecha oscura y corte de caja en la captura del usuario).",
+      "Identificar la diferencia estructural entre GTK 3 y GTK 4: en GTK 3, GtkPopover no tiene sub-nodos '> contents' ni '> arrow'; el renderizado de la ventana y la flecha se ejecuta directamente sobre 'popover.background' mediante Cairo.",
+      "Eliminar 'background-clip: padding-box' y el borde negro 'transparentize(black, 0.25)' heredados de Adwaita en sass-gtk3/_common.scss.",
+      "Añadir soporte unificado para 'popover.background' en _widgets.scss y _sidebars.scss con fondo $bg1 (#2E383C), borde $bg3 (#414B50) y sombras dimensionales.",
+      "Recompilar el tema, validar paridad y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/sass-gtk3/_common.scss: Corregidas las reglas de popover.background eliminando background-clip y asignando border-color: $borders_color.",
+      "src/theme/overrides/_widgets.scss y src/theme/overrides/_sidebars.scss: Unificados los selectores popover.background y popover.background > contents para aplicar fondo $bg1, borde $bg3 y sombras consistentes.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "En GTK 3, las reglas de popover deben apuntar directamente a 'popover.background' (el único nodo existente), mientras que en GTK 4 se dirigen a 'popover.background > contents' y 'popover.background > arrow'."
+    ],
+    "next_steps": [
+      "Comprobar visualmente en la pestaña 1 de 'make test-gtk3' al presionar 'Mostrar Popover' que la flecha y el contenedor se fusionen limpiamente con fondo $bg1 y borde $bg3."
+    ]
+  },
+  {
+    "session_id": 37,
+    "timestamp": "2026-08-11T00:44:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Separación arquitectónica de Popovers GTK 3 vs GTK 4 (eliminación del cuadro oclusivo en GTK 4 y visibilidad de hijos en GTK 3).",
+    "objectives": [
+      "Resolver la oclusión de widgets por un cuadro sólido debajo del Popover en GTK 4 provocado por un estilo opaco en 'popover.background'.",
+      "Resolver el colapso a tamaño 0px del Popover en GTK 3 por falta de show_all() en sus elementos hijos.",
+      "Configurar $gtk_version: 3 y $gtk_version: 4 en los puntos de entrada SCSS para aislar con precisión la regla 'popover.background { background: transparent; }' en GTK 4 manteniendo 'popover.background { background: $bg1; }' en GTK 3.",
+      "Añadir popover_content.show_all() en test_visual.py (GTK 3).",
+      "Recompilar el tema, validar paridad y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/sass-gtk3/gtk-contained-dark.scss: Añadido $gtk_version: 3;.",
+      "src/theme/sass-gtk4/Default-dark.scss: Añadido $gtk_version: 4;.",
+      "src/theme/overrides/_widgets.scss y src/theme/overrides/_sidebars.scss: Aislado popover.background como transparente en GTK 4 (aplicando estilos a > contents y > arrow) y sólido en GTK 3.",
+      "tests/test_visual.py: Añadido popover_content.show_all() en el botón de Popover de GTK 3.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "En GTK 4, 'popover.background' debe ser estrictamente transparente sin bordes ni sombras para actuar únicamente como contenedor de posicionamiento.",
+      "En GTK 3, los contenedores dinámicos añadidos a GtkPopover requieren show_all() para activar su árbol de renderizado."
+    ],
+    "next_steps": [
+      "Comprobar visualmente en 'make test-gtk3' y 'make test-gtk4' que el Popover se despliegue con cuerpo completo, botones visibles y sin fondos cuadrados extra."
+    ]
+  },
+  {
+    "session_id": 38,
+    "timestamp": "2026-08-11T00:53:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Corrección del desbordamiento de pestañas en Notebook (Foco y Selección): optimización de padding horizontal y habilitación de set_scrollable(True) en el tester.",
+    "objectives": [
+      "Investigar por qué el texto de la última pestaña ('Foco y Selección') se cortaba/salía de la ventana en GTK 3 y GTK 4.",
+      "Identificar que el padding horizontal de 16px por pestaña multiplicaba el ancho requerido, superando la ventana fija de 600px.",
+      "Ajustar el padding de pestañas a 6px 12px en _notebooks.scss.",
+      "Configurar el tamaño de ventana a 780x700 y habilitar notebook.set_scrollable(True) en test_visual.py tanto para GTK 3 como para GTK 4.",
+      "Recompilar el tema, validar paridad y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_notebooks.scss: Reducido padding de pestañas a 6px 12px para evitar desbordamientos.",
+      "tests/test_visual.py: Actualizado tamaño por defecto de ventana a 780x700 y añadido notebook.set_scrollable(True) en GTK 3 y GTK 4.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Las pestañas de notebook deben contar con un espaciado horizontal calibrado (12px) y soporte para desplazamiento (scrollable) para garantizar que todas las etiquetas sean legibles independientemente del tamaño de pantalla."
+    ],
+    "next_steps": [
+      "Verificar visualmente en 'make test-gtk3' y 'make test-gtk4' que las 6 pestañas se lean de forma completa y cómoda."
+    ]
+  },
+  {
+    "session_id": 39,
+    "timestamp": "2026-08-11T00:57:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Unificación del confort visual en selección de texto (fondo verde bosque oscuro $bg_green y texto claro $fg) para entradas, editores y etiquetas.",
+    "objectives": [
+      "Atender la observación del usuario sobre el contraste de selección de texto: la selección en entradas/campos de texto usaba un verde claro brillante ($green #A7C080 con texto oscuro $bg0), mientras que GtkTextView usaba un verde oscuro ($bg_green #3C4841 con texto claro $fg #D3C6AA), siendo este último mucho más cómodo visualmente.",
+      "Separar la selección de elementos estructurales (filas, listas, árboles) de la selección de texto en _selections.scss.",
+      "Asignar a toda selección de texto (entry, textview, spinbutton, searchentry, label) el fondo $bg_green (#3C4841) y color $fg (#D3C6AA), garantizando descanso visual sin invertir el color de las fuentes a negro.",
+      "Recompilar el tema, validar paridad y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/overrides/_selections.scss: Creada sección dedicada para selección de texto con $bg_green y $fg, tanto en estado normal como con foco y backdrop.",
+      "src/theme/overrides/_widgets.scss: Simplificada la regla de textview > text > selection para mantener $bg_green y $fg de forma homogénea.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "La selección de texto en campos interactivos y editores debe utilizar el verde bosque oscuro ($bg_green #3C4841) con texto claro ($fg #D3C6AA), reservando el verde brillante ($green #A7C080) exclusivamente para elementos estructurales como filas de listas seleccionadas o pestañas activas."
+    ],
+    "next_steps": [
+      "Verificar visualmente en la pestaña 6 ('Foco y Selección') de 'make test-gtk4' y 'make test-gtk3' que la selección de texto en inputs y textviews comparta el mismo verde oscuro descansado."
+    ]
+  },
+  {
+    "session_id": 40,
+    "timestamp": "2026-08-11T01:00:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Expansión integral de secciones de prueba en test_visual.py: añadidas pestañas 7 (InfoBars y Mensajes), 8 (Selectores y Fechas) y 9 (Navegación y Estructura).",
+    "objectives": [
+      "Ampliar la cobertura de pruebas visuales para validar el renderizado completo de todos los widgets de GTK 3 y GTK 4.",
+      "Implementar la Pestaña 7 ('InfoBars y Mensajes'): 4 InfoBars semánticas (Info, Question, Warning, Error) con fondos cromáticos y botones de acción, más un banner OSD (.app-notification).",
+      "Implementar la Pestaña 8 ('Selectores y Fechas'): GtkCalendar, GtkColorButton y GtkFontButton con paleta Everforest.",
+      "Implementar la Pestaña 9 ('Navegación y Estructura'): Botones vinculados (.linked a 90 grados), GtkFrame estructurado y GtkActionBar.",
+      "Garantizar total paridad de código y compatibilidad de API entre GTK 3 y GTK 4.",
+      "Ejecutar validación de sintaxis y parseo estricto."
+    ],
+    "changes_made": [
+      "tests/test_visual.py: Añadidas pestañas 7, 8 y 9 tanto en la rama GTK 3 como en la rama GTK 4.",
+      "docs/memory.json: Registrada la sesión 40."
+    ],
+    "key_decisions": [
+      "La suite de pruebas visuales unificada debe ofrecer cobertura integral de todos los controles avanzados (calendarios, selectores, infobars cromáticas y barras de acción) en una sola ventana navegable mediante pestañas desplazables."
+    ],
+    "next_steps": [
+      "Verificar visualmente en 'make test-gtk4' y 'make test-gtk3' las 9 pestañas de componentes."
+    ]
+  },
+  {
+    "session_id": 41,
+    "timestamp": "2026-08-11T01:03:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Corrección definitiva de la selección enfocada en GtkEntry para GTK 4: asignación de $selected_text_bg_color a $bg_green y selectores específicos > text > selection:focus-within.",
+    "objectives": [
+      "Investigar por qué en GTK 4 el texto seleccionado en una GtkEntry enfocada seguía mostrándose con fondo verde claro ($green #A7C080).",
+      "Identificar la causa raíz: en sass-gtk4/_colors.scss, $selected_text_bg_color estaba definido como 'rgba(167, 192, 128, 0.8)' y el selector nativo 'entry > text > selection:focus-within' tenía mayor especificidad CSS que la regla de override genérica.",
+      "Actualizar $selected_text_bg_color a #3C4841 ($bg_green) en sass-gtk4/_colors.scss.",
+      "Añadir selectores directos de sub-nodos 'entry > text > selection:focus-within' y 'spinbutton > text > selection:focus-within' en _selections.scss con color $fg (#D3C6AA).",
+      "Recompilar el tema, validar paridad y actualizar el baseline."
+    ],
+    "changes_made": [
+      "src/theme/sass-gtk4/_colors.scss: Actualizado $selected_text_bg_color a #3C4841.",
+      "src/theme/overrides/_selections.scss: Añadidos selectores directos entry > text > selection y :focus-within.",
+      "docs/baseline.sha256: Actualizado mediante 'make baseline-update' tras verificar con 'make validate'."
+    ],
+    "key_decisions": [
+      "Toda variable de selección de texto a nivel de raíz ($selected_text_bg_color) debe coincidir con $bg_green (#3C4841) para evitar que los selectores de sub-nodos con alta especificidad de Adwaita sobreescriban las reglas de selección de texto."
+    ],
+    "next_steps": [
+      "Comprobar visualmente en 'make test-gtk4' que la primera caja de texto en la pestaña 6 muestre el fondo verde bosque oscuro #3C4841 y texto claro #D3C6AA."
+    ]
+  },
+  {
+    "session_id": 42,
+    "timestamp": "2026-08-11T01:06:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Incorporación de alternador interactivo de tema en tiempo real (Everforest <-> Adwaita Dark) en la HeaderBar de test_visual.py para GTK 3 y GTK 4.",
+    "objectives": [
+      "Implementar un botón interactivo (GtkToggleButton) en la HeaderBar de test_visual.py que permita alternar en vivo entre Everforest y el tema Adwaita Dark nativo sin reiniciar la aplicación.",
+      "Configurar la remoción/adición dinámica del CssProvider global sobre Gdk.Screen (GTK 3) y Gdk.Display (GTK 4), sincronizando 'gtk-application-prefer-dark-theme' y 'gtk-theme-name: Adwaita'.",
+      "Actualizar dinámicamente el texto del botón y el subtítulo de la HeaderBar según el estado activo.",
+      "Validar el funcionamiento correcto en GTK 3 y GTK 4."
+    ],
+    "changes_made": [
+      "tests/test_visual.py: Integrado btn_toggle_theme con callbacks para GTK 3 y GTK 4.",
+      "docs/memory.json: Registrada la sesión 42."
+    ],
+    "key_decisions": [
+      "El tester visual debe permitir comparación directa instantánea (A/B testing visual) entre el tema personalizado y el tema nativo del sistema mediante la manipulación en caliente de StyleContext y CssProvider."
+    ],
+    "next_steps": [
+      "Utilizar el botón en la HeaderBar de 'make test-gtk4' y 'make test-gtk3' para alternar fluidamente entre Everforest y Adwaita Dark."
+    ]
+  },
+  {
+    "session_id": 43,
+    "timestamp": "2026-08-11T08:21:21-06:00",
+    "developer": "Antigravity",
+    "summary": "Generación de commits para actualizar SASS overrides, assets, y scripts.",
+    "objectives": [
+      "Generar una serie de commits organizados para los últimos cambios de recolor_assets, test_visual y SASS overrides.",
+      "Realizar el push al repositorio remoto."
+    ],
+    "changes_made": [
+      "Se organizaron los cambios en commits lógicos (Scripts, Assets, SASS overrides).",
+      "Actualización de docs/baseline.sha256 y docs/memory.json."
+    ],
+    "key_decisions": [
+      "Separar los cambios en commits atómicos para mantener un historial limpio."
+    ],
+    "next_steps": [
+      "Continuar con el desarrollo SASS y pruebas de componentes."
+    ]
   }
 ]
