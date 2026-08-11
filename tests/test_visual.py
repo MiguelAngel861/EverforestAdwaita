@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import common
 
 use_gtk3 = common.parse_gtk_args()
-common.load_css(use_gtk3)
+css_provider = common.load_css(use_gtk3)
 
 if use_gtk3:
     print("Iniciando prueba visual unificada con GTK 3...")
@@ -28,8 +28,12 @@ if use_gtk3:
 
     Gtk.init([])
 
+    settings = Gtk.Settings.get_default()
+    if settings:
+        settings.set_property("gtk-application-prefer-dark-theme", True)
+
     win = Gtk.Window(title="EverforestAdwaita - Prueba Visual (GTK 3)")
-    win.set_default_size(600, 680)
+    win.set_default_size(780, 700)
     win.connect("destroy", Gtk.main_quit)
 
     hb = Gtk.HeaderBar()
@@ -37,6 +41,31 @@ if use_gtk3:
     hb.set_title("EverforestAdwaita")
     hb.set_subtitle("Prueba visual unificada GTK 3")
     win.set_titlebar(hb)
+
+    # Botón para alternar en vivo entre Everforest y Adwaita Dark
+    btn_toggle_theme = Gtk.ToggleButton(label="🌲 Everforest")
+    btn_toggle_theme.set_tooltip_text("Haz clic para alternar entre Everforest y Adwaita Dark nativo")
+
+    def on_theme_toggle_gtk3(btn):
+        screen = Gdk.Screen.get_default()
+        if btn.get_active():
+            if css_provider and screen:
+                Gtk.StyleContext.remove_provider_for_screen(screen, css_provider)
+            if settings:
+                settings.set_property("gtk-theme-name", "Adwaita")
+                settings.set_property("gtk-application-prefer-dark-theme", True)
+            btn.set_label("🔵 Adwaita Dark")
+            hb.set_subtitle("Modo Comparación: Adwaita Dark")
+        else:
+            if css_provider and screen:
+                Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+            if settings:
+                settings.set_property("gtk-application-prefer-dark-theme", True)
+            btn.set_label("🌲 Everforest")
+            hb.set_subtitle("Prueba visual unificada GTK 3")
+
+    btn_toggle_theme.connect("toggled", on_theme_toggle_gtk3)
+    hb.pack_end(btn_toggle_theme)
 
     main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
     main_box.set_margin_top(12)
@@ -46,6 +75,7 @@ if use_gtk3:
     win.add(main_box)
 
     notebook = Gtk.Notebook()
+    notebook.set_scrollable(True)
     main_box.pack_start(notebook, True, True, 0)
 
     def new_tab():
@@ -71,6 +101,7 @@ if use_gtk3:
     popover_content.pack_start(pop_btn1, False, False, 0)
     popover_content.pack_start(pop_btn2, False, False, 0)
     popover.add(popover_content)
+    popover_content.show_all()
     btn_popover.connect("clicked", lambda w: popover.popup() if not popover.get_visible() else popover.popdown())
     tab1.pack_start(btn_popover, False, False, 0)
 
@@ -335,26 +366,12 @@ if use_gtk3:
     pb.set_show_text(True)
     tab5.pack_start(pb, False, False, 0)
 
-    lbl_info = Gtk.Label(label="InfoBars (fondo #384B55 info / #45443C warning):")
-    lbl_info.set_xalign(0.0)
-    lbl_info.set_margin_top(10)
-    tab5.pack_start(lbl_info, False, False, 0)
-
-    for msg_type in (Gtk.MessageType.INFO, Gtk.MessageType.WARNING):
-        ib = Gtk.InfoBar()
-        ib.set_message_type(msg_type)
-        ib_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        ib_box.pack_start(Gtk.Label(label=f"InfoBar {str(msg_type).split('.')[-1]} - fondos mapeados Everforest"), False, False, 0)
-        ib.get_content_area().pack_start(ib_box, True, True, 0)
-        ib.show_all()
-        tab5.pack_start(ib, False, False, 0)
-
     notebook.append_page(tab5, Gtk.Label(label="Links y Estados"))
 
     # --- PESTAÑA 6: Foco y Selección ---
     tab6 = new_tab()
 
-    lbl_sel = Gtk.Label(label="Selección enfocada (selection:focus verde, texto #272E33).\nGTK 3 no tiene :focus-within; usa selection:focus (ya mapeado en el base).")
+    lbl_sel = Gtk.Label(label="Selección de texto (fondo verde bosque oscuro #3C4841 y texto claro #D3C6AA):")
     lbl_sel.set_xalign(0.0)
     tab6.pack_start(lbl_sel, False, False, 0)
 
@@ -362,6 +379,25 @@ if use_gtk3:
     entry_sel.set_text("Texto seleccionado dentro de una Entry enfocada")
     entry_sel.connect("realize", lambda w: (w.select_region(0, -1), w.grab_focus()))
     tab6.pack_start(entry_sel, False, False, 0)
+
+    lbl_tv = Gtk.Label(label="Selección en TextView:")
+    lbl_tv.set_xalign(0.0)
+    lbl_tv.set_margin_top(8)
+    tab6.pack_start(lbl_tv, False, False, 0)
+
+    scrolled_sel = Gtk.ScrolledWindow()
+    scrolled_sel.set_min_content_height(80)
+    tv_sel = Gtk.TextView()
+    buf_sel = tv_sel.get_buffer()
+    buf_sel.set_text("Párrafo con selección enfocada en TextView Everforest.")
+    tv_sel.set_editable(True)
+    tv_sel.set_cursor_visible(True)
+    start = buf_sel.get_start_iter()
+    end = buf_sel.get_end_iter()
+    buf_sel.select_range(start, end)
+    tv_sel.connect("realize", lambda w: w.grab_focus())
+    scrolled_sel.add(tv_sel)
+    tab6.pack_start(scrolled_sel, False, False, 0)
 
     lbl_spin = Gtk.Label(label="SpinButton enfocado:")
     lbl_spin.set_xalign(0.0)
@@ -371,7 +407,7 @@ if use_gtk3:
     spin.set_value(4)
     tab6.pack_start(spin, False, False, 0)
 
-    lbl_focus = Gtk.Label(label="Pulsa Tab para ver el anillo de foco (box-shadow verde #A7C080 en GTK 3):")
+    lbl_focus = Gtk.Label(label="Pulsa Tab para ver el anillo de foco (box-shadow verde #A7C080):")
     lbl_focus.set_xalign(0.0)
     lbl_focus.set_margin_top(10)
     tab6.pack_start(lbl_focus, False, False, 0)
@@ -381,21 +417,158 @@ if use_gtk3:
 
     notebook.append_page(tab6, Gtk.Label(label="Foco y Selección"))
 
+    # --- PESTAÑA 7: InfoBars y Mensajes ---
+    tab7 = new_tab()
+    lbl_ib_header = Gtk.Label(label="InfoBars Semánticas (fondos cromáticos y acentos Everforest):")
+    lbl_ib_header.set_xalign(0.0)
+    tab7.pack_start(lbl_ib_header, False, False, 0)
+
+    for msg_type, msg_label in [
+        (Gtk.MessageType.INFO, "InfoBar Informativa (Fondo Azul #384B55, Acento #7FBBB3)"),
+        (Gtk.MessageType.QUESTION, "InfoBar de Pregunta (Fondo Azul #384B55, Acento #7FBBB3)"),
+        (Gtk.MessageType.WARNING, "InfoBar de Advertencia (Fondo Ámbar #45443C, Acento #DBBC7F)"),
+        (Gtk.MessageType.ERROR, "InfoBar de Error (Fondo Rojo #4C3743, Acento #E67E80)"),
+    ]:
+        ib = Gtk.InfoBar()
+        ib.set_message_type(msg_type)
+        ib.set_show_close_button(True)
+        ib_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        ib_box.pack_start(Gtk.Label(label=msg_label), True, True, 0)
+        ib.get_content_area().pack_start(ib_box, True, True, 0)
+        ib.add_button("Acción", 1)
+        ib.show_all()
+        tab7.pack_start(ib, False, False, 0)
+
+    lbl_notif = Gtk.Label(label="Banner de Notificación Flotante (.app-notification):")
+    lbl_notif.set_xalign(0.0)
+    lbl_notif.set_margin_top(10)
+    tab7.pack_start(lbl_notif, False, False, 0)
+
+    notif_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+    notif_box.get_style_context().add_class("app-notification")
+    notif_box.pack_start(Gtk.Label(label="Notificación del sistema Everforest (Superficie OSD)"), True, True, 6)
+    btn_undo = Gtk.Button(label="Deshacer")
+    notif_box.pack_start(btn_undo, False, False, 6)
+    tab7.pack_start(notif_box, False, False, 0)
+
+    notebook.append_page(tab7, Gtk.Label(label="InfoBars y Mensajes"))
+
+    # --- PESTAÑA 8: Selectores y Fechas ---
+    tab8 = new_tab()
+
+    lbl_cal = Gtk.Label(label="GtkCalendar (números, días, cabecera de mes y día actual):")
+    lbl_cal.set_xalign(0.0)
+    tab8.pack_start(lbl_cal, False, False, 0)
+
+    cal = Gtk.Calendar()
+    tab8.pack_start(cal, False, False, 0)
+
+    lbl_choosers = Gtk.Label(label="Selectores de Color y Tipografía:")
+    lbl_choosers.set_xalign(0.0)
+    lbl_choosers.set_margin_top(10)
+    tab8.pack_start(lbl_choosers, False, False, 0)
+
+    hbox_choosers = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+    color_btn = Gtk.ColorButton()
+    rgba = Gdk.RGBA()
+    rgba.parse("#A7C080")
+    color_btn.set_rgba(rgba)
+    color_btn.set_hexpand(True)
+    hbox_choosers.pack_start(color_btn, True, True, 0)
+
+    font_btn = Gtk.FontButton()
+    font_btn.set_hexpand(True)
+    hbox_choosers.pack_start(font_btn, True, True, 0)
+    tab8.pack_start(hbox_choosers, False, False, 0)
+
+    notebook.append_page(tab8, Gtk.Label(label="Selectores y Fechas"))
+
+    # --- PESTAÑA 9: Navegación y Estructura ---
+    tab9 = new_tab()
+
+    lbl_linked = Gtk.Label(label="Botones Vinculados (.linked a 90 grados):")
+    lbl_linked.set_xalign(0.0)
+    tab9.pack_start(lbl_linked, False, False, 0)
+
+    hbox_linked = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+    hbox_linked.get_style_context().add_class("linked")
+    btn_l1 = Gtk.Button(label="Izquierda")
+    btn_l2 = Gtk.Button(label="Centro")
+    btn_l3 = Gtk.Button(label="Derecha")
+    hbox_linked.pack_start(btn_l1, True, True, 0)
+    hbox_linked.pack_start(btn_l2, True, True, 0)
+    hbox_linked.pack_start(btn_l3, True, True, 0)
+    tab9.pack_start(hbox_linked, False, False, 0)
+
+    lbl_frame = Gtk.Label(label="GtkFrame (Borde estructurado $bg3 #414B50 y etiqueta):")
+    lbl_frame.set_xalign(0.0)
+    lbl_frame.set_margin_top(10)
+    tab9.pack_start(lbl_frame, False, False, 0)
+
+    frame = Gtk.Frame(label="Marco de Contenido Everforest")
+    frame_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+    frame_box.set_border_width(12)
+    frame_box.pack_start(Gtk.Label(label="Contenido encapsulado dentro de un marco geométrico recto."), False, False, 0)
+    frame.add(frame_box)
+    tab9.pack_start(frame, False, False, 0)
+
+    lbl_act = Gtk.Label(label="GtkActionBar (Barra de acciones inferior):")
+    lbl_act.set_xalign(0.0)
+    lbl_act.set_margin_top(10)
+    tab9.pack_start(lbl_act, False, False, 0)
+
+    action_bar = Gtk.ActionBar()
+    btn_act1 = Gtk.Button(label="Cancelar")
+    btn_act2 = Gtk.Button(label="Guardar Cambios")
+    btn_act2.get_style_context().add_class("suggested-action")
+    action_bar.pack_start(btn_act1)
+    action_bar.pack_end(btn_act2)
+    tab9.pack_start(action_bar, False, False, 0)
+
+    notebook.append_page(tab9, Gtk.Label(label="Navegación y Estructura"))
+
     win.show_all()
     Gtk.main()
 
 else:
     print("Iniciando prueba visual unificada con GTK 4...")
     gi.require_version("Gtk", "4.0")
-    from gi.repository import Gtk
+    from gi.repository import Gtk, Gdk
 
     def on_activate(app):
+        settings = Gtk.Settings.get_default()
+        if settings:
+            settings.set_property("gtk-application-prefer-dark-theme", True)
+
         win = Gtk.ApplicationWindow(application=app, title="EverforestAdwaita - Prueba Visual (GTK 4)")
-        win.set_default_size(600, 680)
+        win.set_default_size(780, 700)
 
         hb = Gtk.HeaderBar()
         hb.set_show_title_buttons(True)
         win.set_titlebar(hb)
+
+        # Botón para alternar en vivo entre Everforest y Adwaita Dark
+        btn_toggle_theme = Gtk.ToggleButton(label="🌲 Everforest")
+        btn_toggle_theme.set_tooltip_text("Haz clic para alternar entre Everforest y Adwaita Dark nativo")
+
+        def on_theme_toggle_gtk4(btn):
+            display = Gdk.Display.get_default()
+            if btn.get_active():
+                if css_provider and display:
+                    Gtk.StyleContext.remove_provider_for_display(display, css_provider)
+                if settings:
+                    settings.set_property("gtk-theme-name", "Adwaita")
+                    settings.set_property("gtk-application-prefer-dark-theme", True)
+                btn.set_label("🔵 Adwaita Dark")
+            else:
+                if css_provider and display:
+                    Gtk.StyleContext.add_provider_for_display(display, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+                if settings:
+                    settings.set_property("gtk-application-prefer-dark-theme", True)
+                btn.set_label("🌲 Everforest")
+
+        btn_toggle_theme.connect("toggled", on_theme_toggle_gtk4)
+        hb.pack_end(btn_toggle_theme)
 
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         main_box.set_margin_top(12)
@@ -405,6 +578,7 @@ else:
         win.set_child(main_box)
 
         notebook = Gtk.Notebook()
+        notebook.set_scrollable(True)
         main_box.append(notebook)
 
         def new_tab():
@@ -737,24 +911,12 @@ else:
         pb.set_show_text(True)
         tab5.append(pb)
 
-        lbl_info = Gtk.Label(label="InfoBars (fondo #384B55 info / #45443C warning):")
-        lbl_info.set_xalign(0.0)
-        lbl_info.set_margin_top(10)
-        tab5.append(lbl_info)
-
-        for msg_type in (Gtk.MessageType.INFO, Gtk.MessageType.WARNING):
-            ib = Gtk.InfoBar()
-            ib.set_message_type(msg_type)
-            ib.add_child(Gtk.Label(label=f"InfoBar {str(msg_type).split('.')[-1]} - fondos mapeados Everforest"))
-            ib.set_revealed(True)
-            tab5.append(ib)
-
         notebook.append_page(tab5, Gtk.Label(label="Links y Estados"))
 
         # --- PESTAÑA 6: Foco y Selección ---
         tab6 = new_tab()
 
-        lbl_sel = Gtk.Label(label="Selección enfocada (selection:focus-within verde, texto #272E33,\nregla GTK4-only de overrides-gtk4.css):")
+        lbl_sel = Gtk.Label(label="Selección de texto (fondo verde bosque oscuro #3C4841 y texto claro #D3C6AA):")
         lbl_sel.set_xalign(0.0)
         tab6.append(lbl_sel)
 
@@ -772,7 +934,7 @@ else:
         scrolled_sel.set_min_content_height(80)
         tv_sel = Gtk.TextView()
         buf_sel = tv_sel.get_buffer()
-        buf_sel.set_text("Párrafo con selección enfocada (textview > text > selection:focus-within)")
+        buf_sel.set_text("Párrafo con selección enfocada en TextView Everforest.")
         tv_sel.set_editable(True)
         tv_sel.set_cursor_visible(True)
         start = buf_sel.get_start_iter()
@@ -791,12 +953,12 @@ else:
         spin.set_value(4)
         tab6.append(spin)
 
-        lbl_focus = Gtk.Label(label="Pulsa Tab para ver el anillo de foco verde (focus-visible, overrides-gtk4.css):")
+        lbl_focus = Gtk.Label(label="Pulsa Tab para ver el anillo de foco verde:")
         lbl_focus.set_xalign(0.0)
         lbl_focus.set_margin_top(10)
         tab6.append(lbl_focus)
 
-        btn_focus = Gtk.Button(label="Botón con anillo de foco verde (outline rgba(167,192,128,0.7))")
+        btn_focus = Gtk.Button(label="Botón con anillo de foco verde")
         tab6.append(btn_focus)
 
         dropdown = Gtk.DropDown.new_from_strings(["Opción de dropdown 1", "Opción de dropdown 2"])
@@ -804,6 +966,119 @@ else:
         tab6.append(dropdown)
 
         notebook.append_page(tab6, Gtk.Label(label="Foco y Selección"))
+
+        # --- PESTAÑA 7: InfoBars y Mensajes ---
+        tab7 = new_tab()
+        lbl_ib_header = Gtk.Label(label="InfoBars Semánticas (fondos cromáticos y acentos Everforest):")
+        lbl_ib_header.set_xalign(0.0)
+        tab7.append(lbl_ib_header)
+
+        for msg_type, msg_label in [
+            (Gtk.MessageType.INFO, "InfoBar Informativa (Fondo Azul #384B55, Acento #7FBBB3)"),
+            (Gtk.MessageType.QUESTION, "InfoBar de Pregunta (Fondo Azul #384B55, Acento #7FBBB3)"),
+            (Gtk.MessageType.WARNING, "InfoBar de Advertencia (Fondo Ámbar #45443C, Acento #DBBC7F)"),
+            (Gtk.MessageType.ERROR, "InfoBar de Error (Fondo Rojo #4C3743, Acento #E67E80)"),
+        ]:
+            ib = Gtk.InfoBar()
+            ib.set_message_type(msg_type)
+            ib.set_show_close_button(True)
+            ib.add_child(Gtk.Label(label=msg_label))
+            ib.add_button("Acción", 1)
+            ib.set_revealed(True)
+            tab7.append(ib)
+
+        lbl_notif = Gtk.Label(label="Banner de Notificación Flotante (.app-notification):")
+        lbl_notif.set_xalign(0.0)
+        lbl_notif.set_margin_top(10)
+        tab7.append(lbl_notif)
+
+        notif_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        notif_box.add_css_class("app-notification")
+        lbl_notif_txt = Gtk.Label(label="Notificación del sistema Everforest (Superficie OSD)")
+        lbl_notif_txt.set_hexpand(True)
+        notif_box.append(lbl_notif_txt)
+        btn_undo = Gtk.Button(label="Deshacer")
+        notif_box.append(btn_undo)
+        tab7.append(notif_box)
+
+        notebook.append_page(tab7, Gtk.Label(label="InfoBars y Mensajes"))
+
+        # --- PESTAÑA 8: Selectores y Fechas ---
+        tab8 = new_tab()
+
+        lbl_cal = Gtk.Label(label="GtkCalendar (números, días, cabecera de mes y día actual):")
+        lbl_cal.set_xalign(0.0)
+        tab8.append(lbl_cal)
+
+        cal = Gtk.Calendar()
+        tab8.append(cal)
+
+        lbl_choosers = Gtk.Label(label="Selectores de Color y Tipografía:")
+        lbl_choosers.set_xalign(0.0)
+        lbl_choosers.set_margin_top(10)
+        tab8.append(lbl_choosers)
+
+        hbox_choosers = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        color_btn = Gtk.ColorButton()
+        color_btn.set_hexpand(True)
+        hbox_choosers.append(color_btn)
+
+        font_btn = Gtk.FontButton()
+        font_btn.set_hexpand(True)
+        hbox_choosers.append(font_btn)
+        tab8.append(hbox_choosers)
+
+        notebook.append_page(tab8, Gtk.Label(label="Selectores y Fechas"))
+
+        # --- PESTAÑA 9: Navegación y Estructura ---
+        tab9 = new_tab()
+
+        lbl_linked = Gtk.Label(label="Botones Vinculados (.linked a 90 grados):")
+        lbl_linked.set_xalign(0.0)
+        tab9.append(lbl_linked)
+
+        hbox_linked = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        hbox_linked.add_css_class("linked")
+        btn_l1 = Gtk.Button(label="Izquierda")
+        btn_l1.set_hexpand(True)
+        btn_l2 = Gtk.Button(label="Centro")
+        btn_l2.set_hexpand(True)
+        btn_l3 = Gtk.Button(label="Derecha")
+        btn_l3.set_hexpand(True)
+        hbox_linked.append(btn_l1)
+        hbox_linked.append(btn_l2)
+        hbox_linked.append(btn_l3)
+        tab9.append(hbox_linked)
+
+        lbl_frame = Gtk.Label(label="GtkFrame (Borde estructurado $bg3 #414B50 y etiqueta):")
+        lbl_frame.set_xalign(0.0)
+        lbl_frame.set_margin_top(10)
+        tab9.append(lbl_frame)
+
+        frame = Gtk.Frame(label="Marco de Contenido Everforest")
+        frame_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        frame_box.set_margin_top(12)
+        frame_box.set_margin_bottom(12)
+        frame_box.set_margin_start(12)
+        frame_box.set_margin_end(12)
+        frame_box.append(Gtk.Label(label="Contenido encapsulado dentro de un marco geométrico recto."))
+        frame.set_child(frame_box)
+        tab9.append(frame)
+
+        lbl_act = Gtk.Label(label="GtkActionBar (Barra de acciones inferior):")
+        lbl_act.set_xalign(0.0)
+        lbl_act.set_margin_top(10)
+        tab9.append(lbl_act)
+
+        action_bar = Gtk.ActionBar()
+        btn_act1 = Gtk.Button(label="Cancelar")
+        btn_act2 = Gtk.Button(label="Guardar Cambios")
+        btn_act2.add_css_class("suggested-action")
+        action_bar.pack_start(btn_act1)
+        action_bar.pack_end(btn_act2)
+        tab9.append(action_bar)
+
+        notebook.append_page(tab9, Gtk.Label(label="Navegación y Estructura"))
 
         win.present()
 

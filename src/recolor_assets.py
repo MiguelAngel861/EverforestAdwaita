@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Script para recolorear de forma nativa los archivos vectoriales assets.svg."""
+"""Script para recolorear de forma nativa los archivos vectoriales assets.svg con la paleta Everforest Dark Hard."""
 import re
 from pathlib import Path
 
-# Mapa de reemplazo de colores (de los azules de Adwaita a los verdes/gris de Everforest)
+# Mapa de reemplazo de colores (de los azules de Adwaita a los verdes/gris de Everforest Dark Hard)
 COLOR_REPLACEMENTS = {
-    # GTK 3 & GTK 4 azules comunes
-    "#3584e4": "#A7C080",  # Azul acento principal -> Verde Everforest
-    "#2a76d9": "#8fbcbb",  # Azul hover
-    "#215d9c": "#3C4841",  # Azul activo/oscuro -> Verde oscuro/backdrop
-    "#1b6acb": "#3C4841",  # Azul oscuro
-    "#3465a4": "#A7C080",  # Azul clásico de assets
-    "#729fcf": "#A7C080",  # Azul claro
+    # GTK 3 & GTK 4 azules comunes -> Paleta oficial Everforest Dark Hard
+    "#3584e4": "#A7C080",  # Azul acento principal -> Verde Everforest ($green)
+    "#2a76d9": "#83C092",  # Azul hover -> Aqua Everforest ($aqua)
+    "#215d9c": "#3C4841",  # Azul activo/oscuro -> Verde oscuro/backdrop ($bg_green)
+    "#1b6acb": "#3C4841",  # Azul oscuro -> Verde oscuro ($bg_green)
+    "#3465a4": "#A7C080",  # Azul clásico de assets -> Verde Everforest ($green)
+    "#729fcf": "#A7C080",  # Azul claro -> Verde Everforest ($green)
+    "#8fbcbb": "#83C092",  # Nord teal residual -> Aqua Everforest ($aqua)
 }
 
 def recolor_svg(svg_path: Path):
