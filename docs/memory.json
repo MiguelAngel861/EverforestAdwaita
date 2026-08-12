@@ -1048,5 +1048,228 @@
     "next_steps": [
       "Continuar con el desarrollo SASS y pruebas de componentes."
     ]
+  },
+  {
+    "session_id": 44,
+    "timestamp": "2026-08-11T12:10:36-06:00",
+    "developer": "Antigravity",
+    "summary": "Fix infobar button hover color appearing pure black.",
+    "objectives": [
+      "Corregir el color de fondo negro (modo foco/hover) en los botones de las infobars y notificaciones."
+    ],
+    "changes_made": [
+      "Modificación de src/theme/overrides/_widgets.scss para cambiar el background-color del hover de los botones en infobars de rgba($bg_dim, 0.7) a rgba($fg, 0.1).",
+      "Ejecución de `make compile` para regenerar el CSS."
+    ],
+    "key_decisions": [
+      "El uso de un color oscuro con mucha opacidad (rgba($bg_dim, 0.7)) generaba un fondo casi negro que contrastaba mal con el fondo brillante o semibrillante de las infobars.",
+      "Cambiar a rgba($fg, 0.1) aclara sutilmente el botón, lo que es un patrón de hover más estándar para botones sobre fondos de color."
+    ],
+    "next_steps": [
+      "Pedir al usuario que verifique los botones de las infobars para asegurarse de que el color de hover sea el adecuado."
+    ]
+  },
+  {
+    "session_id": 45,
+    "timestamp": "2026-08-11T12:15:49-06:00",
+    "developer": "Antigravity",
+    "summary": "Fix notification/OSD button hover color appearing pure black.",
+    "objectives": [
+      "Corregir el color de fondo negro (modo foco/hover) en los botones de las notificaciones flotantes (OSD)."
+    ],
+    "changes_made": [
+      "Añadido bloque para `.osd button`, `.app-notification button` y `toast button` en `src/theme/overrides/_widgets.scss` con el mismo estilo translúcido ligero `rgba($fg, 0.1)` en hover que se aplicó a las infobars.",
+      "Ejecución de `make compile` para regenerar el CSS."
+    ],
+    "key_decisions": [
+      "El problema de fondo oscuro en botones también ocurría en las notificaciones flotantes (OSD). Replicar la solución de las infobars en los selectores de OSD asegura consistencia en toda la interfaz."
+    ],
+    "next_steps": [
+      "Pedir al usuario que verifique el hover en el botón de la notificación flotante."
+    ]
+  },
+  {
+    "session_id": 46,
+    "timestamp": "2026-08-11T12:35:47-06:00",
+    "developer": "Antigravity",
+    "summary": "Mejorar la estética de los botones de radio (radio buttons) haciéndolos completamente cuadrados por dentro y por fuera.",
+    "objectives": [
+      "Reemplazar el icono interno circular (bullet) de la selección del radio button por un icono cuadrado proporcional (más grande) que combine con la estética geométrica de esquinas de 90 grados."
+    ],
+    "changes_made": [
+      "Añadido bloque para `radio` en `src/theme/overrides/_widgets.scss` que incrementa mínimamente el tamaño base a 16pxx16px.",
+      "Sustitución de la fuente del icono para `radio:checked` usando `-gtk-icontheme('media-stop-symbolic')` para dibujar un bloque cuadrado en lugar de un círculo.",
+      "Ajuste del `-gtk-icon-size` a 12px para lograr un espaciado interior bonito y estético.",
+      "Ejecución de `make compile` para regenerar el CSS."
+    ],
+    "key_decisions": [
+      "En lugar de simplemente escalar un círculo dentro de un borde cuadrado (lo cual se veía incongruente), se optó por cambiar el icono SVG a un cuadrado sólido (`media-stop-symbolic`). Esto armoniza el widget en un diseño 100% geométrico sin curvas."
+    ],
+    "next_steps": [
+      "Pedir al usuario que valide visualmente los radio buttons y compruebe si el tamaño y la proporción son de su agrado."
+    ]
+  },
+  {
+    "session_id": 47,
+    "timestamp": "2026-08-11T12:37:27-06:00",
+    "developer": "Antigravity",
+    "summary": "Incrementar el tamaño del SVG del radio button cuadrado (media-stop-symbolic).",
+    "objectives": [
+      "Aumentar aún más el tamaño del icono cuadrado interior del radio button según lo solicitado por el usuario."
+    ],
+    "changes_made": [
+      "Aumentado el `min-width` y `min-height` del `radio` a 18px en `src/theme/overrides/_widgets.scss` para darle más área total.",
+      "Incrementado el `-gtk-icon-size` de 12px a 16px para el estado `:checked` e `:indeterminate` para que el cuadrado interior ocupe una mayor porción de la caja, viéndose más grande y prominente.",
+      "Ejecución de `make compile`."
+    ],
+    "key_decisions": [
+      "Se balanceó el incremento del icono interior (16px) con un leve aumento en el contenedor exterior (18px) para asegurar que se mantenga el borde y no se fusione visualmente."
+    ],
+    "next_steps": [
+      "Pedir confirmación visual de que el nuevo tamaño del cuadrado sí cumple con las expectativas del usuario."
+    ]
+  },
+  {
+    "session_id": 48,
+    "timestamp": "2026-08-11T20:12:51-06:00",
+    "developer": "Antigravity",
+    "summary": "Revertir el icono media-stop-symbolic para restaurar el cuadrado original.",
+    "objectives": [
+      "Restaurar el icono anterior del radio button (bullet-symbolic) pero manteniendo el tamaño más grande que solicitó el usuario."
+    ],
+    "changes_made": [
+      "Eliminada la línea `-gtk-icon-source: -gtk-icontheme('media-stop-symbolic');` de la regla `radio:checked` en `src/theme/overrides/_widgets.scss`.",
+      "Se mantuvo el aumento del área `min-width: 18px`, `min-height: 18px` y el `-gtk-icon-size: 16px`.",
+      "Ejecución de `make compile`."
+    ],
+    "key_decisions": [
+      "El usuario prefirió mantener el icono SVG que se renderizaba originalmente (el 'cuadrado sólido' predeterminado de su entorno) y solo deseaba que éste fuera más grande, por lo que el cambio al icono `media-stop` fue descartado pero se preservaron los ajustes de tamaño."
+    ],
+    "next_steps": [
+      "Avisar al usuario que el icono original ha sido restaurado con el tamaño grande."
+    ]
+  },
+  {
+    "session_id": 49,
+    "timestamp": "2026-08-11T20:17:23-06:00",
+    "developer": "Antigravity",
+    "summary": "Restaurar el icono de cuadrado sólido (media-stop-symbolic) y aumentarlo significativamente.",
+    "objectives": [
+      "Volver a aplicar el icono de cuadrado sólido que el usuario realmente deseaba, pero haciéndolo mucho más grande para que sea estético con el radio box."
+    ],
+    "changes_made": [
+      "Reintroducida la regla `-gtk-icon-source: -gtk-icontheme('media-stop-symbolic');` en `radio:checked`.",
+      "Aumentado el `min-width` y `min-height` del contenedor de radio a 20px.",
+      "Aumentado el `-gtk-icon-size` a 20px (tanto en `:checked` como en `:indeterminate`) para lograr que el cuadrado interior ocupe una gran porción y destaque mucho más.",
+      "Ejecución de `make compile`."
+    ],
+    "key_decisions": [
+      "El tamaño de 20px para el icono garantiza que el cuadrado sólido interior renderizado escale considerablemente y logre el peso visual deseado por el usuario, manteniéndose fiel a las esquinas a 90 grados."
+    ],
+    "next_steps": [
+      "Confirmar que el tamaño de 20px es el adecuado y agradable visualmente para el usuario."
+    ]
+  },
+  {
+    "session_id": 50,
+    "timestamp": "2026-08-11T20:20:21-06:00",
+    "developer": "Antigravity",
+    "summary": "Restaurar icono anterior del radio button y aumentar agresivamente su tamaño.",
+    "objectives": [
+      "Asegurar que el icono usado para el radio button sea estrictamente el original (por defecto) y aumentar considerablemente su tamaño, ya que el usuario pidió más tamaño y no un cambio de icono."
+    ],
+    "changes_made": [
+      "Eliminada por completo la sustitución de icono (`media-stop-symbolic`) en `src/theme/overrides/_widgets.scss`.",
+      "Aumentado drásticamente el `min-width` y `min-height` del radio button a 24px.",
+      "Aumentado el `-gtk-icon-size` a 20px para forzar que el SVG original ocupe mucha más área.",
+      "Ejecución de `make compile`."
+    ],
+    "key_decisions": [
+      "El usuario fue enfático en mantener su icono anterior (que visualmente percibe como el cuadrado). La única modificación es la propiedad de tamaño y un contenedor mucho más grande para acomodarlo de manera proporcional y notoria."
+    ],
+    "next_steps": [
+      "Pedir disculpas y confirmar que ahora sí tiene su icono original pero de gran tamaño."
+    ]
+  },
+  {
+    "session_id": 51,
+    "timestamp": "2026-08-11T20:23:28-06:00",
+    "developer": "Antigravity",
+    "summary": "Implementar un icono de cuadrado sólido real (vía SVG) para los radio buttons.",
+    "objectives": [
+      "Asegurarse de que el usuario tenga un 'cuadrado sólido' real y estético sin depender del icono predeterminado ni usar el icono de 'media-stop' que no era de su agrado."
+    ],
+    "changes_made": [
+      "Sustitución de `-gtk-icon-source` en `radio:checked` por un URI de datos SVG con un `<rect>` que dibuja un cuadrado sólido perfecto (`currentColor`).",
+      "Ajuste del tamaño del contenedor a 18px y el tamaño del icono a 12px para lograr un padding perfecto y elegante.",
+      "Ejecución de `make compile`."
+    ],
+    "key_decisions": [
+      "Se evitó el icono `media-stop` que generó fricción con el usuario y se construyó un cuadrado SVG puro que es inequívoco y se escala de manera impecable."
+    ],
+    "next_steps": [
+      "Confirmar que este es exactamente el cuadrado sólido que el usuario deseaba."
+    ]
+  },
+  {
+    "session_id": 52,
+    "timestamp": "2026-08-11T20:28:57-06:00",
+    "developer": "Antigravity",
+    "summary": "Reducir ligeramente el tamaño del cuadrado sólido puro para mejorar su proporción (margin).",
+    "objectives": [
+      "Ajustar el tamaño del SVG del cuadrado sólido porque el usuario percibió que llenaba demasiado la caja, haciéndolo un poco más pequeño para dar un margen estético adecuado."
+    ],
+    "changes_made": [
+      "Reducción del `-gtk-icon-size` de 12px a 10px en `radio:checked` y `radio:indeterminate` (manteniendo la caja exterior en 18x18px).",
+      "Ejecución de `make compile`."
+    ],
+    "key_decisions": [
+      "10px proporciona exactamente 4px de margen a cada lado dentro de la caja de 18px, lo cual crea un diseño de cuadrado balanceado que no abruma el contorno ni se pega a los bordes."
+    ],
+    "next_steps": [
+      "Verificar que la nueva proporción cuadrado interno / caja exterior cumple con la expectativa del usuario de no ser 'demasiado grande'."
+    ]
+  },
+  {
+    "session_id": 53,
+    "timestamp": "2026-08-11T20:32:18-06:00",
+    "developer": "Antigravity",
+    "summary": "Agregar padding interno al SVG del radio button para evitar que rellene toda la caja.",
+    "objectives": [
+      "Corregir el problema visual donde el cuadrado sólido rellenaba toda la caja del radio button tapando el color de fondo, agregando padding directamente al SVG."
+    ],
+    "changes_made": [
+      "Actualizado el data-URI SVG en `src/theme/overrides/_widgets.scss` para centrar el `<rect>` con dimensiones `x='4' y='4' width='8' height='8'` dentro de un viewBox de `0 0 16 16`.",
+      "Ajustado el `-gtk-icon-size` a 16px para permitir que escale correctamente.",
+      "Ejecución de `make compile`."
+    ],
+    "key_decisions": [
+      "GTK tiende a estirar el `-gtk-icon-source` para cubrir todo el contenedor. Definir el padding en el propio SVG (`viewBox` y `rect` con coordenadas) garantiza que siempre se mantenga el margen y el color de fondo (verde en este caso) sea visible alrededor del cuadrado sólido central."
+    ],
+    "next_steps": [
+      "Verificar con el usuario que el radio button ya muestra su color de fondo verde y el cuadrado sólido centrado de forma estética."
+    ]
+  },
+  {
+    "session_id": 54,
+    "timestamp": "2026-08-11T22:43:00-06:00",
+    "developer": "Antigravity",
+    "summary": "Corrección de validación de GTK 3 por propiedad -gtk-icon-size y actualización de baseline.",
+    "objectives": [
+      "Resolver error de parseo en GTK 3 causado por -gtk-icon-size.",
+      "Actualizar el baseline de hashes para que coincida con los últimos cambios visuales compilados.",
+      "Realizar el commit y push de todos los cambios pendientes."
+    ],
+    "changes_made": [
+      "Modificación en `src/theme/overrides/_widgets.scss` para envolver -gtk-icon-size en condicionales SASS '@if $gtk_version == 4'.",
+      "Actualización de `docs/baseline.sha256` mediante 'make baseline-update' tras la recompilación limpia.",
+      "Registro de la sesión 54 en `docs/memory.json`."
+    ],
+    "key_decisions": [
+      "Usar la variable `$gtk_version` para aislar propiedades de CSS propietarias o específicas de GTK 4, garantizando que el CSS de GTK 3 no rompa en el validador estricto."
+    ],
+    "next_steps": [
+      "Monitorear la retroalimentación del usuario sobre el tema compilado y los radio buttons modificados."
+    ]
   }
 ]
