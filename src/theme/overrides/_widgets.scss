@@ -779,7 +779,7 @@ infobar {
         box-shadow: none;
         
         &:hover {
-            background-color: rgba($bg_dim, 0.7);
+            background-color: rgba($fg, 0.1);
             color: $fg;
             border-color: rgba($fg, 0.25);
         }
@@ -975,3 +975,52 @@ scale {
 
 
 
+
+// 8. Botones en Notificaciones y OSD
+.osd button,
+.app-notification button,
+toast button {
+    background-color: rgba($bg_dim, 0.45);
+    background-image: none;
+    color: $fg;
+    border: 1px solid rgba($fg, 0.15);
+    box-shadow: none;
+    
+    &:hover {
+        background-color: rgba($fg, 0.1);
+        color: $fg;
+        border-color: rgba($fg, 0.25);
+    }
+    
+    &:active,
+    &:checked {
+        background-color: $bg_dim;
+        color: $green;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    &:disabled {
+        background-color: rgba($bg_dim, 0.2);
+        color: $grey0;
+        border-color: transparent;
+    }
+}
+
+// 9. Radio Button Cuadrado (Cuadrado sólido puro vía SVG con padding interno)
+radio {
+    min-width: 18px;
+    min-height: 18px;
+    
+    &:checked {
+        -gtk-icon-source: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='4' y='4' width='8' height='8' fill='currentColor'/></svg>");
+        @if $gtk_version == 4 {
+            -gtk-icon-size: 16px;
+        }
+    }
+    
+    &:indeterminate {
+        @if $gtk_version == 4 {
+            -gtk-icon-size: 16px;
+        }
+    }
+}
